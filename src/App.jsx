@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { GameProvider, useGame } from './contexts/GameContext';
+import StartScreen from './components/Screens/StartScreen';
+import PrologueScreen from './components/Screens/PrologueScreen';
+import Chapter1Screen from './components/Screens/Chapter1Screen';
+import Chapter2Screen from './components/Screens/Chapter2Screen';
+import Chapter3Screen from './components/Screens/Chapter3Screen';
+import Chapter4Screen from './components/Screens/Chapter4Screen';
+import Chapter5Screen from './components/Screens/Chapter5Screen';
+import GameOverScreen from './components/Screens/GameOverScreen';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+function GameRouter() {
+  const { state } = useGame();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  switch (state.screen) {
+    case 'start':
+      return <StartScreen />;
+
+    case 'prologue':
+      return <PrologueScreen />;
+
+    case 'chapter1':
+      return <Chapter1Screen />;
+
+    case 'chapter2':
+      return <Chapter2Screen />;
+
+    case 'chapter3':
+      return <Chapter3Screen />;
+
+    case 'chapter4':
+      return <Chapter4Screen />;
+
+    case 'chapter5':
+      return <Chapter5Screen />;
+
+    case 'gameover':
+      return <GameOverScreen />;
+
+    default:
+      return <StartScreen />;
+  }
 }
 
-export default App
+function App() {
+  return (
+    <GameProvider>
+      <GameRouter />
+    </GameProvider>
+  );
+}
+
+export default App;

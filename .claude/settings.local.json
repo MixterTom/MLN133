@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(where:*)",
+      "Bash(node:*)",
+      "Bash(move:*)",
+      "Bash(npm run build)",
+      "Bash(grep:*)",
+      "Bash(dos2unix:*)",
+      "Bash(unix2dos:*)",
+      "Bash(git checkout:*)"
+    ]
+  }
+}

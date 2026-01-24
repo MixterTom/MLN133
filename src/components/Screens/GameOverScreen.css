@@ -1,0 +1,248 @@
+.gameover-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #1a0a0a 0%, #2d1a1a 50%, #1a0a0a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.gameover-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.1), transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.gameover-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gameover-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+.gameover-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff4444;
+    text-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+    margin-bottom: 0.5rem;
+    letter-spacing: 4px;
+}
+
+.gameover-reason {
+    font-size: 1.3rem;
+    color: #ffcccc;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.gameover-stats {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.gameover-stats h3 {
+    color: #ff8888;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+.stat-item:hover {
+    transform: scale(1.05);
+}
+
+.stat-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.stat-value.critical {
+    color: #ff4444;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.gameover-advice {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+    border-left: 4px solid #ffc107;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 0 12px 12px 0;
+    text-align: left;
+}
+
+.gameover-advice h4 {
+    color: #ffc107;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gameover-advice p {
+    color: #e0e0e0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.gameover-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.gameover-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.gameover-btn.primary {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.gameover-btn.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.gameover-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gameover-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .gameover-title {
+        font-size: 1.8rem;
+    }
+
+    .gameover-icon {
+        font-size: 3.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gameover-buttons {
+        flex-direction: column;
+    }
+
+    .gameover-btn {
+        width: 100%;
+    }
+}

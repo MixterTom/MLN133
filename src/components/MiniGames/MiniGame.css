@@ -1,0 +1,871 @@
+.minigame-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.minigame-container {
+    width: 700px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: linear-gradient(135deg, rgba(30, 30, 60, 0.95), rgba(50, 30, 80, 0.95));
+    backdrop-filter: blur(20px);
+    border: 3px solid rgba(255, 140, 0, 0.6);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+}
+
+.minigame-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.minigame-header h2 {
+    color: #fff;
+    font-size: 28px;
+    margin: 0 0 15px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.minigame-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.minigame-stats span {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #ffd700;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.timer-urgent {
+    animation: pulse 1s infinite;
+}
+
+/* Exam Game */
+.exam-question {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+}
+
+.exam-question p {
+    color: #fff;
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+}
+
+.exam-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.exam-answer {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 140, 0, 0.4);
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.exam-answer:hover:not(:disabled) {
+    background: rgba(255, 140, 0, 0.2);
+    border-color: rgba(255, 140, 0, 0.8);
+    transform: translateX(5px);
+}
+
+.exam-answer.correct {
+    background: rgba(0, 255, 0, 0.3);
+    border-color: #0f0;
+}
+
+.exam-answer.wrong {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #f00;
+}
+
+.exam-result {
+    text-align: center;
+    padding: 30px;
+}
+
+.result-score {
+    font-size: 48px;
+    color: #ffd700;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.result-text {
+    font-size: 24px;
+    color: #fff;
+    margin: 10px 0;
+}
+
+/* Interview Game */
+.interview-question {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+}
+
+.interviewer {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.interview-question p {
+    color: #fff;
+    font-size: 18px;
+    margin: 0;
+}
+
+.interview-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.interview-answer {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(100, 150, 255, 0.4);
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.interview-answer:hover:not(:disabled) {
+    background: rgba(100, 150, 255, 0.2);
+    border-color: rgba(100, 150, 255, 0.8);
+    transform: translateX(5px);
+}
+
+.interview-result {
+    text-align: center;
+    padding: 30px;
+}
+
+/* Date Game */
+.date-game {
+    height: 600px;
+    max-height: 80vh;
+}
+
+.date-instructions {
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.date-game-area {
+    position: relative;
+    height: 400px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+}
+
+.falling-heart {
+    position: absolute;
+    top: -50px;
+    font-size: 40px;
+    cursor: pointer;
+    animation: fall 4s linear;
+    user-select: none;
+}
+
+.falling-heart.good:hover {
+    transform: scale(1.2);
+}
+
+.falling-heart.bad:hover {
+    transform: scale(1.2);
+}
+
+@keyframes fall {
+    from {
+        top: -50px;
+    }
+
+    to {
+        top: 450px;
+    }
+}
+
+.game-result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 3px solid #ffd700;
+    animation: fadeIn 0.5s ease;
+    z-index: 10;
+}
+
+.game-result h3 {
+    color: #ffd700;
+    font-size: 28px;
+    margin: 0 0 15px 0;
+}
+
+.game-result p {
+    color: #fff;
+    font-size: 20px;
+    margin: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Study Group Game - Memory Match */
+.study-group-game {
+    max-width: 700px;
+}
+
+.study-instructions {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.memory-card:hover:not(.flipped):not(.matched) {
+    transform: scale(1.05);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    transform: rotateY(180deg);
+    animation: matchPulse 0.5s ease;
+}
+
+@keyframes matchPulse {
+
+    0%,
+    100% {
+        transform: rotateY(180deg) scale(1);
+    }
+
+    50% {
+        transform: rotateY(180deg) scale(1.1);
+    }
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.card-front {
+    font-size: 48px;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    background: white;
+    color: #333;
+}
+
+.memory-card.matched .card-back {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.card-emoji {
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.memory-card.matched .card-text {
+    color: white;
+}
+
+.minigame-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 16px;
+}
+
+.minigame-stats .pairs {
+    color: #38ef7d;
+}
+
+/* Wedding Plan Game */
+.wedding-items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.wedding-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.wedding-item:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.wedding-item.selected {
+    background: rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+}
+
+.wedding-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.item-icon {
+    font-size: 24px;
+}
+
+.item-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.item-cost {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: #ffc107;
+    font-size: 14px;
+}
+
+.item-stats {
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.result-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.result-item-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+/* Parenting Game */
+.child-stats-bar {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.mini-stat {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mini-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.mini-bar-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.mini-bar-fill.health {
+    background: #ff4444;
+}
+
+.mini-bar-fill.education {
+    background: #4488ff;
+}
+
+.mini-bar-fill.happiness {
+    background: #ffeb3b;
+}
+
+.mini-bar-fill.bonding {
+    background: #e91e63;
+}
+
+.scenario-progress {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.progress-dot.completed {
+    background: #4caf50;
+}
+
+.progress-dot.current {
+    background: #ffc107;
+    transform: scale(1.2);
+}
+
+.scenario-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.scenario-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.scenario-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.scenario-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.choice-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.choice-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.choice-cost {
+    color: #ffc107;
+    font-size: 14px;
+}
+
+.result-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.result-stat {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Work Balance Game */
+.activities-palette {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.activity-chip {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.schedule-slot {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.slot-time {
+    display: block;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.slot-activities {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.slot-activity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.slot-activity-btn.active {
+    background: #ffc107;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.minigame-gameplay.simulation {
+    text-align: center;
+}
+
+.simulation-clock {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #ffc107;
+}
+
+.activity-icon-large {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 10px;
+    animation: bounce 1s infinite;
+}
+
+.simulation-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.sim-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sim-bar {
+    flex: 1;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.sim-bar-fill {
+    height: 100%;
+    transition: width 0.3s linear;
+}
+
+.sim-bar-fill.work {
+    background: #4488ff;
+}
+
+.sim-bar-fill.family {
+    background: #e91e63;
+}
+
+.sim-bar-fill.health {
+    background: #4caf50;
+}
+
+.sim-bar-fill.stress {
+    background: #ff9800;
+}
+
+.sim-bar-fill.stress.danger {
+    background: #ff4444;
+}
+
+.event-notification {
+    background: #ff4444;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    animation: shake 0.5s;
+}
+
+/* Memory Lane Game */
+.memory-gameplay {
+    display: block;
+}
+
+.memory-section {
+    margin-bottom: 20px;
+}
+
+.memories-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scrollbar-width: thin;
+}
+
+.memory-card {
+    min-width: 140px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.memory-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.memory-card.selected {
+    border-color: #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+    transform: translateY(-5px);
+}
+
+.memory-card.matched {
+    opacity: 0.5;
+    pointer-events: none;
+    background: rgba(76, 175, 80, 0.1);
+    border-color: #4caf50;
+}
+
+.memory-icon {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.periods-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.period-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.period-card:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.period-card.disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.match-feedback {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    animation: fadeIn 0.3s;
+}
+
+.match-feedback.correct {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.match-feedback.incorrect {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+.reflection-input {
+    width: 100%;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    color: white;
+    font-size: 16px;
+    resize: none;
+}
+
+.reflection-prompt {
+    font-size: 18px;
+    font-style: italic;
+    color: #ffd700;
+}
+
+.life-message {
+    font-style: italic;
+    color: #aaa;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}

@@ -1,0 +1,68 @@
+TẾ BÀO XÃ HỘI - GAME STRUCTURE
+================================
+
+FOLDER STRUCTURE:
+-----------------
+src/
+├── assets/
+│   ├── characters/        (40+ character emotion sprites)
+│   └── *.png             (9 background images)
+├── components/
+│   ├── Common/
+│   │   └── DialogueScreen.jsx        - Reusable dialogue component
+│   ├── Screens/
+│   │   ├── StartScreen.jsx           - Màn hình bắt đầu
+│   │   ├── PrologueScreen.jsx        - Prologue (chọn xuất thân, giới tính, tên)
+│   │   ├── Chapter1Screen.jsx        - Chapter 1 (demo)
+│   │   └── Chapter1ScreenExample.jsx - Example using DialogueScreen
+│   └── UI/
+│       ├── StatsPanel.jsx                - Hiển thị chỉ số (góc phải trên)
+│       └── StatChangeNotification.jsx    - Popup thông báo thay đổi chỉ số
+├── contexts/
+│   └── GameContext.jsx    - Quản lý state toàn game
+├── utils/
+│   └── gameHelpers.js     - Helper functions
+├── App.jsx                - Main app router
+├── App.css                - Global styles
+└── index.css              - Base styles
+
+KEY FEATURES:
+-------------
+✅ Beautiful UI with real background images
+✅ Character sprites with emotions
+✅ Stats panel showing numbers on bars
+✅ Hidden stat effects (only show AFTER choice)
+✅ Clean, expandable structure
+✅ Easy to add new chapters/scenes
+
+HOW TO ADD NEW CONTENT:
+-----------------------
+METHOD 1 - Using DialogueScreen (RECOMMENDED):
+  1. Create new screen in src/components/Screens/
+  2. Import DialogueScreen component
+  3. Pass props: background, character, speaker, dialogue, choices
+  4. See Chapter1ScreenExample.jsx for reference
+  
+METHOD 2 - Custom screen:
+  1. Create new screen in src/components/Screens/
+  2. Add route in App.jsx GameRouter
+  3. Use existing components (StatsPanel, StatChangeNotification)
+  4. Follow pattern from Chapter1Screen.jsx
+
+STATS SYSTEM:
+-------------
+- Health (Sức khỏe) ❤️
+- Happiness (Hạnh phúc) 😊
+- Economy (Kinh tế) 💰
+- Social (Xã hội) 👥
+- Knowledge (Tri thức) 📚
+
+All stats clamped between 0-100
+
+GAME FLOW:
+----------
+StartScreen → PrologueScreen → Chapter1Screen → (more chapters...)
+
+TO RUN:
+-------
+npm run dev

@@ -1,0 +1,379 @@
+.prologue-screen {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('/src/assets/background/unnamed (1).jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* Dynamic background support */
+.prologue-screen[data-background] {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        var(--bg-image);
+}
+
+.character-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    pointer-events: none;
+    z-index: 1;
+    padding: 0;
+}
+
+.character-sprite {
+    height: 80vh;
+    width: auto;
+    max-width: 40vw;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.6));
+    animation: fadeInUp 0.5s ease;
+    position: relative;
+}
+
+.character-sprite.left {
+    margin-left: -8%;
+}
+
+.character-sprite.center {
+    margin: 0 auto;
+}
+
+.character-sprite.right {
+    margin-left: auto;
+    margin-right: -8%;
+}
+
+/* Dialogue Box - Centered, smaller width */
+.dialogue-box {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    max-height: 200px;
+    /* Gradient background: transparent sides -> semi-transparent center */
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(20, 20, 20, 0.7) 20%,
+            rgba(20, 20, 20, 0.7) 80%,
+            rgba(0, 0, 0, 0) 100%);
+    /* Mask to fade edges and blur */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 100;
+    padding: 15px 100px;
+    /* Increased side padding to keep content in center area */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Speaker nameplate */
+.speaker-name {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff9d00;
+    /* Gold/Orange for name */
+    margin: 0 0 5px 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    letter-spacing: 0.5px;
+    align-self: center;
+    /* Center the name */
+    width: auto;
+    max-width: none;
+    backdrop-filter: none;
+}
+
+/* Orange accent slash */
+.speaker-name::before {
+    display: none;
+}
+
+/* Dialogue content area */
+.dialogue-content {
+    padding: 0;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+    /* Allow scrolling if content is long */
+    max-height: 150px;
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Webkit scrollbar styling */
+.dialogue-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dialogue-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dialogue-content::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+/* Text - sans-serif */
+.dialogue-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    /* Reduced line height */
+    color: #ffffff;
+    margin: 0;
+    white-space: pre-line;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.3px;
+    text-align: center;
+    /* Center text */
+    width: 100%;
+}
+
+/* Controls - Hidden */
+.dialogue-controls {
+    display: none;
+}
+
+/* Choices styling */
+.choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 600px;
+    /* Reduced width */
+    align-items: center;
+}
+
+.choice-btn {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 140, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px 18px;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.choice-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 140, 0, 0.6);
+    transform: translateX(0) scale(1.02);
+    box-shadow:
+        0 4px 20px rgba(255, 140, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.choice-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+    display: block;
+    color: #ffd700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.choice-desc {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    display: block;
+    line-height: 1.3;
+}
+
+/* Input styling */
+.input-container {
+    margin-top: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.name-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 16px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 140, 0, 0.4);
+    border-radius: 8px;
+    color: white;
+    box-shadow:
+        inset 0 2px 8px rgba(0, 0, 0, 0.3),
+        0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.name-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: rgba(255, 140, 0, 0.8);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 0 20px rgba(255, 140, 0, 0.3),
+        inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Continue button */
+.continue-btn {
+    position: static;
+    margin-top: 15px;
+    background: rgba(255, 140, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 140, 0, 0.6);
+    border-radius: 5px;
+    padding: 7px 18px;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    box-shadow: 0 3px 15px rgba(255, 140, 0, 0.3);
+}
+
+.continue-btn:hover {
+    background: rgba(255, 140, 0, 0.35);
+    border-color: rgba(255, 140, 0, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5);
+}
+
+.continue-btn:active {
+    transform: translateY(0);
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Audio Enable Overlay */
+.audio-enable-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease;
+}
+
+.audio-enable-box {
+    background: linear-gradient(135deg, rgba(30, 30, 60, 0.95), rgba(50, 30, 80, 0.95));
+    backdrop-filter: blur(20px);
+    border: 3px solid rgba(255, 140, 0, 0.6);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.audio-enable-box h2 {
+    color: #ffd700;
+    font-size: 28px;
+    margin: 0 0 20px 0;
+    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+}
+
+.audio-enable-box p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.audio-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.audio-buttons .choice-btn {
+    max-width: 100%;
+}
+
+.audio-buttons .choice-btn.secondary {
+    background: rgba(100, 100, 100, 0.3);
+    border-color: rgba(150, 150, 150, 0.4);
+}
+
+.audio-buttons .choice-btn.secondary:hover {
+    background: rgba(100, 100, 100, 0.5);
+    border-color: rgba(150, 150, 150, 0.6);
+}

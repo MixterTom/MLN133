@@ -1,0 +1,207 @@
+.cafe-qte-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.cafe-qte {
+    width: 700px;
+    max-width: 90vw;
+    height: 700px;
+    max-height: 85vh;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.95), rgba(101, 67, 33, 0.95));
+    backdrop-filter: blur(20px);
+    border: 3px solid rgba(255, 140, 0, 0.6);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+}
+
+.qte-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.qte-header h2 {
+    color: #fff;
+    font-size: 28px;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.qte-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.qte-score,
+.qte-timer,
+.qte-missed,
+.qte-difficulty {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: #ffd700;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.qte-instructions {
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.qte-game-area {
+    position: relative;
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+}
+
+.qte-lanes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.qte-lane {
+    flex: 1;
+    border-right: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.qte-lane:last-child {
+    border-right: none;
+}
+
+.lane-key {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 140, 0, 0.3);
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 140, 0, 0.6);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+.qte-hit-line {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            #ff0000 10%,
+            #ff0000 90%,
+            transparent 100%);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    z-index: 10;
+    animation: pulse-line 1s infinite;
+}
+
+@keyframes pulse-line {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 30px rgba(255, 0, 0, 1);
+    }
+}
+
+.qte-falling-order {
+    position: absolute;
+    transform: translateX(-50%);
+    z-index: 5;
+    transition: top 0.05s linear;
+}
+
+.falling-drink {
+    font-size: 32px;
+    text-align: center;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.falling-key {
+    background: linear-gradient(135deg, #ff8c00, #ff6600);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5);
+}
+
+.qte-result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 3px solid #ffd700;
+    animation: fadeIn 0.5s ease;
+    z-index: 100;
+    min-width: 300px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.qte-result h3 {
+    color: #ffd700;
+    font-size: 32px;
+    margin: 0 0 15px 0;
+}
+
+.qte-result p {
+    color: #fff;
+    font-size: 20px;
+    margin: 10px 0;
+}
