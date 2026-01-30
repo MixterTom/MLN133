@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { GameProvider, useGame } from './contexts/GameContext';
 import StartScreen from './components/Screens/StartScreen';
 import PrologueScreen from './components/Screens/PrologueScreen';
@@ -8,22 +7,10 @@ import Chapter3Screen from './components/Screens/Chapter3Screen';
 import Chapter4Screen from './components/Screens/Chapter4Screen';
 import Chapter5Screen from './components/Screens/Chapter5Screen';
 import GameOverScreen from './components/Screens/GameOverScreen';
-import { initAutoChoiceHandler } from './utils/autoChoiceHandler';
-import './components/UI/ChoiceNotification.css';
 import './App.css';
 
 function GameRouter() {
   const { state } = useGame();
-
-  // Init auto choice handler
-  useEffect(() => {
-    // Delay một chút để đảm bảo DOM đã sẵn sàng
-    const timer = setTimeout(() => {
-      initAutoChoiceHandler();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [state.screen]); // Re-init khi screen thay đổi
 
   switch (state.screen) {
     case 'start':
