@@ -49,7 +49,7 @@ const SCENARIOS = [
     }
 ];
 
-export default function ParentingGame({ onComplete, childAge = 5 }) {
+export default function ParentingGame({ onComplete, onStatChange, childAge = 5 }) {
     const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
     const [childStats, setChildStats] = useState({
         health: 50,
@@ -60,12 +60,29 @@ export default function ParentingGame({ onComplete, childAge = 5 }) {
     const [showResult, setShowResult] = useState(false);
 
     const handleChoice = (choice) => {
+        const delta = {
+            health: choice.stats.health || 0,
+            education: choice.stats.education || 0,
+            happiness: choice.stats.happiness || 0,
+            bonding: choice.stats.bonding || 0
+        };
+
         setChildStats(prev => ({
-            health: Math.min(100, Math.max(0, prev.health + (choice.stats.health || 0))),
-            education: Math.min(100, Math.max(0, prev.education + (choice.stats.education || 0))),
-            happiness: Math.min(100, Math.max(0, prev.happiness + (choice.stats.happiness || 0))),
-            bonding: Math.min(100, Math.max(0, prev.bonding + (choice.stats.bonding || 0)))
+            health: Math.min(100, Math.max(0, prev.health + delta.health)),
+            education: Math.min(100, Math.max(0, prev.education + delta.education)),
+            happiness: Math.min(100, Math.max(0, prev.happiness + delta.happiness)),
+            bonding: Math.min(100, Math.max(0, prev.bonding + delta.bonding))
         }));
+
+        if (onStatChange) {
+            const mapped = {
+                health: delta.health,
+                happiness: delta.happiness,
+                knowledge: delta.education,
+                social: delta.bonding
+            };
+            onStatChange(mapped);
+        }
 
         if (currentScenarioIndex < SCENARIOS.length - 1) {
             setTimeout(() => setCurrentScenarioIndex(prev => prev + 1), 300);
