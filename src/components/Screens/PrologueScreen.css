@@ -197,6 +197,7 @@
         opacity: 0;
         transform: scale(0.8);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -411,13 +412,14 @@
 
 /* Responsive cho grid layout */
 @media (max-width: 768px) {
+
     .dialogue-box:has(.choices-container:has(.choice-btn:nth-child(2):last-child)),
     .dialogue-box:has(.choices-container:has(.choice-btn:nth-child(3))),
     .dialogue-box.has-multiple-choices {
         padding: 12px 15px;
         width: 95%;
     }
-    
+
     .choices-container:has(.choice-btn:nth-child(2):last-child),
     .choices-container.choices-grid-2,
     .choices-container:has(.choice-btn:nth-child(3)),
@@ -428,7 +430,7 @@
         margin-top: 8px;
         margin-bottom: 8px;
     }
-    
+
     .choices-container:has(.choice-btn:nth-child(2):last-child) .choice-btn,
     .choices-container.choices-grid-2 .choice-btn,
     .choices-container:has(.choice-btn:nth-child(3)) .choice-btn,
@@ -439,14 +441,14 @@
         max-height: none;
         padding: 10px;
     }
-    
+
     .choices-container:has(.choice-btn:nth-child(2):last-child) .choice-title,
     .choices-container.choices-grid-2 .choice-title,
     .choices-container:has(.choice-btn:nth-child(3)) .choice-title,
     .choices-container.choices-grid-3 .choice-title {
         font-size: 13px;
     }
-    
+
     .choices-container:has(.choice-btn:nth-child(2):last-child) .choice-desc,
     .choices-container.choices-grid-2 .choice-desc,
     .choices-container:has(.choice-btn:nth-child(3)) .choice-desc,
@@ -495,34 +497,49 @@
         inset 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Continue button */
-.continue-btn {
+/* Continue button - HIDDEN in dialogue (click anywhere to continue) */
+/* But VISIBLE in mini-games */
+.dialogue-box .continue-btn,
+.dialogue-content .continue-btn {
+    display: none !important;
+    /* Ẩn nút tiếp tục trong dialogue - click chuột để tiếp tục */
+}
+
+/* Keep continue button visible in mini-games and result screens */
+.minigame-overlay .continue-btn,
+.result-screen .continue-btn,
+.path-collector-container .continue-btn {
+    display: inline-block !important;
     position: static;
-    margin-top: 15px;
-    background: rgba(255, 140, 0, 0.2);
+    margin-top: 20px;
+    background: rgba(255, 140, 0, 0.3);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 140, 0, 0.6);
-    border-radius: 5px;
-    padding: 7px 18px;
+    border: 2px solid rgba(255, 140, 0, 0.7);
+    border-radius: 8px;
+    padding: 12px 30px;
     color: white;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    box-shadow: 0 3px 15px rgba(255, 140, 0, 0.3);
+    letter-spacing: 1px;
+    box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
 }
 
-.continue-btn:hover {
-    background: rgba(255, 140, 0, 0.35);
-    border-color: rgba(255, 140, 0, 0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5);
+.minigame-overlay .continue-btn:hover,
+.result-screen .continue-btn:hover,
+.path-collector-container .continue-btn:hover {
+    background: rgba(255, 140, 0, 0.5);
+    border-color: rgba(255, 140, 0, 1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255, 140, 0, 0.6);
 }
 
-.continue-btn:active {
-    transform: translateY(0);
+.minigame-overlay .continue-btn:active,
+.result-screen .continue-btn:active,
+.path-collector-container .continue-btn:active {
+    transform: translateY(-1px);
 }
 
 /* Fade in animation */

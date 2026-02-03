@@ -4,7 +4,7 @@ import StatsPanel from '../UI/StatsPanel';
 import StatChangeNotification from '../UI/StatChangeNotification';
 import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
-import { useTypewriter } from '../../hooks/useTypewriter';
+
 import StudyGroupGame from '../MiniGames/StudyGroupGame';
 import WorkBalanceGame from '../MiniGames/WorkBalanceGame';
 import './PrologueScreen.css';
@@ -16,7 +16,7 @@ export default function Chapter4Screen() {
 
     const [scenario, setScenarioState] = useState(state.flags.chapter4_scenario || 'transition');
     const [step, setStepState] = useState(state.flags.chapter4_step || 0);
-    const [isTyping, handleTypingComplete] = useTypewriter(step);
+
 
     const setScenario = (newScenario) => {
         setScenarioState(newScenario);
@@ -72,11 +72,7 @@ export default function Chapter4Screen() {
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Narrator</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(1)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -96,11 +92,7 @@ export default function Chapter4Screen() {
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Narrator</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(2)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -118,11 +110,7 @@ Bà Tiên Duyên lại xuất hiện, nhưng vẻ mặt bà có chút lo lắng.
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Narrator</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(3)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(3)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -149,11 +137,7 @@ Hãy cẩn thận với những quyết định ở tuổi trung niên nhé...
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bà Tiên Duyên</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(4)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(4)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -178,11 +162,7 @@ Hãy cân bằng nhé con!`;
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bà Tiên Duyên</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(5)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -202,14 +182,10 @@ Những quyết định tiếp theo sẽ định hình phần còn lại của c
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Narrator</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => {
-                                        setScenario('career_peak');
-                                        setStep(0);
-                                    }}>Bắt đầu Chapter 4 →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => {
+                                    setScenario('career_peak');
+                                    setStep(0);
+                                }} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -232,9 +208,9 @@ Những quyết định tiếp theo sẽ định hình phần còn lại của c
 Bạn đã làm việc 20 năm...
 
 Đây là thời kỳ đỉnh cao sự nghiệp...`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setStep(1)}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -257,9 +233,9 @@ Bạn đã làm việc 20 năm...
 Công ty quyết định thăng chức anh/chị lên Giám đốc!
 
 Lương tăng gấp đôi, nhưng công việc sẽ bận hơn!`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setStep(2)}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -278,13 +254,9 @@ Lương tăng gấp đôi, nhưng công việc sẽ bận hơn!`}
                             <div className="dialogue-content">
                                 <Typewriter
                                     text="Cảm ơn sếp! Tôi sẽ cố gắng hết sức!"
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => {
-                                    updateStats({ economy: 50, happiness: 30 });
-                                    setScenario('work_life_balance');
-                                    setStep(0);
-                                }}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -307,9 +279,9 @@ Lương tăng gấp đôi, nhưng công việc sẽ bận hơn!`}
 Công việc ngày càng bận rộn...
 
 Bạn thường xuyên về nhà muộn...`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setStep(1)}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -336,9 +308,9 @@ Bạn thường xuyên về nhà muộn...`}
 Bạn con ai cũng có bố mẹ đưa đi chơi!
 
 Bố/Mẹ giàu mà không dành thời gian cho con! Con ghét bố/mẹ! 😠`}
-                                        onComplete={handleTypingComplete}
+                                        onComplete={() => { }}
                                     />
-                                    {!isTyping && <button className="continue-btn" onClick={() => setStep(1.5)}>Tiếp tục →</button>}
+
                                 </div>
                             </div>
                         </SceneBackground>
@@ -362,9 +334,9 @@ Bố/Mẹ giàu mà không dành thời gian cho con! Con ghét bố/mẹ! 😠`
 Con nhớ bố/mẹ lắm...
 
 Bố/Mẹ không có thời gian chơi với con nữa...`}
-                                        onComplete={handleTypingComplete}
+                                        onComplete={() => { }}
                                     />
-                                    {!isTyping && <button className="continue-btn" onClick={() => setStep(2)}>Tiếp tục →</button>}
+
                                 </div>
                             </div>
                         </SceneBackground>
@@ -388,9 +360,9 @@ Bố/Mẹ không có thời gian chơi với con nữa...`}
 Con sẽ tự làm bài tập, không làm phiền bố/mẹ...
 
 Bố/Mẹ nghỉ ngơi đi ạ... 😊`}
-                                        onComplete={handleTypingComplete}
+                                        onComplete={() => { }}
                                     />
-                                    {!isTyping && <button className="continue-btn" onClick={() => setStep(1.5)}>Tiếp tục →</button>}
+
                                 </div>
                             </div>
                         </SceneBackground>
@@ -419,12 +391,9 @@ Bố/Mẹ nghỉ ngơi đi ạ... 😊`}
 Con mình... Con mình ghét mình...
 
 Mình đang lặp lại sai lầm của bố mẹ mình... 😢`}
-                                        onComplete={handleTypingComplete}
+                                        onComplete={() => { }}
                                     />
-                                    {!isTyping && <button className="continue-btn" onClick={() => {
-                                        updateStats({ happiness: -30, social: -20 });
-                                        setStep(2);
-                                    }}>Tiếp tục →</button>}
+
                                 </div>
                             </div>
                         </SceneBackground>
@@ -448,12 +417,9 @@ Mình đang lặp lại sai lầm của bố mẹ mình... 😢`}
 Con mình... Con mình hiểu mình...
 
 Mình may mắn có con ngoan như vậy... 😊`}
-                                        onComplete={handleTypingComplete}
+                                        onComplete={() => { }}
                                     />
-                                    {!isTyping && <button className="continue-btn" onClick={() => {
-                                        updateStats({ happiness: 20, social: 10 });
-                                        setStep(2);
-                                    }}>Tiếp tục →</button>}
+
                                 </div>
                             </div>
                         </SceneBackground>
@@ -477,9 +443,9 @@ Mình may mắn có con ngoan như vậy... 😊`}
 Bố/Mẹ bận làm việc để kiếm tiền cho con...
 
 (Suy nghĩ) Mình có đang đánh mất gia đình?`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setStep(3)}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -502,11 +468,9 @@ Bố/Mẹ bận làm việc để kiếm tiền cho con...
 Anh/Em chỉ lo công việc, không còn quan tâm gia đình...
                                     
 Con cũng buồn lắm...`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setScenario('work_balance_game')}>
-                                    Thử cân bằng cuộc sống (Mini-game)
-                                </button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -551,37 +515,9 @@ Con cũng buồn lắm...`}
 Đây là câu hỏi khó của tuổi trung niên...
 
 Hãy chọn khôn ngoan...`}
-                                onComplete={handleTypingComplete}
+                                onComplete={() => { }}
                             />
-                            {!isTyping && <div className="choices-container">
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: 50, happiness: -30, social: -20 }, { type: 'balance', value: 'career_focus' });
-                                    setFlag('balance_choice', 'career_focus');
-                                    setScenario('health_crisis');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">💼 Tập trung sự nghiệp</span>
-                                    <span className="choice-desc">Kiếm nhiều tiền nhưng mất gia đình</span>
-                                </button>
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: -20, happiness: 30, social: 20 }, { type: 'balance', value: 'family_focus' });
-                                    setFlag('balance_choice', 'family_focus');
-                                    setScenario('health_crisis');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">👨‍👩‍👧 Tập trung gia đình</span>
-                                    <span className="choice-desc">Từ chối thăng chức, dành thời gian cho gia đình</span>
-                                </button>
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: 20, happiness: 10, social: 10 }, { type: 'balance', value: 'balanced' });
-                                    setFlag('balance_choice', 'balanced');
-                                    setScenario('health_crisis');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">⚖️ Cân bằng cả hai</span>
-                                    <span className="choice-desc">Cố gắng cân bằng công việc và gia đình</span>
-                                </button>
-                            </div>}
+
                         </div>
                     </div>
                 </SceneBackground>
@@ -603,9 +539,9 @@ Hãy chọn khôn ngoan...`}
 Bạn đột nhiên cảm thấy đau ngực...
 
 Stress công việc đã ảnh hưởng đến sức khỏe...`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => setStep(1)}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -628,13 +564,9 @@ Stress công việc đã ảnh hưởng đến sức khỏe...`}
 Nếu không thay đổi lối sống, rất nguy hiểm!
 
 Anh/Chị cần nghỉ ngơi, ăn uống lành mạnh, tập thể dục!`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => {
-                                    updateStats({ health: -30, happiness: -20 });
-                                    setScenario('chapter_end');
-                                    setStep(0);
-                                }}>Tiếp tục →</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -668,12 +600,9 @@ Anh/Chị cần nghỉ ngơi, ăn uống lành mạnh, tập thể dục!`}
 ${choiceText}
 
 Giờ đây, ngươi bước vào tuổi già... Hãy tận hưởng những năm tháng còn lại...`}
-                                    onComplete={handleTypingComplete}
+                                    onComplete={() => { }}
                                 />
-                                {!isTyping && <button className="continue-btn" onClick={() => {
-                                    updateStats({ happiness: 20, knowledge: 30 });
-                                    setScreen('chapter5');
-                                }}>Hoàn thành Chapter 4 ✨</button>}
+
                             </div>
                         </div>
                     </SceneBackground>
@@ -690,9 +619,9 @@ Giờ đây, ngươi bước vào tuổi già... Hãy tận hưởng những nă
                     <div className="dialogue-content">
                         <Typewriter
                             text="Chapter 4 đang được phát triển..."
-                            onComplete={handleTypingComplete}
+                            onComplete={() => { }}
                         />
-                        {!isTyping && <button className="continue-btn" onClick={() => setScreen('start')}>Về màn hình chính</button>}
+
                     </div>
                 </div>
             </SceneBackground>

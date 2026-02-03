@@ -22,7 +22,7 @@ const initialState = {
         scene: 0
     },
     choices: [],
-    flags: {}
+    flags: {} // Stores: education_path, partner, parents_choice, work_balance, etc.
 };
 
 // Load saved game from localStorage

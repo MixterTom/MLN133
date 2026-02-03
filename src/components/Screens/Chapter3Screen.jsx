@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGame } from '../../contexts/GameContext';
 import StatsPanel from '../UI/StatsPanel';
 import StatChangeNotification from '../UI/StatChangeNotification';
 import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
-import { useTypewriter } from '../../hooks/useTypewriter';
+
 import StudyGroupGame from '../MiniGames/StudyGroupGame';
 import ParentingGame from '../MiniGames/ParentingGame';
 import './PrologueScreen.css';
@@ -13,12 +13,16 @@ export default function Chapter3Screen() {
     const { state, updateStats, setScreen, addChoice, setFlag } = useGame();
     const [showStatChange, setShowStatChange] = useState(false);
     const [statChanges, setStatChanges] = useState({});
+    const [showChoices, setShowChoices] = useState(false);
 
     const [scenario, setScenarioState] = useState(state.flags.chapter3_scenario || 'transition');
     const [step, setStepState] = useState(state.flags.chapter3_step || 0);
 
-    // Typewriter effect
-    const [isTyping, handleTypingComplete] = useTypewriter(step);
+    // Reset showChoices when step changes
+    useEffect(() => {
+        setShowChoices(false);
+    }, [step]);
+
 
     const setScenario = (newScenario) => {
         setScenarioState(newScenario);
@@ -67,11 +71,7 @@ export default function Chapter3Screen() {
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(1)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -91,11 +91,7 @@ export default function Chapter3Screen() {
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(2)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -113,11 +109,7 @@ Bà hiện ra trong một vùng sáng dịu nhẹ, nụ cười hiền hậu nh�
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(3)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(3)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -144,11 +136,7 @@ Con có sẵn sàng không?`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(4)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(4)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -173,11 +161,7 @@ Hãy suy nghĩ kỹ trước khi quyết định nhé!
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(5)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(5)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -199,14 +183,10 @@ Lời Bà Tiên vẫn văng vẳng trong đầu...`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
-                                    setScenario('child_birth');
-                                    setStep(0);
-                                }}>Bắt đầu Chapter 3 →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => {
+                                setScenario('child_birth');
+                                setStep(0);
+                            }} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -229,11 +209,7 @@ Và một tin vui đang chờ đợi...`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(1)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -254,11 +230,7 @@ Em/Anh... em/anh có thai rồi! 😄`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{partnerName}</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(2)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -279,14 +251,10 @@ Chúng mình sẽ có con rồi!`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
-                                    updateStats({ happiness: 50, social: 30 });
-                                    setStep(3);
-                                }}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => {
+                                updateStats({ happiness: 50, social: 30 });
+                                setStep(3);
+                            }} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -306,11 +274,7 @@ Tiếng khóc em bé vang lên...
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(4)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(4)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -331,11 +295,7 @@ Bé nặng 3.2kg, cao 50cm!`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bác sĩ</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(5)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(5)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -356,16 +316,11 @@ Con đẹp quá!`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
-                                    updateStats({ happiness: 100 });
-                                    setFlag('has_child', true);
-                                    setScenario('parenting_intro');
-                                    setStep(0);
-                                }}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => {
+                                updateStats({ happiness: 100 });
+                                setScenario('parenting_intro');
+                                setStep(0);
+                            }} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -388,13 +343,7 @@ Và bắt đầu có những rắc rối trẻ thơ...`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setScenario('parenting_challenge')}>
-                                    Thử thách làm cha mẹ! (Mini-game)
-                                </button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setScenario('parenting_challenge')} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -433,11 +382,7 @@ Và bắt đầu có những rắc rối trẻ thơ...`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(1)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -464,11 +409,7 @@ Con có thể mua thêm căn hộ cho bố mẹ ở gần không?`;
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố (qua điện thoại)</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(1.5)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(1.5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -492,11 +433,7 @@ Con có thể cho bố mẹ lên ở cùng không? 😢`;
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố (qua điện thoại)</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(2)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -520,11 +457,7 @@ Con có thể cho bố mẹ lên ở cùng không? Mẹ sẽ giúp con chăm ch�
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Mẹ (qua điện thoại)</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(1.5)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(1.5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -553,11 +486,7 @@ Mình có đủ tiền... Nhưng có nên không?`;
                         <div className="dialogue-box">
                             <h2 className="speaker-name">{state.player.name}</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(2)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -581,11 +510,7 @@ Nhưng nhà mình nhỏ... Mình phải làm sao đây... 😢`;
                         <div className="dialogue-box">
                             <h2 className="speaker-name">{state.player.name}</h2>
                             <div className="dialogue-content">
-                                {isTyping ? (
-                                    <Typewriter text={text} onComplete={handleTypingComplete} />
-                                ) : (
-                                    <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
-                                )}
+                                <Typewriter text={text} onComplete={() => setStep(2)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -607,11 +532,7 @@ Nhưng nhà mình nhỏ... Mình phải làm sao đây... 😢`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setStep(3)}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setStep(3)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -634,11 +555,7 @@ Bố mẹ ở đâu? 😰`;
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{partnerName}</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => setScenario('parents_decision')}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => setScenario('parents_decision')} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -666,8 +583,8 @@ Hãy chọn khôn ngoan...`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        {isTyping ? (
-                            <Typewriter text={text} onComplete={handleTypingComplete} />
+                        {!showChoices ? (
+                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <>
                                 <div className="choices-container fade-in">
@@ -733,14 +650,10 @@ Cuộc đời không có lựa chọn hoàn hảo... Chỉ có lựa chọn phù
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                         <div className="dialogue-content">
-                            {isTyping ? (
-                                <Typewriter text={text} onComplete={handleTypingComplete} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
-                                    updateStats({ happiness: 30, knowledge: 20 });
-                                    setScreen('chapter4');
-                                }}>Hoàn thành Chapter 3 ✨</button>
-                            )}
+                            <Typewriter text={text} onComplete={() => {
+                                updateStats({ happiness: 30, knowledge: 20 });
+                                setScreen('chapter4');
+                            }} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -757,11 +670,7 @@ Cuộc đời không có lựa chọn hoàn hảo... Chỉ có lựa chọn phù
             <div className="dialogue-box">
                 <h2 className="speaker-name">System</h2>
                 <div className="dialogue-content">
-                    {isTyping ? (
-                        <Typewriter text={text} onComplete={handleTypingComplete} />
-                    ) : (
-                        <button className="continue-btn fade-in" onClick={() => setScreen('start')}>Về màn hình chính</button>
-                    )}
+                    <Typewriter text={text} onComplete={() => setScreen('start')} />
                 </div>
             </div>
         </SceneBackground>

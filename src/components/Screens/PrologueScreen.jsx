@@ -3,33 +3,43 @@ import { useGame } from '../../contexts/GameContext';
 import { getSceneBackground } from '../../utils/backgroundManager';
 import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
+import StatsPanel from '../UI/StatsPanel';
+import DiceOfDestiny from '../MiniGames/DiceOfDestiny';
 import './PrologueScreen.css';
 
 export default function PrologueScreen() {
     const { dispatch, setScreen } = useGame();
     const [step, setStep] = useState(0);
-    const [isTyping, setIsTyping] = useState(true); // Track typing status
+    const [showChoices, setShowChoices] = useState(false);
+    const [showDiceGame, setShowDiceGame] = useState(false);
     const [playerData, setPlayerData] = useState({
         name: '',
         gender: '',
-        origin: ''
+        origin: '',
+        detailedOrigin: ''
     });
 
-    // Reset typing state when step changes
+    // Reset showChoices when step changes
     useEffect(() => {
-        setIsTyping(true);
+        setShowChoices(false);
     }, [step]);
 
-    const handleTypingComplete = () => {
-        setIsTyping(false);
+    const handleOriginChoice = (origin) => {
+        setPlayerData({ ...playerData, origin });
+        setShowDiceGame(true);
     };
 
-    const handleOriginChoice = (origin, stats) => {
-        setPlayerData({ ...playerData, origin });
+    const handleDiceGameComplete = (result) => {
+        // Update player data with detailed origin
+        setPlayerData({ ...playerData, detailedOrigin: result.detailedOrigin });
+
+        // Update stats based on dice result
         dispatch({
             type: 'UPDATE_STATS',
-            payload: stats
+            payload: result.bonusStats
         });
+
+        setShowDiceGame(false);
         setStep(1);
     };
 
@@ -49,6 +59,16 @@ export default function PrologueScreen() {
         setScreen('chapter1');
     };
 
+    // Show Dice Game
+    if (showDiceGame) {
+        return (
+            <SceneBackground sceneKey="dream">
+                <StatsPanel />
+                <DiceOfDestiny origin={playerData.origin} onComplete={handleDiceGameComplete} />
+            </SceneBackground>
+        );
+    }
+
     // Step 0: Gặp Bà Tiên - Giới thiệu
     if (step === 0) {
         const text = `Chào ngươi, linh hồn trẻ tuổi...
@@ -63,6 +83,7 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
 
         return (
             <SceneBackground sceneKey="dream">
+                <StatsPanel />
                 <div className="character-container">
                     <img
                         src="/src/assets/characters/bà_tiên_bth.png"
@@ -73,19 +94,13 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        {isTyping ? (
-                            <Typewriter text={text} onComplete={handleTypingComplete} />
+                        {!showChoices ? (
+                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <div className="choices-container fade-in">
                                 <button
                                     className="choice-btn"
-                                    onClick={() => handleOriginChoice('rich', {
-                                        economy: 100,
-                                        happiness: 70,
-                                        health: 90,
-                                        social: 60,
-                                        knowledge: 80
-                                    })}
+                                    onClick={() => handleOriginChoice('rich')}
                                 >
                                     <span className="choice-title">🏰 Gia đình giàu có</span>
                                     <span className="choice-desc">Doanh nhân, có tiền có quyền, nhiều cơ hội nhưng áp lực lớn</span>
@@ -93,13 +108,7 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
 
                                 <button
                                     className="choice-btn"
-                                    onClick={() => handleOriginChoice('normal', {
-                                        economy: 50,
-                                        happiness: 100,
-                                        health: 100,
-                                        social: 80,
-                                        knowledge: 60
-                                    })}
+                                    onClick={() => handleOriginChoice('normal')}
                                 >
                                     <span className="choice-title">🏡 Gia đình bình thường</span>
                                     <span className="choice-desc">Công nhân, giáo viên - cuộc sống cân bằng, ít áp lực</span>
@@ -107,13 +116,7 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
 
                                 <button
                                     className="choice-btn"
-                                    onClick={() => handleOriginChoice('poor', {
-                                        economy: 20,
-                                        happiness: 80,
-                                        health: 90,
-                                        social: 70,
-                                        knowledge: 40
-                                    })}
+                                    onClick={() => handleOriginChoice('poor')}
                                 >
                                     <span className="choice-title">🏚️ Gia đình nghèo</span>
                                     <span className="choice-desc">Nông dân, công nhân nghèo - khó khăn nhưng ý chí mạnh mẽ</span>
@@ -134,6 +137,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
 
         return (
             <SceneBackground sceneKey="dream">
+                <StatsPanel />
                 <div className="character-container">
                     <img
                         src="/src/assets/characters/bà_tiên_vui_vẻ.png"
@@ -144,8 +148,8 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        {isTyping ? (
-                            <Typewriter text={text} onComplete={handleTypingComplete} />
+                        {!showChoices ? (
+                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <div className="choices-container fade-in">
                                 <button
@@ -177,6 +181,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
 
         return (
             <SceneBackground sceneKey="dream">
+                <StatsPanel />
                 <div className="character-container">
                     <img
                         src="/src/assets/characters/bà_tiên_khôn_ngoang.png"
@@ -187,27 +192,24 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        {isTyping ? (
-                            <Typewriter text={text} onComplete={handleTypingComplete} />
+                        {!showChoices ? (
+                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
                         ) : (
-                            <>
-                                <div className="input-container fade-in">
-                                    <input
-                                        type="text"
-                                        className="name-input"
-                                        placeholder="Nhập tên của bạn..."
-                                        value={playerData.name}
-                                        onChange={(e) => setPlayerData({ ...playerData, name: e.target.value })}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
-                                        autoFocus
-                                    />
-                                </div>
-                                {playerData.name.trim() && (
-                                    <button className="continue-btn fade-in" onClick={handleNameSubmit}>
-                                        Tiếp tục →
-                                    </button>
-                                )}
-                            </>
+                            <div className="input-container fade-in">
+                                <input
+                                    type="text"
+                                    className="name-input"
+                                    placeholder="Nhập tên của bạn... (Enter để tiếp tục)"
+                                    value={playerData.name}
+                                    onChange={(e) => setPlayerData({ ...playerData, name: e.target.value })}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && playerData.name.trim()) {
+                                            handleNameSubmit();
+                                        }
+                                    }}
+                                    autoFocus
+                                />
+                            </div>
                         )}
                     </div>
                 </div>
@@ -250,13 +252,11 @@ Tiếng khóc em bé vang lên...
 
         return (
             <SceneBackground sceneKey={sceneKey}>
+                <StatsPanel />
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Narrator</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={handleTypingComplete} />
-                        {!isTyping && (
-                            <button className="continue-btn fade-in" onClick={() => setStep(3.1)}>Tiếp tục →</button>
-                        )}
+                        <Typewriter text={text} onComplete={() => setStep(3.1)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -300,16 +300,14 @@ Nhưng mẹ sẽ cố gắng hết sức! Con phải học hành chăm chỉ đ�
 
         return (
             <SceneBackground sceneKey={sceneKey}>
+                <StatsPanel />
                 <div className="character-container">
                     <img src={characterImg} alt={speakerName} className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">{speakerName}</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={handleTypingComplete} />
-                        {!isTyping && (
-                            <button className="continue-btn fade-in" onClick={() => setStep(3.2)}>Tiếp tục →</button>
-                        )}
+                        <Typewriter text={text} onComplete={() => setStep(3.2)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -364,13 +362,11 @@ Bạn quyết tâm phải thoát nghèo! Ý chí của bạn rất mạnh mẽ!`
 
         return (
             <SceneBackground sceneKey={sceneKey}>
+                <StatsPanel />
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Narrator</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={handleTypingComplete} />
-                        {!isTyping && (
-                            <button className="continue-btn fade-in" onClick={() => setStep(4)}>Tiếp tục →</button>
-                        )}
+                        <Typewriter text={text} onComplete={() => setStep(4)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -394,6 +390,7 @@ Mỗi giai đoạn đều có thử thách riêng... Hãy chọn khôn ngoan!`;
 
         return (
             <SceneBackground sceneKey="dream">
+                <StatsPanel />
                 <div className="character-container">
                     <img
                         src="/src/assets/characters/bà_tiên_vui_vẻ.png"
@@ -404,13 +401,7 @@ Mỗi giai đoạn đều có thử thách riêng... Hãy chọn khôn ngoan!`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={handleTypingComplete} />
-
-                        {!isTyping && (
-                            <button className="continue-btn fade-in" onClick={handleComplete}>
-                                Bắt đầu cuộc đời →
-                            </button>
-                        )}
+                        <Typewriter text={text} onComplete={handleComplete} />
                     </div>
                 </div>
             </SceneBackground>

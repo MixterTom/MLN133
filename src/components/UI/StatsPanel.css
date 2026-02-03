@@ -124,16 +124,16 @@
     .stats-content {
         gap: 12px;
     }
-    
+
     .stat-item {
         min-width: 100px;
         max-width: 150px;
     }
-    
+
     .stat-label {
         font-size: 11px;
     }
-    
+
     .stat-value {
         font-size: 12px;
     }

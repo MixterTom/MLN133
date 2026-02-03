@@ -29,6 +29,12 @@ const Typewriter = ({
     const indexRef = useRef(0);
     const lastTextRef = useRef('');
     const textIdRef = useRef(0);
+    const onCompleteRef = useRef(onComplete); // Store onComplete in ref to avoid re-triggering
+
+    // Update onCompleteRef when onComplete changes
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
 
     // Get speaker from DOM
     const getSpeaker = useCallback(() => {
@@ -149,13 +155,13 @@ const Typewriter = ({
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
-        
+
         skippedRef.current = true;
-        
+
         // Hiển thị toàn bộ text ngay lập tức - QUAN TRỌNG: text phải hiển thị đầy đủ
         setDisplayedText(text);
         indexRef.current = text.length;
-        
+
         // Scroll to bottom để đảm bảo thấy hết nội dung
         setTimeout(() => {
             const el = document.querySelector('.dialogue-content');
@@ -163,7 +169,7 @@ const Typewriter = ({
                 el.scrollTop = el.scrollHeight;
             }
         }, 10);
-        
+
         // KHÔNG gọi onComplete ở đây - để text vẫn hiển thị
         // onComplete sẽ được gọi khi text tự động hoàn thành hoặc khi người dùng click tiếp
     }, [text, displayedText.length]);
@@ -188,14 +194,23 @@ const Typewriter = ({
 
     // Typewriter animation
     useEffect(() => {
-        setDisplayedText('');
+        // Reset state
         indexRef.current = 0;
         skippedRef.current = false;
         hasCompletedRef.current = false;
 
+        // Hiển thị ký tự đầu tiên ngay lập tức để tránh bị mất
+        setDisplayedText(text.charAt(0) || '');
+        indexRef.current = 1; // Bắt đầu từ ký tự thứ 2
+
+        // Clear any existing interval
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+
         intervalRef.current = setInterval(() => {
             // Nếu đã skip thì không cần tiếp tục animation
-            // KHÔNG gọi onComplete ở đây - sẽ được gọi khi user click tiếp
             if (skippedRef.current) {
                 if (intervalRef.current) {
                     clearInterval(intervalRef.current);
@@ -205,7 +220,7 @@ const Typewriter = ({
             }
 
             if (indexRef.current < text.length) {
-                setDisplayedText(prev => prev + text.charAt(indexRef.current));
+                setDisplayedText(text.substring(0, indexRef.current + 1));
                 indexRef.current++;
 
                 const el = document.querySelector('.dialogue-content');
@@ -215,11 +230,11 @@ const Typewriter = ({
                     clearInterval(intervalRef.current);
                     intervalRef.current = null;
                 }
-                // Gọi onComplete khi text tự động hoàn thành
-                if (!hasCompletedRef.current && onComplete) {
-                    hasCompletedRef.current = true;
-                    onComplete();
-                }
+                // KHÔNG tự động gọi onComplete - người chơi phải click để tiếp tục
+                // if (!hasCompletedRef.current && onCompleteRef.current) {
+                //     hasCompletedRef.current = true;
+                //     onCompleteRef.current();
+                // }
             }
         }, speed);
 
@@ -229,7 +244,7 @@ const Typewriter = ({
                 intervalRef.current = null;
             }
         };
-    }, [text, onComplete, speed]);
+    }, [text, speed]); // Removed onComplete from dependencies
 
     // Show skip option only when typing and not completed
     const isTyping = displayedText.length < text.length;
@@ -239,15 +254,15 @@ const Typewriter = ({
         const handleClick = (e) => {
             // Không xử lý nếu click vào button, input, hoặc các element tương tác
             const target = e.target;
-            const isInteractive = target.tagName === 'BUTTON' || 
-                                  target.tagName === 'INPUT' || 
-                                  target.tagName === 'TEXTAREA' ||
-                                  target.closest('button') ||
-                                  target.closest('input') ||
-                                  target.closest('textarea') ||
-                                  target.closest('.choice-btn') ||
-                                  target.closest('.continue-btn');
-            
+            const isInteractive = target.tagName === 'BUTTON' ||
+                target.tagName === 'INPUT' ||
+                target.tagName === 'TEXTAREA' ||
+                target.closest('button') ||
+                target.closest('input') ||
+                target.closest('textarea') ||
+                target.closest('.choice-btn') ||
+                target.closest('.continue-btn');
+
             if (isInteractive) {
                 return;
             }
@@ -255,21 +270,21 @@ const Typewriter = ({
             // Nếu đang typing: skip animation và hiển thị text đầy đủ
             if (isTyping) {
                 skipAnimation();
-            } 
+            }
             // Nếu text đã đầy đủ và chưa gọi onComplete: gọi onComplete để tiếp tục
-            else if (displayedText.length >= text.length && !hasCompletedRef.current && onComplete) {
+            else if (displayedText.length >= text.length && !hasCompletedRef.current && onCompleteRef.current) {
                 hasCompletedRef.current = true;
-                onComplete();
+                onCompleteRef.current();
             }
         };
 
         // Thêm listener
         window.addEventListener('click', handleClick);
-        
+
         return () => {
             window.removeEventListener('click', handleClick);
         };
-    }, [isTyping, displayedText.length, text.length, skipAnimation, onComplete]);
+    }, [isTyping, displayedText.length, text.length, skipAnimation]); // Removed onComplete
 
     return (
         <div className="typewriter-container">

@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useGame } from '../../contexts/GameContext';
+import { useState } from 'react';
 import './MiniGame.css';
 
 const WEDDING_ITEMS = [
@@ -21,10 +20,10 @@ const WEDDING_ITEMS = [
     { id: 'guest_3', name: 'Mời cả làng (500)', cost: 60, happiness: 10, social: 40, type: 'guest', icon: '📢' },
 ];
 
-export default function WeddingPlanGame({ budget = 100, onComplete }) {
+export default function WeddingPlanGame({ budget = 150, onComplete }) {
     const [currentBudget, setCurrentBudget] = useState(budget);
     const [selectedItems, setSelectedItems] = useState({});
-    const [gameStep, setGameStep] = useState('playing'); // playing, result
+    const [gameStep, setGameStep] = useState('playing');
 
     const categories = ['venue', 'dress', 'food', 'photo', 'guest'];
     const categoryNames = {
@@ -38,7 +37,6 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
     const handleSelectItem = (item) => {
         const currentCategoryItem = selectedItems[item.type];
 
-        // Nếu đã chọn item này rồi thì bỏ chọn (hoàn tiền)
         if (currentCategoryItem && currentCategoryItem.id === item.id) {
             setCurrentBudget(prev => prev + item.cost);
             const newSelected = { ...selectedItems };
@@ -47,15 +45,9 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
             return;
         }
 
-        // Nếu chọn item mới
         let costDiff = item.cost;
         if (currentCategoryItem) {
-            costDiff -= currentCategoryItem.cost; // Trừ đi tiền của item cũ được hoàn lại
-        }
-
-        if (currentBudget - costDiff < 0) {
-            alert("Không đủ ngân sách!");
-            return;
+            costDiff -= currentCategoryItem.cost;
         }
 
         setCurrentBudget(prev => prev - costDiff);
@@ -63,18 +55,6 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
             ...prev,
             [item.type]: item
         }));
-    };
-
-    const calculateTotalStats = () => {
-        let totalHappiness = 0;
-        let totalSocial = 0;
-
-        Object.values(selectedItems).forEach(item => {
-            totalHappiness += item.happiness;
-            totalSocial += item.social;
-        });
-
-        return { happiness: totalHappiness, social: totalSocial };
     };
 
     const handleFinish = () => {
@@ -86,21 +66,92 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
     };
 
     const handleClose = () => {
-        const stats = calculateTotalStats();
-        // Bonus for saving money
-        if (currentBudget > 10) {
-            stats.economy = 10;
+        const moneyLeft = currentBudget;
+        const moneySpent = budget - currentBudget;
+
+        const stats = {
+            happiness: 0,
+            economy: 0,
+            social: 0
+        };
+
+        if (moneyLeft < 0) {
+            const debt = Math.abs(moneyLeft);
+            stats.happiness = 0;
+            stats.economy = -debt;
+            stats.social = 30;
+        } else if (moneySpent >= 130 && moneySpent <= 150) {
+            stats.happiness = 30;
+            stats.economy = moneyLeft;
+            stats.social = 20;
+        } else if (moneySpent >= 100 && moneySpent < 130) {
+            stats.happiness = 20;
+            stats.economy = moneyLeft;
+            stats.social = 5;
+        } else {
+            stats.happiness = 10;
+            stats.economy = moneyLeft;
+            stats.social = -20;
         }
+
         onComplete({ bonusStats: stats });
     };
 
     if (gameStep === 'result') {
-        const stats = calculateTotalStats();
+        const moneyLeft = currentBudget;
+        const moneySpent = budget - currentBudget;
+
+        let resultTitle = '';
+        let resultMessage = '';
+        let resultColor = '';
+        let advantages = [];
+        let disadvantages = [];
+
+        if (moneyLeft < 0) {
+            const debt = Math.abs(moneyLeft);
+            resultTitle = '😰 Vượt Ngân Sách!';
+            resultMessage = `Bạn đã chi ${moneySpent}tr, vượt quá ${debt}tr!`;
+            resultColor = '#ff4444';
+            advantages = ['✅ Đám cưới hoành tráng, mọi người khen ngợi'];
+            disadvantages = [
+                `❌ Nợ ${debt}tr, áp lực tài chính rất lớn`,
+                '❌ Stress, lo lắng về tương lai'
+            ];
+        } else if (moneySpent >= 130 && moneySpent <= 150) {
+            resultTitle = '🎉 Hoàn Hảo!';
+            resultMessage = `Bạn đã chi ${moneySpent}tr, còn dư ${moneyLeft}tr!`;
+            resultColor = '#4CAF50';
+            advantages = [
+                '✅ Đám cưới đẹp, mọi người hài lòng',
+                '✅ Tiết kiệm được tiền cho tương lai',
+                '✅ Mọi người khen khôn ngoan'
+            ];
+            disadvantages = ['⚠️ Không có gì đặc biệt nổi bật'];
+        } else if (moneySpent >= 100 && moneySpent < 130) {
+            resultTitle = '💰 Tiết Kiệm';
+            resultMessage = `Bạn đã chi ${moneySpent}tr, còn dư ${moneyLeft}tr.`;
+            resultColor = '#2196F3';
+            advantages = [
+                '✅ Tiết kiệm nhiều tiền cho tương lai',
+                '✅ Đám cưới ấm cúng, vui vẻ'
+            ];
+            disadvantages = ['⚠️ Đám cưới bình thường, không ấn tượng'];
+        } else {
+            resultTitle = '😕 Quá Tiết Kiệm';
+            resultMessage = `Bạn chỉ chi ${moneySpent}tr, còn dư ${moneyLeft}tr.`;
+            resultColor = '#ff9800';
+            advantages = ['✅ Tiết kiệm RẤT nhiều tiền'];
+            disadvantages = [
+                '❌ Đám cưới quá đơn giản, hơi tiếc',
+                '❌ Bị bàn tán là "keo kiệt"'
+            ];
+        }
+
         return (
             <div className="minigame-overlay">
                 <div className="minigame-container">
                     <div className="minigame-header">
-                        <h2>🎉 Đám Cưới Hoàn Hảo! 🎉</h2>
+                        <h2 style={{ color: resultColor }}>{resultTitle}</h2>
                     </div>
                     <div className="game-result">
                         <div className="result-items">
@@ -110,11 +161,69 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
                                 </span>
                             ))}
                         </div>
-                        <p className="result-text">Bạn đã tổ chức một đám cưới tuyệt vời!</p>
+                        <p className="result-text" style={{
+                            fontSize: '18px',
+                            marginBottom: '15px',
+                            color: '#ffffff',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            fontWeight: '500'
+                        }}>
+                            {resultMessage}
+                        </p>
+
+                        <div style={{
+                            textAlign: 'left',
+                            margin: '15px 0',
+                            padding: '20px',
+                            background: 'rgba(0,0,0,0.4)',
+                            borderRadius: '12px',
+                            border: '2px solid rgba(255,255,255,0.2)'
+                        }}>
+                            <div style={{ marginBottom: '15px' }}>
+                                <strong style={{
+                                    color: '#66ff66',
+                                    fontSize: '18px',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    display: 'block',
+                                    marginBottom: '8px'
+                                }}>Ưu điểm:</strong>
+                                {advantages.map((adv, i) => (
+                                    <div key={i} style={{
+                                        marginLeft: '10px',
+                                        fontSize: '16px',
+                                        marginTop: '6px',
+                                        color: '#e0e0e0',
+                                        textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+                                        lineHeight: '1.6'
+                                    }}>{adv}</div>
+                                ))}
+                            </div>
+                            <div>
+                                <strong style={{
+                                    color: '#ff6666',
+                                    fontSize: '18px',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    display: 'block',
+                                    marginBottom: '8px'
+                                }}>Nhược điểm:</strong>
+                                {disadvantages.map((dis, i) => (
+                                    <div key={i} style={{
+                                        marginLeft: '10px',
+                                        fontSize: '16px',
+                                        marginTop: '6px',
+                                        color: '#e0e0e0',
+                                        textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+                                        lineHeight: '1.6'
+                                    }}>{dis}</div>
+                                ))}
+                            </div>
+                        </div>
+
                         <div className="result-stats-grid">
-                            <div className="result-stat">❤️ Hạnh phúc: +{stats.happiness}</div>
-                            <div className="result-stat">🤝 Quan hệ: +{stats.social}</div>
-                            {currentBudget > 10 && <div className="result-stat">💰 Tiết kiệm: +10</div>}
+                            <div className="result-stat">💰 Chi: {moneySpent}tr / {budget}tr</div>
+                            <div className="result-stat" style={{ color: moneyLeft < 0 ? '#ff4444' : '#4CAF50' }}>
+                                {moneyLeft < 0 ? '💸 Nợ' : '💵 Dư'}: {Math.abs(moneyLeft)}tr
+                            </div>
                         </div>
                         <button className="continue-btn" onClick={handleClose}>Hoàn thành</button>
                     </div>
@@ -129,8 +238,12 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
                 <div className="minigame-header">
                     <h2>💒 Lập Kế Hoạch Đám Cưới</h2>
                     <div className="minigame-stats">
-                        <span style={{ color: currentBudget < 20 ? '#ff4444' : '#ffd700' }}>
-                            💰 Ngân sách: {currentBudget} triệu
+                        <span style={{
+                            color: currentBudget < 0 ? '#ff4444' : currentBudget < 30 ? '#ff9800' : '#4CAF50',
+                            fontWeight: 'bold',
+                            fontSize: '18px'
+                        }}>
+                            💰 Ngân sách: {currentBudget} triệu {currentBudget < 0 ? '(NỢ!)' : ''}
                         </span>
                     </div>
                 </div>
@@ -143,16 +256,12 @@ export default function WeddingPlanGame({ budget = 100, onComplete }) {
                                 {WEDDING_ITEMS.filter(item => item.type === cat).map(item => (
                                     <div
                                         key={item.id}
-                                        className={`wedding-item ${selectedItems[cat]?.id === item.id ? 'selected' : ''} ${selectedItems[cat]?.id !== item.id && currentBudget < item.cost - (selectedItems[cat]?.cost || 0) ? 'disabled' : ''}`}
+                                        className={`wedding-item ${selectedItems[cat]?.id === item.id ? 'selected' : ''}`}
                                         onClick={() => handleSelectItem(item)}
                                     >
                                         <span className="item-icon">{item.icon}</span>
                                         <div className="item-info">
                                             <div className="item-name">{item.name}</div>
-                                            <div className="item-stats">
-                                                <span>❤️ +{item.happiness}</span>
-                                                <span>🤝 +{item.social}</span>
-                                            </div>
                                         </div>
                                         <div className="item-cost">-{item.cost}tr</div>
                                     </div>
