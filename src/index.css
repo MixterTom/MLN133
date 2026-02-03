@@ -12,6 +12,15 @@ body {
   overflow: hidden;
 }
 
+/* Anti-select (applies broadly but keeps inputs usable) */
+body.no-text-select,
+body.no-text-select *:not(input):not(textarea) {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 button {
   font-family: inherit;
 }

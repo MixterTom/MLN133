@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+api-worker-windows.exe
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -7,6 +7,7 @@ import Typewriter from '../Common/Typewriter';
 
 import StudyGroupGame from '../MiniGames/StudyGroupGame';
 import ParentingGame from '../MiniGames/ParentingGame';
+import WorkBalanceGame from '../MiniGames/WorkBalanceGame';
 import './PrologueScreen.css';
 
 export default function Chapter3Screen() {
@@ -364,7 +365,11 @@ Và bắt đầu có những rắc rối trẻ thơ...`;
 
         return (
             <SceneBackground sceneKey="dream">
-                <ParentingGame onComplete={handleGameComplete} childAge={5} />
+                <ParentingGame
+                    onComplete={handleGameComplete}
+                    onStatChange={(delta) => updateStats(delta)}
+                    childAge={5}
+                />
             </SceneBackground>
         );
     }
@@ -591,7 +596,7 @@ Hãy chọn khôn ngoan...`;
                                     <button className="choice-btn" onClick={() => {
                                         handleChoice({ economy: -100, happiness: 30, social: 20 }, { type: 'parents', value: 'buy_new_house' });
                                         setFlag('parents_decision', 'buy_new_house');
-                                        setScenario('chapter_end');
+                                        setScenario('parents_move_in_intro');
                                         setStep(0);
                                     }}>
                                         <span className="choice-title">🏠 Mua nhà mới 4 phòng</span>
@@ -600,7 +605,7 @@ Hãy chọn khôn ngoan...`;
                                     <button className="choice-btn" onClick={() => {
                                         handleChoice({ happiness: 10, social: 10 }, { type: 'parents', value: 'stay_old_house' });
                                         setFlag('parents_decision', 'stay_old_house');
-                                        setScenario('chapter_end');
+                                        setScenario('parents_move_in_intro');
                                         setStep(0);
                                     }}>
                                         <span className="choice-title">🏡 Ở nhà cũ</span>
@@ -609,7 +614,7 @@ Hãy chọn khôn ngoan...`;
                                     <button className="choice-btn" onClick={() => {
                                         handleChoice({ economy: 20, happiness: -30, social: -20 }, { type: 'parents', value: 'send_money' });
                                         setFlag('parents_decision', 'send_money');
-                                        setScenario('chapter_end');
+                                        setScenario('parents_move_in_intro');
                                         setStep(0);
                                     }}>
                                         <span className="choice-title">💰 Gửi tiền về quê</span>
@@ -622,6 +627,500 @@ Hãy chọn khôn ngoan...`;
                 </div>
             </SceneBackground>
         );
+    }
+
+    // SCENARIO: Ba mẹ lên ở chung (intro)
+    if (scenario === 'parents_move_in_intro') {
+        if (step === 0) {
+            const text = `📅 Vài ngày sau...
+
+Bạn và ${partnerName} bắt đầu dọn dẹp, chuẩn bị một góc nhỏ cho bố mẹ.`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `${partnerName}: "Anh/Em ơi... mình sắp xếp phòng thế nào đây?" 😰
+
+Bạn: "Mình cố gắng thôi... miễn bố mẹ lên ở cùng, yên tâm tuổi già..."`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
+                        <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    updateStats({ happiness: 10, social: 10 });
+                                    setScenario('parents_move_in_conflict');
+                                    setStep(0);
+                                }}>Đón bố mẹ lên →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    // SCENARIO: Ba mẹ lên ở chung (va chạm thế hệ)
+    if (scenario === 'parents_move_in_conflict') {
+        if (step === 0) {
+            const text = `🚉 Tuần sau...
+
+Bố mẹ lên thành phố, mang theo nhiều đồ quê.
+
+Bố: "Con ơi! Bố nhớ con quá!"
+
+Mẹ: "Cháu đâu rồi? Bà nhớ cháu!"`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_parents_request">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `🌅 Tuần đầu tiên...
+
+5:00 AM - tiếng nồi niêu khua lạch cạch.
+
+Mẹ: "Con ơi! Dậy ăn sáng!" 😐
+
+${partnerName} (mệt): "Sớm quá..." 😵`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/mẹ_nghiêm_túc.png" alt="Mẹ" className="character-sprite left" />
+                        <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(2)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 2) {
+            const text = `📺 Buổi tối...
+
+Bố bật TV rất to.
+
+Bạn: "Bố ơi... nhỏ tiếng xuống được không ạ?" 😰
+
+Bố: "Tai bố kém, phải to mới nghe!" 😠`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/bố_tức_giận.png" alt="Bố" className="character-sprite left" />
+                        <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    updateStats({ happiness: -10, social: -5 });
+                                    setScenario('parents_move_in_resolution');
+                                    setStep(0);
+                                }}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    // SCENARIO: Ba mẹ lên ở chung (chốt hòa giải)
+    if (scenario === 'parents_move_in_resolution') {
+        if (step === 0) {
+            const text = `🌙 Đêm đó...
+
+Bạn nhận ra: nếu không nói chuyện rõ ràng, mọi người sẽ càng buồn.
+
+Bạn mời cả nhà ngồi lại.`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `Bạn: "Con biết bố mẹ muốn giúp... và vợ/chồng con cũng cần được tôn trọng."
+
+"Mình thống nhất vài điều nhé:"
+
+- Sáng dậy sớm thì nhỏ tiếng
+- TV giảm âm lượng
+- Chăm cháu thì hỏi ý kiến bố/mẹ
+
+Cả nhà gật đầu. Không hoàn hảo, nhưng là một khởi đầu.`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
+                        <img src={`/src/assets/characters/${partner}_vui_vẻ.png`} alt={partnerName} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    updateStats({ happiness: 20, social: 20, knowledge: 10 });
+                                    setFlag('chapter3_parents_moved_in', true);
+                                    setScenario('parenting_teach_intro');
+                                    setStep(0);
+                                }}>Đi tiếp: Dạy con học →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    // SCENARIO: Dạy con học (intro + mini-game)
+    if (scenario === 'parenting_teach_intro') {
+        if (step === 0) {
+            const text = `📚 36 tuổi - Con vào lớp 1
+
+Con bắt đầu có bài tập về nhà...
+
+Và bạn nhận ra: Dạy con học là một hành trình dài.`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `Con: "Bố/Mẹ ơi! Con không biết làm bài này!" 😰
+
+Bạn sẽ phản ứng như thế nào?`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    {showStatChange && (
+                        <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
+                    )}
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <>
+                                    <div className="choices-container fade-in">
+                                        <button className="choice-btn" onClick={() => {
+                                            handleChoice({ happiness: 10, knowledge: 10 }, { type: 'teach', value: 'guide' });
+                                            setFlag('chapter3_teach_style', 'guide');
+                                        }}>
+                                            <span className="choice-title">📖 Hướng dẫn con tự làm</span>
+                                            <span className="choice-desc">Chậm hơn, nhưng con học được cách tư duy</span>
+                                        </button>
+                                        <button className="choice-btn" onClick={() => {
+                                            handleChoice({ happiness: -5, knowledge: -5 }, { type: 'teach', value: 'do_for_child' });
+                                            setFlag('chapter3_teach_style', 'do_for_child');
+                                        }}>
+                                            <span className="choice-title">🎯 Làm hộ con cho nhanh</span>
+                                            <span className="choice-desc">Nhanh nhưng con dễ phụ thuộc</span>
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        // Sau khi apply stat change (step tăng lên), chuyển sang mini-game
+        if (step === 2) {
+            const text = `Để con tiến bộ, bạn quyết định dành thời gian cùng con ôn bài.
+
+Hãy chơi mini-game "Học nhóm" như một bài luyện tập trí nhớ!`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setScenario('parenting_teach_game');
+                                    setStep(0);
+                                }}>Bắt đầu mini-game →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    if (scenario === 'parenting_teach_game') {
+        const handleGameComplete = (score) => {
+            const bonus = {
+                knowledge: Math.max(5, Math.round(score / 20)),
+                happiness: Math.max(0, Math.round(score / 40))
+            };
+            updateStats(bonus);
+            setScenario('child_sick_intro');
+            setStep(0);
+        };
+
+        return (
+            <SceneBackground sceneKey="chapter3_family_discussion">
+                <StudyGroupGame onComplete={handleGameComplete} />
+            </SceneBackground>
+        );
+    }
+
+    // SCENARIO: Con ốm (intro + mini-game cân bằng)
+    if (scenario === 'child_sick_intro') {
+        if (step === 0) {
+            const text = `🤒 37 tuổi - Nửa đêm
+
+Con (khóc): "Bố/Mẹ ơi... con đau..." 😢
+
+Bạn choàng dậy, sờ trán con...`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_hospital_night">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `🌡️ Con sốt cao và phải vào viện.
+
+Sau ca cấp cứu, một vấn đề khác xuất hiện:
+
+Công việc vẫn không chờ bạn...`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_hospital">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setScenario('child_sick_balance_game');
+                                    setStep(0);
+                                }}>Cân bằng công việc & gia đình (Mini-game) →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    if (scenario === 'child_sick_balance_game') {
+        const handleGameComplete = (result) => {
+            if (result?.bonusStats) {
+                updateStats(result.bonusStats);
+            }
+            setScenario('child_study_bad_intro');
+            setStep(0);
+        };
+
+        return (
+            <SceneBackground sceneKey="chapter3_hospital">
+                <WorkBalanceGame onComplete={handleGameComplete} />
+            </SceneBackground>
+        );
+    }
+
+    // SCENARIO: Con học kém (intro + choice)
+    if (scenario === 'child_study_bad_intro') {
+        if (step === 0) {
+            const text = `📉 38 tuổi - Họp phụ huynh
+
+Giáo viên: "Phụ huynh ơi... con anh/chị học kém..." 😐
+
+Bạn cảm thấy lo lắng và áp lực.`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => setStep(1)}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            const text = `Về nhà, con im lặng...
+
+Bạn sẽ xử lý như thế nào?`;
+
+            return (
+                <SceneBackground sceneKey="chapter3_family_discussion">
+                    <StatsPanel />
+                    {showStatChange && (
+                        <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
+                    )}
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <>
+                                    <div className="choices-container fade-in">
+                                        <button className="choice-btn" onClick={() => {
+                                            handleChoice({ happiness: 20, knowledge: 10 }, { type: 'study', value: 'find_reason' });
+                                            setFlag('chapter3_study_style', 'find_reason');
+                                        }}>
+                                            <span className="choice-title">💡 Tìm hiểu nguyên nhân & giúp con</span>
+                                            <span className="choice-desc">Mất thời gian nhưng bền vững</span>
+                                        </button>
+                                        <button className="choice-btn" onClick={() => {
+                                            handleChoice({ happiness: -20, knowledge: -10 }, { type: 'study', value: 'punish' });
+                                            setFlag('chapter3_study_style', 'punish');
+                                        }}>
+                                            <span className="choice-title">😠 Phạt con, ép học</span>
+                                            <span className="choice-desc">Nhanh nhưng dễ phản tác dụng</span>
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 2) {
+            const text = `Dù lựa chọn thế nào, bạn cũng nhận ra:
+
+Nuôi dạy con là chuỗi những quyết định không hoàn hảo.
+
+Bạn đã đi hết một chặng đường dài của Chapter 3.`;
+
+            return (
+                <SceneBackground sceneKey="dream">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {isTyping ? (
+                                <Typewriter text={text} onComplete={handleTypingComplete} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setScenario('chapter_end');
+                                    setStep(0);
+                                }}>Tổng kết Chapter 3 →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
     }
 
     // SCENARIO: Kết thúc Chapter 3
@@ -639,7 +1138,13 @@ Hãy chọn khôn ngoan...`;
 
 ${decisionText}
 
-Cuộc đời không có lựa chọn hoàn hảo... Chỉ có lựa chọn phù hợp nhất...`;
+Bạn đã trải qua:
+- Sinh con và làm cha/mẹ
+- Dạy con học
+- Cân bằng công việc và gia đình
+- Đối diện áp lực khi con gặp khó khăn
+
+Giờ đây, bạn bước vào Chapter 4...`;
 
             return (
                 <SceneBackground sceneKey="dream">

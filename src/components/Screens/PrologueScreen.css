@@ -55,6 +55,11 @@
     margin-right: -8%;
 }
 
+.character-container > .character-sprite.left,
+.character-container > .character-sprite.right {
+    bottom: -100px;
+}
+
 /* Dialogue Box - Centered, smaller width */
 .dialogue-box {
     position: fixed;
