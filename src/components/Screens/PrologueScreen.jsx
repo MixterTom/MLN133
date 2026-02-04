@@ -5,6 +5,7 @@ import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
 import StatsPanel from '../UI/StatsPanel';
 import DiceOfDestiny from '../MiniGames/DiceOfDestiny';
+import GameModal from '../UI/GameModal';
 import './PrologueScreen.css';
 
 export default function PrologueScreen() {
@@ -18,6 +19,10 @@ export default function PrologueScreen() {
         origin: '',
         detailedOrigin: ''
     });
+    const [showModal, setShowModal] = useState(false);
+    const [modalConfig, setModalConfig] = useState({});
+    const [nameError, setNameError] = useState('');
+    const [nameTouched, setNameTouched] = useState(false);
 
     // Reset showChoices when step changes
     useEffect(() => {
@@ -48,11 +53,100 @@ export default function PrologueScreen() {
         setStep(2);
     };
 
-    const handleNameSubmit = () => {
-        if (playerData.name.trim()) {
-            dispatch({ type: 'SET_PLAYER_DATA', payload: playerData });
-            setStep(3);
+    // Validation rules for name
+    const validateName = (name) => {
+        const trimmedName = name.trim();
+        
+        if (!trimmedName) {
+            return {
+                isValid: false,
+                error: 'Tên không được để trống!'
+            };
         }
+        
+        if (trimmedName.length < 2) {
+            return {
+                isValid: false,
+                error: 'Tên phải có ít nhất 2 ký tự!'
+            };
+        }
+        
+        if (trimmedName.length > 20) {
+            return {
+                isValid: false,
+                error: 'Tên không được vượt quá 20 ký tự!'
+            };
+        }
+        
+        // Allow Vietnamese characters, letters, numbers, spaces, and common Vietnamese name characters
+        // Pattern: Vietnamese letters (including accented), numbers, spaces, and common name separators
+        const validNamePattern = /^[a-zA-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐđ\s]+$/;
+        
+        if (!validNamePattern.test(trimmedName)) {
+            return {
+                isValid: false,
+                error: 'Tên chỉ được chứa chữ cái, số và dấu cách!'
+            };
+        }
+        
+        // Check for consecutive spaces
+        if (trimmedName.includes('  ')) {
+            return {
+                isValid: false,
+                error: 'Tên không được có nhiều khoảng trắng liên tiếp!'
+            };
+        }
+        
+        // Check for leading/trailing spaces (shouldn't happen after trim, but just in case)
+        if (name !== trimmedName) {
+            return {
+                isValid: false,
+                error: 'Tên không được có khoảng trắng ở đầu hoặc cuối!'
+            };
+        }
+        
+        return {
+            isValid: true,
+            error: ''
+        };
+    };
+
+    const handleNameChange = (e) => {
+        const newName = e.target.value;
+        setPlayerData({ ...playerData, name: newName });
+        
+        if (nameTouched) {
+            const validation = validateName(newName);
+            setNameError(validation.error);
+        }
+    };
+
+    const handleNameBlur = () => {
+        setNameTouched(true);
+        const validation = validateName(playerData.name);
+        setNameError(validation.error);
+    };
+
+    const handleNameSubmit = () => {
+        setNameTouched(true);
+        const validation = validateName(playerData.name);
+        
+        if (!validation.isValid) {
+            setNameError(validation.error);
+            setModalConfig({
+                title: '⚠️ Tên không hợp lệ',
+                message: validation.error,
+                type: 'alert',
+                icon: '⚠️'
+            });
+            setShowModal(true);
+            return;
+        }
+        
+        // Name is valid, proceed
+        dispatch({ type: 'SET_PLAYER_DATA', payload: { ...playerData, name: playerData.name.trim() } });
+        setNameError('');
+        setStep(3);
     };
 
     const handleComplete = () => {
@@ -180,40 +274,65 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
         const text = `Tuyệt vời! Giờ đây... Ngươi muốn có tên gì?`;
 
         return (
-            <SceneBackground sceneKey="dream">
-                <StatsPanel />
-                <div className="character-container">
-                    <img
-                        src="/src/assets/characters/bà_tiên_khôn_ngoang.png"
-                        alt="Bà Tiên Duyên"
-                        className="character-sprite left"
-                    />
-                </div>
-                <div className="dialogue-box">
-                    <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
-                    <div className="dialogue-content">
-                        {!showChoices ? (
-                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
-                        ) : (
-                            <div className="input-container fade-in">
-                                <input
-                                    type="text"
-                                    className="name-input"
-                                    placeholder="Nhập tên của bạn... (Enter để tiếp tục)"
-                                    value={playerData.name}
-                                    onChange={(e) => setPlayerData({ ...playerData, name: e.target.value })}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter' && playerData.name.trim()) {
-                                            handleNameSubmit();
-                                        }
-                                    }}
-                                    autoFocus
-                                />
-                            </div>
-                        )}
+            <>
+                <SceneBackground sceneKey="dream">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img
+                            src="/src/assets/characters/bà_tiên_khôn_ngoang.png"
+                            alt="Bà Tiên Duyên"
+                            className="character-sprite left"
+                        />
                     </div>
-                </div>
-            </SceneBackground>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
+                        <div className="dialogue-content">
+                            {!showChoices ? (
+                                <Typewriter text={text} onComplete={() => setShowChoices(true)} />
+                            ) : (
+                                <div className="input-container fade-in">
+                                    <input
+                                        type="text"
+                                        className={`name-input ${nameError ? 'error' : ''} ${!nameError && playerData.name.trim() ? 'valid' : ''}`}
+                                        placeholder="Nhập tên của bạn... (Enter để tiếp tục)"
+                                        value={playerData.name}
+                                        onChange={handleNameChange}
+                                        onBlur={handleNameBlur}
+                                        onKeyPress={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleNameSubmit();
+                                            }
+                                        }}
+                                        autoFocus
+                                        maxLength={20}
+                                    />
+                                    {nameError && (
+                                        <div className="name-error-message">
+                                            <span className="error-icon">⚠️</span>
+                                            {nameError}
+                                        </div>
+                                    )}
+                                    {!nameError && playerData.name.trim() && (
+                                        <div className="name-hint">
+                                            <span className="hint-icon">✓</span>
+                                            Tên hợp lệ! Nhấn Enter để tiếp tục
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+                <GameModal
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                    onConfirm={() => setShowModal(false)}
+                    title={modalConfig.title || 'Thông báo'}
+                    message={modalConfig.message || ''}
+                    type={modalConfig.type || 'alert'}
+                    icon={modalConfig.icon || '✨'}
+                />
+            </>
         );
     }
 

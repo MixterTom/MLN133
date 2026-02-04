@@ -20,6 +20,10 @@ export default function DiceOfDestiny({ origin, onComplete }) {
     const [totalScore, setTotalScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
     const [rollHistory, setRollHistory] = useState([]);
+    
+    // Check if all dice are locked
+    const allLocked = lockedDice.every(locked => locked === true);
+    const hasLocked = lockedDice.some(locked => locked === true);
 
     const rollDice = () => {
         if (rollCount >= 5 || isRolling) return;
@@ -47,7 +51,7 @@ export default function DiceOfDestiny({ origin, onComplete }) {
     };
 
     const toggleLock = (index) => {
-        if (isRolling || rollCount === 0) return;
+        if (isRolling || rollCount === 0 || !dice[index]) return;
         const newLocked = [...lockedDice];
         newLocked[index] = !newLocked[index];
         setLockedDice(newLocked);
@@ -198,7 +202,7 @@ export default function DiceOfDestiny({ origin, onComplete }) {
                 {dice.map((symbol, idx) => (
                     <div
                         key={idx}
-                        className={`dice ${isRolling ? 'rolling' : ''} ${lockedDice[idx] ? 'locked' : ''}`}
+                        className={`dice ${isRolling && !lockedDice[idx] ? 'rolling' : ''} ${lockedDice[idx] ? 'locked' : ''}`}
                         onClick={() => toggleLock(idx)}
                         style={{
                             borderColor: symbol ? DICE_SYMBOLS[symbol].color : '#ddd',
@@ -220,19 +224,31 @@ export default function DiceOfDestiny({ origin, onComplete }) {
 
             <div className="dice-instructions">
                 {rollCount === 0 && <p>Nhấn "Gieo xúc xắc" để bắt đầu!</p>}
-                {rollCount > 0 && rollCount < 5 && <p>Click vào xúc xắc để giữ lại, sau đó gieo lại!</p>}
-                {rollCount === 5 && <p>Bạn đã hết lượt gieo. Nhấn "Xem kết quả"!</p>}
+                {rollCount > 0 && rollCount < 5 && !allLocked && <p>Click vào xúc xắc để giữ lại, sau đó gieo lại hoặc xác nhận!</p>}
+                {rollCount > 0 && allLocked && <p>✨ Tất cả xúc xắc đã được khóa! Nhấn "Xác nhận" để xem kết quả!</p>}
+                {rollCount === 5 && !allLocked && <p>Bạn đã hết lượt gieo. Nhấn "Xem kết quả"!</p>}
             </div>
 
             <div className="dice-controls">
-                {rollCount < 5 ? (
-                    <button
-                        className="roll-button"
-                        onClick={rollDice}
-                        disabled={isRolling}
-                    >
-                        {isRolling ? '🎲 Đang gieo...' : '🎲 Gieo xúc xắc'}
-                    </button>
+                {rollCount < 5 && !allLocked ? (
+                    <>
+                        <button
+                            className="roll-button"
+                            onClick={rollDice}
+                            disabled={isRolling}
+                        >
+                            {isRolling ? '🎲 Đang gieo...' : '🎲 Gieo xúc xắc'}
+                        </button>
+                        {hasLocked && rollCount > 0 && (
+                            <button 
+                                className="finish-button confirm-early-button" 
+                                onClick={finishGame}
+                                style={{ marginLeft: '15px' }}
+                            >
+                                ✅ Xác nhận
+                            </button>
+                        )}
+                    </>
                 ) : (
                     <button className="finish-button" onClick={finishGame}>
                         ✨ Xem kết quả

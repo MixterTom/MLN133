@@ -2,12 +2,17 @@ import { useState, useEffect } from 'react';
 import { useGame } from '../../contexts/GameContext';
 import StatsPanel from '../UI/StatsPanel';
 import StatChangeNotification from '../UI/StatChangeNotification';
+import GameModal from '../UI/GameModal';
 import CafeQTE from '../MiniGames/CafeQTE';
 import ExamGame from '../MiniGames/ExamGame';
 import InterviewGame from '../MiniGames/InterviewGame';
 import DateGame from '../MiniGames/DateGame';
 import StudyGroupGame from '../MiniGames/StudyGroupGame';
 import PathCollectorGame from '../MiniGames/PathCollectorGame';
+import BudgetGame from '../MiniGames/BudgetGame';
+import TimeManagementGame from '../MiniGames/TimeManagementGame';
+import SocialNetworkGame from '../MiniGames/SocialNetworkGame';
+import PresentationGame from '../MiniGames/PresentationGame';
 import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
 import { preloadDialogues, getPreloadProgress } from '../../utils/voicePreloader';
@@ -28,6 +33,24 @@ export default function Chapter1Screen() {
     const [selectedPath, setSelectedPath] = useState(null); // Track selected path for mini-game
     const [audioEnabled, setAudioEnabled] = useState(state.flags.audio_enabled || false); // Track if user has enabled audio
     const [voicePreloadDone, setVoicePreloadDone] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalConfig, setModalConfig] = useState({});
+
+    // Helper to wrap content with GameModal
+    const renderWithModal = (content) => (
+        <>
+            {content}
+            <GameModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={() => setShowModal(false)}
+                title={modalConfig.title || 'Thông báo'}
+                message={modalConfig.message || ''}
+                type={modalConfig.type || 'alert'}
+                icon={modalConfig.icon || '✨'}
+            />
+        </>
+    );
 
     // Reset showChoices when step changes
     useEffect(() => {
@@ -179,6 +202,66 @@ export default function Chapter1Screen() {
                 updateStats({ happiness: 15, social: 10 });
             } else {
                 updateStats({ happiness: 5, social: 5 });
+            }
+        } else if (currentGameType === 'budget') {
+            // Budget management results
+            if (score >= 200) {
+                updateStats({ economy: 25, happiness: 15, knowledge: 5 });
+                setFlag('budget_skill', 'excellent');
+            } else if (score >= 150) {
+                updateStats({ economy: 15, happiness: 10 });
+                setFlag('budget_skill', 'good');
+            } else if (score >= 100) {
+                updateStats({ economy: 10 });
+                setFlag('budget_skill', 'average');
+            } else {
+                updateStats({ economy: -10, happiness: -5 });
+                setFlag('budget_skill', 'poor');
+            }
+        } else if (currentGameType === 'time_management') {
+            // Time management results
+            if (score >= 300) {
+                updateStats({ knowledge: 25, happiness: 20, health: 10 });
+                setFlag('time_management', 'excellent');
+            } else if (score >= 200) {
+                updateStats({ knowledge: 15, happiness: 10 });
+                setFlag('time_management', 'good');
+            } else if (score >= 100) {
+                updateStats({ knowledge: 10 });
+                setFlag('time_management', 'average');
+            } else {
+                updateStats({ knowledge: -10, happiness: -10, health: -5 });
+                setFlag('time_management', 'poor');
+            }
+        } else if (currentGameType === 'social_network') {
+            // Social network results
+            if (score >= 150) {
+                updateStats({ social: 30, happiness: 20, knowledge: 10 });
+                setFlag('social_network', 'excellent');
+            } else if (score >= 100) {
+                updateStats({ social: 20, happiness: 10 });
+                setFlag('social_network', 'good');
+            } else if (score >= 50) {
+                updateStats({ social: 10 });
+                setFlag('social_network', 'average');
+            } else {
+                updateStats({ social: -10, happiness: -5 });
+                setFlag('social_network', 'poor');
+            }
+        } else if (currentGameType === 'presentation') {
+            // Presentation results
+            if (score >= 150) {
+                updateStats({ knowledge: 35, social: 25, happiness: 20 });
+                setFlag('presentation_performance', 'excellent');
+            } else if (score >= 100) {
+                updateStats({ knowledge: 25, social: 15, happiness: 10 });
+                setFlag('presentation_performance', 'good');
+            } else if (score >= 60) {
+                updateStats({ knowledge: 15, social: 10 });
+                setFlag('presentation_performance', 'average');
+            } else {
+                updateStats({ knowledge: 5, social: -5, happiness: -10 });
+                setFlag('presentation_performance', 'poor');
             }
         }
 
@@ -653,7 +736,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
             );
         }
 
-        return (
+        return renderWithModal(
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 {showStatChange && (
@@ -691,7 +774,13 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                                         setMiniGameType('path_collector');
                                         setShowMiniGame(true);
                                     } else {
-                                        alert('Gia đình không đủ tiền cho con du học...');
+                                        setModalConfig({
+                                            title: '💰 Không đủ tiền',
+                                            message: 'Gia đình không đủ tiền cho con du học...',
+                                            type: 'alert',
+                                            icon: '💰'
+                                        });
+                                        setShowModal(true);
                                     }
                                 }} style={{ opacity: canAffordStudyAbroad ? 1 : 0.5, cursor: canAffordStudyAbroad ? 'pointer' : 'not-allowed' }}>
                                     <span className="choice-title">✈️ Du học (4 năm)</span>
@@ -876,9 +965,34 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📚 Tuần đầu tiên - Giảng đường...\n\nMôi trường đại học hoàn toàn khác THPT.\n\nKhông còn thầy cô nhắc nhở, bạn phải tự học, tự nghiên cứu..."} onComplete={() => setStep(4)} />
+                            <Typewriter text={"📚 Tuần đầu tiên - Giảng đường...\n\nMôi trường đại học hoàn toàn khác THPT.\n\nKhông còn thầy cô nhắc nhở, bạn phải tự học, tự nghiên cứu...\n\nVà bạn cần xây dựng mối quan hệ với bạn bè, thầy cô!"} onComplete={() => setStep(3.5)} />
                         </div>
                     </div>
+                </SceneBackground>
+            );
+        }
+
+        // Step 3.5: Social Network Game - Xây dựng mối quan hệ
+        if (step === 3.5) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {!showChoices ? (
+                                <Typewriter text={"Bạn bắt đầu làm quen với môi trường mới...\n\nHãy tương tác với mọi người để xây dựng mối quan hệ!"} onComplete={() => setShowChoices(true)} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setMiniGameType('social_network');
+                                    setShowMiniGame(true);
+                                }}>Xây dựng mối quan hệ 👥</button>
+                            )}
+                        </div>
+                    </div>
+                    {showMiniGame && miniGameType === 'social_network' && (
+                        <SocialNetworkGame onComplete={handleMiniGameComplete} />
+                    )}
                 </SceneBackground>
             );
         }
@@ -941,7 +1055,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
                             <div className="dialogue-content">
-                                <Typewriter text={"Wow! Bạn học nhanh quá! Giải thích rất dễ hiểu!\n\nHọc nhóm với bạn hiệu quả thật! Mình hiểu hết rồi!\n\nCảm ơn bạn nhiều!"} onComplete={() => setStep(7)} />
+                                <Typewriter text={"Wow! Bạn học nhanh quá! Giải thích rất dễ hiểu!\n\nHọc nhóm với bạn hiệu quả thật! Mình hiểu hết rồi!\n\nCảm ơn bạn nhiều!"} onComplete={() => setStep(6.5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -959,7 +1073,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
                             <div className="dialogue-content">
-                                <Typewriter text={"Học nhóm vui đấy! Mình hiểu được nhiều!\n\nLần sau học tiếp nhé!"} onComplete={() => setStep(7)} />
+                                <Typewriter text={"Học nhóm vui đấy! Mình hiểu được nhiều!\n\nLần sau học tiếp nhé!"} onComplete={() => setStep(6.5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -977,7 +1091,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
                             <div className="dialogue-content">
-                                <Typewriter text={"Ừm... mình vẫn chưa hiểu lắm...\n\nCó lẽ chúng mình cần học kỹ hơn..."} onComplete={() => setStep(7)} />
+                                <Typewriter text={"Ừm... mình vẫn chưa hiểu lắm...\n\nCó lẽ chúng mình cần học kỹ hơn..."} onComplete={() => setStep(6.5)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -995,12 +1109,40 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
                             <div className="dialogue-content">
-                                <Typewriter text={"Học nhóm mà cả hai đều không tập trung...\n\nChúng mình lãng phí thời gian rồi...\n\nLần sau phải cố gắng hơn!"} onComplete={() => setStep(7)} />
+                                <Typewriter text={"Học nhóm mà cả hai đều không tập trung...\n\nChúng mình lãng phí thời gian rồi...\n\nLần sau phải cố gắng hơn!"} onComplete={() => setStep(6.5)} />
                             </div>
                         </div>
                     </SceneBackground>
                 );
             }
+        }
+
+        // Step 6.5: Bài thuyết trình nhóm - Sau khi học nhóm
+        if (step === 6.5) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Hùng</h2>
+                        <div className="dialogue-content">
+                            {!showChoices ? (
+                                <Typewriter text={"Này bạn! Thầy giao bài thuyết trình nhóm rồi!\n\nChúng mình phải trình bày về dự án của nhóm!\n\nBạn có tự tin thuyết trình không?"} onComplete={() => setShowChoices(true)} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setMiniGameType('presentation');
+                                    setShowMiniGame(true);
+                                }}>Bắt đầu thuyết trình! 🎤</button>
+                            )}
+                        </div>
+                    </div>
+                    {showMiniGame && miniGameType === 'presentation' && (
+                        <PresentationGame onComplete={handleMiniGameComplete} />
+                    )}
+                </SceneBackground>
+            );
         }
 
         if (step === 7) {
@@ -1011,15 +1153,18 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
                             {!showChoices ? (
-                                <Typewriter text={"📅 3 tháng sau...\n\nCuộc sống đại học đang dần quen thuộc, nhưng tiền bạc lại là vấn đề..."} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
+                                <Typewriter text={"📅 3 tháng sau...\n\nCuộc sống đại học đang dần quen thuộc, nhưng tiền bạc lại là vấn đề...\n\nBạn cần học cách quản lý ngân sách!"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
                             ) : (
                                 <button className="continue-btn fade-in" onClick={() => {
-                                    setScenario('part_time');
-                                    setStep(0);
-                                }}>Tiếp tục →</button>
+                                    setMiniGameType('budget');
+                                    setShowMiniGame(true);
+                                }}>Học quản lý ngân sách 💰</button>
                             )}
                         </div>
                     </div>
+                    {showMiniGame && miniGameType === 'budget' && (
+                        <BudgetGame onComplete={handleMiniGameComplete} />
+                    )}
                 </SceneBackground>
             );
         }
@@ -1284,6 +1429,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 </SceneBackground>
             );
         }
+
     }
 
     // CHOICE 1.2: Cân bằng học và làm
@@ -1301,34 +1447,53 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
                         {!showChoices ? (
-                            <Typewriter text={"Ngươi phải cân bằng giữa học và làm...\n\nChọn khôn ngoan..."} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
+                            <Typewriter text={"Ngươi phải cân bằng giữa học và làm...\n\nHãy học cách quản lý thời gian trước khi quyết định!"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
                         ) : (
-                            <div className="choices-container fade-in">
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: 20, knowledge: -15, happiness: -10 }, { type: 'work_balance', value: 'work_more' });
-                                    setScenario('romance');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">💼 Tiếp tục làm 5 ca/tuần</span>
-                                    <span className="choice-desc">Mình cần tiền! Mình sẽ cố gắng học!</span>
-                                </button>
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: 12, knowledge: -5, happiness: 5 }, { type: 'work_balance', value: 'balanced' });
-                                    setScenario('romance');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">⚖️ Giảm xuống 3 ca/tuần</span>
-                                    <span className="choice-desc">Mình sẽ cân bằng học và làm!</span>
-                                </button>
-                                <button className="choice-btn" onClick={() => {
-                                    handleChoice({ economy: -20, knowledge: 20, happiness: 10 }, { type: 'work_balance', value: 'study_focus' });
-                                    setScenario('romance');
-                                    setStep(0);
-                                }}>
-                                    <span className="choice-title">📚 Nghỉ làm, tập trung học</span>
-                                    <span className="choice-desc">Mình sẽ xin bố mẹ hỗ trợ thêm!</span>
-                                </button>
-                            </div>
+                            <>
+                                <div className="choices-container fade-in">
+                                    <button className="choice-btn" onClick={() => {
+                                        setMiniGameType('time_management');
+                                        setShowMiniGame(true);
+                                    }}>
+                                        <span className="choice-title">⏰ Học quản lý thời gian</span>
+                                        <span className="choice-desc">Thử thách: Sắp xếp lịch 3 ngày cân bằng!</span>
+                                    </button>
+                                    <button className="choice-btn" onClick={() => {
+                                        handleChoice({ economy: 20, knowledge: -15, happiness: -10 }, { type: 'work_balance', value: 'work_more' });
+                                        setScenario('romance');
+                                        setStep(0);
+                                    }}>
+                                        <span className="choice-title">💼 Tiếp tục làm 5 ca/tuần</span>
+                                        <span className="choice-desc">Mình cần tiền! Mình sẽ cố gắng học!</span>
+                                    </button>
+                                    <button className="choice-btn" onClick={() => {
+                                        handleChoice({ economy: 12, knowledge: -5, happiness: 5 }, { type: 'work_balance', value: 'balanced' });
+                                        setScenario('romance');
+                                        setStep(0);
+                                    }}>
+                                        <span className="choice-title">⚖️ Giảm xuống 3 ca/tuần</span>
+                                        <span className="choice-desc">Mình sẽ cân bằng học và làm!</span>
+                                    </button>
+                                    <button className="choice-btn" onClick={() => {
+                                        handleChoice({ economy: -20, knowledge: 20, happiness: 10 }, { type: 'work_balance', value: 'study_focus' });
+                                        setScenario('romance');
+                                        setStep(0);
+                                    }}>
+                                        <span className="choice-title">📚 Nghỉ làm, tập trung học</span>
+                                        <span className="choice-desc">Mình sẽ xin bố mẹ hỗ trợ thêm!</span>
+                                    </button>
+                                </div>
+                                {showMiniGame && miniGameType === 'time_management' && (
+                                    <TimeManagementGame onComplete={(score) => {
+                                        handleMiniGameComplete(score);
+                                        // After time management game, continue to romance
+                                        setTimeout(() => {
+                                            setScenario('romance');
+                                            setStep(0);
+                                        }, 500);
+                                    }} />
+                                )}
+                            </>
                         )}
                         <div className="dialogue-controls">
                             <button className="control-btn">⚙️ AUTO</button>
@@ -2409,14 +2574,25 @@ Giờ đây, ngươi bước vào giai đoạn tiếp theo: Lập gia đình...`
 
     // Default fallback
     return (
-        <SceneBackground sceneKey="dream">
-            <StatsPanel />
-            <div className="dialogue-box">
-                <h2 className="speaker-name">System</h2>
-                <div className="dialogue-content">
-                    <Typewriter text={"Chapter 1 đang được phát triển..."} onComplete={() => setScreen('start')} />
+        <>
+            <SceneBackground sceneKey="dream">
+                <StatsPanel />
+                <div className="dialogue-box">
+                    <h2 className="speaker-name">System</h2>
+                    <div className="dialogue-content">
+                        <Typewriter text={"Chapter 1 đang được phát triển..."} onComplete={() => setScreen('start')} />
+                    </div>
                 </div>
-            </div>
-        </SceneBackground>
+            </SceneBackground>
+            <GameModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={() => setShowModal(false)}
+                title={modalConfig.title || 'Thông báo'}
+                message={modalConfig.message || ''}
+                type={modalConfig.type || 'alert'}
+                icon={modalConfig.icon || '✨'}
+            />
+        </>
     );
 }

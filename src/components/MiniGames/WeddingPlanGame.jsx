@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import GameModal from '../UI/GameModal';
 import './MiniGame.css';
 
 const WEDDING_ITEMS = [
@@ -24,6 +25,7 @@ export default function WeddingPlanGame({ budget = 150, onComplete }) {
     const [currentBudget, setCurrentBudget] = useState(budget);
     const [selectedItems, setSelectedItems] = useState({});
     const [gameStep, setGameStep] = useState('playing');
+    const [showModal, setShowModal] = useState(false);
 
     const categories = ['venue', 'dress', 'food', 'photo', 'guest'];
     const categoryNames = {
@@ -59,7 +61,7 @@ export default function WeddingPlanGame({ budget = 150, onComplete }) {
 
     const handleFinish = () => {
         if (Object.keys(selectedItems).length < 5) {
-            alert("Bạn hãy chọn đủ các mục cần thiết cho đám cưới nhé!");
+            setShowModal(true);
             return;
         }
         setGameStep('result');
@@ -275,6 +277,15 @@ export default function WeddingPlanGame({ budget = 150, onComplete }) {
                     <button className="continue-btn" onClick={handleFinish}>Tổ chức Đám Cưới!</button>
                 </div>
             </div>
+            <GameModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={() => setShowModal(false)}
+                title="⚠️ Chưa hoàn thành"
+                message="Bạn hãy chọn đủ các mục cần thiết cho đám cưới nhé!"
+                type="alert"
+                icon="⚠️"
+            />
         </div>
     );
 }
