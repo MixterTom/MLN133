@@ -263,7 +263,7 @@ export default function Chapter1Screen() {
     // Helper function to get player sprite based on gender and emotion
     const getPlayerSprite = (emotion = 'nghiêm_túc') => {
         const gender = state.player.gender === 'male' ? 'con_trai' : 'con_gái';
-        return `/src/assets/characters/${gender}_${emotion}.png`;
+        return `/assets/characters/${gender}_${emotion}.png`;
     };
 
     // SCENARIO 1.1: Tốt nghiệp phổ thông (IMPROVED)
@@ -342,7 +342,7 @@ Và ngày mai, tất cả sẽ thay đổi.`} onComplete={() => setStep(2)} enab
                 <SceneBackground sceneKey="chapter1_wakeup">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -385,7 +385,7 @@ Vừa vui, vừa lo... Tương lai đang chờ phía trước.`} onComplete={() 
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -429,7 +429,7 @@ Tao đang phân vân lắm, Minh ạ...`} onComplete={() => setStep(6)} />
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -472,7 +472,7 @@ Ai cũng biết, sau bữa ăn này sẽ là một cuộc nói chuyện nghiêm 
                 <SceneBackground sceneKey="chapter1_dinner">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -494,7 +494,7 @@ Con tốt nghiệp rồi, bố mẹ rất tự hào! Nhưng giờ con phải ngh
                 <SceneBackground sceneKey="chapter1_dinner">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -580,7 +580,7 @@ ${state.player.name} ngồi bật dậy, tim đập thình thịch...
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -602,7 +602,7 @@ Và ta... ta có thể giúp ngươi nhìn thấy những con đường phía tr
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -624,7 +624,7 @@ Nhưng trước khi chọn con đường... ngươi phải chứng minh quyết 
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -661,7 +661,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -731,7 +731,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Bạn cùng phòng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Bạn cùng phòng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bạn cùng phòng</h2>
@@ -773,7 +773,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -791,7 +791,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -809,7 +809,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -889,7 +889,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
@@ -937,7 +937,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -955,7 +955,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -973,7 +973,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -991,7 +991,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_buồn.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_buồn.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1094,7 +1094,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
@@ -1171,7 +1171,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Chủ quán</h2>
@@ -1210,7 +1210,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_cafe">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
+                            <img src="/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Chủ quán</h2>
@@ -1234,7 +1234,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nóng_giận.png" alt="Chủ quán" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nóng_giận.png" alt="Chủ quán" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Chủ quán</h2>
@@ -1268,7 +1268,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
@@ -1287,7 +1287,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -1378,7 +1378,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1412,7 +1412,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1460,7 +1460,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng (Bạn thân)</h2>
@@ -1494,7 +1494,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng (Bạn thân)</h2>
@@ -1525,7 +1525,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cinema">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1573,7 +1573,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cinema">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1610,7 +1610,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cinema">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1641,7 +1641,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_dating">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_nghiêm_túc.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_nghiêm_túc.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1680,7 +1680,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_dating">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1716,7 +1716,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -1808,7 +1808,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${loveInterestSprite}_buồn.png`} alt={loveInterestName} className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_buồn.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{loveInterestName}</h2>
@@ -1882,7 +1882,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -1935,7 +1935,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -1970,7 +1970,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -2030,7 +2030,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
+                        <img src={`/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{introducedPersonName}</h2>
@@ -2067,7 +2067,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
+                        <img src={`/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{introducedPersonName}</h2>
@@ -2107,7 +2107,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -2169,7 +2169,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -2224,7 +2224,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -2258,7 +2258,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -2292,7 +2292,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -2350,7 +2350,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_interview">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp công ty</h2>
@@ -2401,7 +2401,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/đồng_nghiệp_nghiêm_túc.png" alt="Đồng nghiệp" className="character-sprite left" />
+                        <img src="/assets/characters/đồng_nghiệp_nghiêm_túc.png" alt="Đồng nghiệp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Đồng nghiệp (có bằng đại học)</h2>
@@ -2452,7 +2452,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_hài_lòng.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp</h2>
@@ -2486,7 +2486,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân - tốt nghiệp đại học)</h2>
@@ -2537,7 +2537,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -2571,7 +2571,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp</h2>
@@ -2610,7 +2610,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_airport">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_buồn.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_buồn.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -2695,7 +2695,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Bạn quốc tế" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Bạn quốc tế" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bạn quốc tế</h2>
@@ -2831,7 +2831,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_interview">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Nhà tuyển dụng</h2>
@@ -2858,7 +2858,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

@@ -15,7 +15,7 @@ export default function Chapter1ScreenExample() {
         return (
             <DialogueScreen
                 background="bandoi"
-                character="/src/assets/characters/bạn_thân_vui_vẻ.png"
+                character="/assets/characters/bạn_thân_vui_vẻ.png"
                 speaker="Bạn thân"
                 dialogue={`Chào ${state.player.name}! Chúc mừng sinh nhật 18 tuổi!\n\nCuộc đời mới bắt đầu đây! Bạn có kế hoạch gì cho tương lai không?`}
                 choices={[
@@ -48,7 +48,7 @@ export default function Chapter1ScreenExample() {
         return (
             <DialogueScreen
                 background="bandoi"
-                character="/src/assets/characters/bạn_thân_thích_thú.png"
+                character="/assets/characters/bạn_thân_thích_thú.png"
                 speaker="Bạn thân"
                 dialogue={`Tuyệt vời! Quyết định của bạn sẽ định hình tương lai đấy!\n\nChúc bạn may mắn trên con đường mình đã chọn!`}
                 continueButton={

@@ -18,12 +18,12 @@ export function applyStatChanges(currentStats, changes) {
 
 // Helper function to get character sprite path
 export function getCharacterSprite(character, emotion) {
-    return `/src/assets/characters/${character}_${emotion}.png`;
+    return `/assets/characters/${character}_${emotion}.png`;
 }
 
 // Helper function to get background image path
 export function getBackground(name) {
-    return `/src/assets/${name}.png`;
+    return `/assets/${name}.png`;
 }
 
 // Helper to format stat changes for display

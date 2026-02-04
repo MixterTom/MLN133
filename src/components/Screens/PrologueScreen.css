@@ -2,7 +2,7 @@
     width: 100vw;
     height: 100vh;
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-        url('/src/assets/background/unnamed (1).jpg');
+        url('/assets/background/unnamed (1).jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -55,8 +55,8 @@
     margin-right: -8%;
 }
 
-.character-container > .character-sprite.left,
-.character-container > .character-sprite.right {
+.character-container>.character-sprite.left,
+.character-container>.character-sprite.right {
     bottom: -100px;
 }
 

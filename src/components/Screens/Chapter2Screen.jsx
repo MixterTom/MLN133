@@ -109,7 +109,7 @@ Bà Tiên Duyên xuất hiện như lần đầu gặp mặt...`} onComplete={()
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -164,7 +164,7 @@ Con đã 25 tuổi rồi, phải tìm người thôi!`;
                 <SceneBackground sceneKey="chapter2_family_pressure">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -191,7 +191,7 @@ Bố đã sắp xếp cho con gặp con CEO Trang rồi!
                     <SceneBackground sceneKey="chapter2_family_pressure">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                            <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố (Doanh nhân)</h2>
@@ -215,7 +215,7 @@ Bố mẹ muốn thấy con lập gia đình!`;
                     <SceneBackground sceneKey="chapter2_family_pressure">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                            <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố</h2>
@@ -239,7 +239,7 @@ Con phải tìm người có điều kiện tốt hơn!
                     <SceneBackground sceneKey="chapter2_family_pressure">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                            <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Mẹ</h2>
@@ -346,7 +346,7 @@ Hãy chọn kỹ... Đây là quyết định quan trọng nhất đời ngươi
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -395,7 +395,7 @@ Bạn phải chọn người phù hợp nhất!`;
                 <SceneBackground sceneKey="chapter2_meet_candidates">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -423,7 +423,7 @@ Hãy chọn khôn ngoan!`;
                     <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
                 )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -529,7 +529,7 @@ Ngươi đã sẵn sàng chưa ? `;
                     <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
                 )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -660,7 +660,7 @@ Hai bạn đến đăng ký kết hôn...`;
                 <SceneBackground sceneKey="chapter2_marriage_registration">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/ông_khôn_ngoan.png" alt="Cán bộ" className="character-sprite left" />
+                        <img src="/assets/characters/ông_khôn_ngoan.png" alt="Cán bộ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Cán bộ UBND</h2>
@@ -704,7 +704,7 @@ Hai bạn có hiểu không ? `;
                 <SceneBackground sceneKey="chapter2_marriage_registration">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/ông_khôn_ngoan.png" alt="Cán bộ" className="character-sprite left" />
+                        <img src="/assets/characters/ông_khôn_ngoan.png" alt="Cán bộ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Cán bộ UBND</h2>
@@ -746,7 +746,7 @@ Hãy xây dựng gia đình hạnh phúc, đóng góp cho xã hội nhé!`;
                 <SceneBackground sceneKey="chapter2_marriage_registration">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/ông_vui_vẻ.png" alt="Cán bộ" className="character-sprite left" />
+                        <img src="/assets/characters/ông_vui_vẻ.png" alt="Cán bộ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Cán bộ UBND</h2>
@@ -815,7 +815,7 @@ Tổng cộng: ${totalMoney} triệu!`;
                 <SceneBackground sceneKey="chapter2_dating_home">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/đồng_nghiệp_thân_thiện.png" alt="Môi giới" className="character-sprite left" />
+                        <img src="/assets/characters/đồng_nghiệp_thân_thiện.png" alt="Môi giới" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Môi giới nhà đất</h2>
@@ -840,7 +840,7 @@ Tổng cộng: ${totalMoney} triệu!`;
                     <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
                 )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/đồng_nghiệp_thân_thiện.png" alt="Môi giới" className="character-sprite left" />
+                    <img src="/assets/characters/đồng_nghiệp_thân_thiện.png" alt="Môi giới" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Môi giới nhà đất</h2>
@@ -903,7 +903,7 @@ Giờ đây, ngươi sẽ bước vào giai đoạn mới... Nuôi dạy con cá
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

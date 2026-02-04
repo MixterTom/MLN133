@@ -86,7 +86,7 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
                 <StatsPanel />
                 <div className="character-container">
                     <img
-                        src="/src/assets/characters/bà_tiên_bth.png"
+                        src="/assets/characters/bà_tiên_bth.png"
                         alt="Bà Tiên Duyên"
                         className="character-sprite left"
                     />
@@ -140,7 +140,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                 <StatsPanel />
                 <div className="character-container">
                     <img
-                        src="/src/assets/characters/bà_tiên_vui_vẻ.png"
+                        src="/assets/characters/bà_tiên_vui_vẻ.png"
                         alt="Bà Tiên Duyên"
                         className="character-sprite left"
                     />
@@ -184,7 +184,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                 <StatsPanel />
                 <div className="character-container">
                     <img
-                        src="/src/assets/characters/bà_tiên_khôn_ngoang.png"
+                        src="/assets/characters/bà_tiên_khôn_ngoang.png"
                         alt="Bà Tiên Duyên"
                         className="character-sprite left"
                     />
@@ -271,7 +271,7 @@ Tiếng khóc em bé vang lên...
 
         if (origin === 'rich') {
             sceneKey = 'prologue_birth_rich';
-            characterImg = "/src/assets/characters/bố_vui_vẻ.png";
+            characterImg = "/assets/characters/bố_vui_vẻ.png";
             speakerName = "Bố (Doanh nhân)";
             text = `Con trai/gái của tôi! Tuyệt vời!
 
@@ -280,7 +280,7 @@ Con sẽ kế thừa công ty của bố! Bố sẽ cho con học trường tố
 Con phải thành công hơn bố! Đừng làm bố thất vọng!`;
         } else if (origin === 'normal') {
             sceneKey = 'prologue_birth_normal';
-            characterImg = "/src/assets/characters/mẹ_vui_vẻ.png";
+            characterImg = "/assets/characters/mẹ_vui_vẻ.png";
             speakerName = "Mẹ (Giáo viên)";
             text = `Con yêu của mẹ! 😊
 
@@ -289,7 +289,7 @@ Mẹ sẽ nuôi con khỏe mạnh, vui vẻ!
 Con muốn làm gì thì làm, mẹ sẽ ủng hộ con!`;
         } else {
             sceneKey = 'prologue_birth_poor';
-            characterImg = "/src/assets/characters/mẹ_lo_lắng.png";
+            characterImg = "/assets/characters/mẹ_lo_lắng.png";
             speakerName = "Mẹ (Nông dân)";
             text = `Con ơi... Mẹ xin lỗi con... 😢
 
@@ -393,7 +393,7 @@ Mỗi giai đoạn đều có thử thách riêng... Hãy chọn khôn ngoan!`;
                 <StatsPanel />
                 <div className="character-container">
                     <img
-                        src="/src/assets/characters/bà_tiên_vui_vẻ.png"
+                        src="/assets/characters/bà_tiên_vui_vẻ.png"
                         alt="Bà Tiên Duyên"
                         className="character-sprite left"
                     />
