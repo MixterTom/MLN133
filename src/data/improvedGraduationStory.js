@@ -93,7 +93,7 @@ Và ngày mai, tất cả sẽ thay đổi.`} onComplete={handleTypingComplete} 
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -144,7 +144,7 @@ Vừa vui, vừa lo... Tương lai đang chờ phía trước.`} onComplete={han
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -196,7 +196,7 @@ Tao đang phân vân lắm, Minh ạ...`} onComplete={handleTypingComplete} />
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -247,7 +247,7 @@ Ai cũng biết, sau bữa ăn này sẽ là một cuộc nói chuyện nghiêm 
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -273,7 +273,7 @@ Con tốt nghiệp rồi, bố mẹ rất tự hào! Nhưng giờ con phải ngh
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -375,7 +375,7 @@ ${state.player.name} ngồi bật dậy, tim đập thình thịch...
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">??? ✨</h2>
@@ -401,7 +401,7 @@ Và ta... ta có thể giúp ngươi nhìn thấy những con đường phía tr
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -427,7 +427,7 @@ Nhưng trước khi chọn con đường... ngươi phải chứng minh quyết 
                 <div className="prologue-screen">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

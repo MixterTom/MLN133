@@ -2,92 +2,92 @@
 
 export const BACKGROUNDS = {
     // HOSPITAL ROOM (Phòng bệnh - Mới)
-    HOSPITAL_ROOM: '/src/assets/background/phong-benh-sang.png',
+    HOSPITAL_ROOM: '/assets/background/phong-benh-sang.png',
 
     // MEMORY (Hồi ức - Mới)
-    MEMORY: '/src/assets/background/hoi-uc.png',
+    MEMORY: '/assets/background/hoi-uc.png',
 
     // GRADUATION (Lễ tốt nghiệp - Mới)
-    GRADUATION: '/src/assets/background/le-tot-nghiep.png',
+    GRADUATION: '/assets/background/le-tot-nghiep.png',
 
     // DINING ROOM (Phòng ăn - Mới)
-    DINING_ROOM_EVENING: '/src/assets/background/phong-an-toi.png',
+    DINING_ROOM_EVENING: '/assets/background/phong-an-toi.png',
 
     // Bệnh viện
-    HOSPITAL_MORNING: '/src/assets/background/bệnh-viện-sáng.png',
-    HOSPITAL_AFTERNOON: '/src/assets/background/bệnh-viện-chiều.png',
-    HOSPITAL_EVENING: '/src/assets/background/bệnh-viện-tối.png',
+    HOSPITAL_MORNING: '/assets/background/bệnh-viện-sáng.png',
+    HOSPITAL_AFTERNOON: '/assets/background/bệnh-viện-chiều.png',
+    HOSPITAL_EVENING: '/assets/background/bệnh-viện-tối.png',
 
     // Phòng khách
-    LIVING_ROOM_MORNING: '/src/assets/background/phòng-khách-sáng.png',
-    LIVING_ROOM_AFTERNOON: '/src/assets/background/phòng-khách-chiều.png',
-    LIVING_ROOM_EVENING: '/src/assets/background/phòng-khách-tối.png',
+    LIVING_ROOM_MORNING: '/assets/background/phòng-khách-sáng.png',
+    LIVING_ROOM_AFTERNOON: '/assets/background/phòng-khách-chiều.png',
+    LIVING_ROOM_EVENING: '/assets/background/phòng-khách-tối.png',
 
     // Phòng ngủ
-    BEDROOM_MORNING: '/src/assets/background/phòng-ngủ-sáng.png',
-    BEDROOM_AFTERNOON: '/src/assets/background/phòng-ngủ-chiều.png',
-    BEDROOM_EVENING: '/src/assets/background/phong-ngu-toi.png',
+    BEDROOM_MORNING: '/assets/background/phòng-ngủ-sáng.png',
+    BEDROOM_AFTERNOON: '/assets/background/phòng-ngủ-chiều.png',
+    BEDROOM_EVENING: '/assets/background/phong-ngu-toi.png',
 
     // Văn phòng
-    OFFICE_MORNING: '/src/assets/background/văn-phòng-sáng.png',
-    OFFICE_AFTERNOON: '/src/assets/background/văn-phòng-chiều.png',
-    OFFICE_EVENING: '/src/assets/background/văn-phòng-tối.png',
+    OFFICE_MORNING: '/assets/background/văn-phòng-sáng.png',
+    OFFICE_AFTERNOON: '/assets/background/văn-phòng-chiều.png',
+    OFFICE_EVENING: '/assets/background/văn-phòng-tối.png',
 
     // Bàn học
-    STUDY_MORNING: '/src/assets/background/bàn-học-sáng.png',
-    STUDY_AFTERNOON: '/src/assets/background/bàn-học-chiều.png',
-    STUDY_EVENING: '/src/assets/background/bàn-học-tối.png',
+    STUDY_MORNING: '/assets/background/bàn-học-sáng.png',
+    STUDY_AFTERNOON: '/assets/background/bàn-học-chiều.png',
+    STUDY_EVENING: '/assets/background/bàn-học-tối.png',
 
     // Ban công
-    BALCONY_MORNING: '/src/assets/background/ban-công-sáng.png',
-    BALCONY_AFTERNOON: '/src/assets/background/ban-công-chiều.png',
-    // BALCONY_EVENING: '/src/assets/background/ban-công-tối.png', // File not verified in list, using existing ones
+    BALCONY_MORNING: '/assets/background/ban-công-sáng.png',
+    BALCONY_AFTERNOON: '/assets/background/ban-công-chiều.png',
+    // BALCONY_EVENING: '/assets/background/ban-công-tối.png', // File not verified in list, using existing ones
 
     // Cafe (Mới)
-    CAFE_MORNING: '/src/assets/background/cafe-sáng.png',
-    CAFE_AFTERNOON: '/src/assets/background/cafe-chiều.png',
-    CAFE_EVENING: '/src/assets/background/cafe-tối.png',
+    CAFE_MORNING: '/assets/background/cafe-sáng.png',
+    CAFE_AFTERNOON: '/assets/background/cafe-chiều.png',
+    CAFE_EVENING: '/assets/background/cafe-tối.png',
 
     // Nhà hàng (Mới)
-    RESTAURANT_MORNING: '/src/assets/background/nhà-hàng-sáng.png',
-    RESTAURANT_AFTERNOON: '/src/assets/background/nhà-hàng-chiều.png',
-    RESTAURANT_EVENING: '/src/assets/background/nhà-hàng-tối.png',
+    RESTAURANT_MORNING: '/assets/background/nhà-hàng-sáng.png',
+    RESTAURANT_AFTERNOON: '/assets/background/nhà-hàng-chiều.png',
+    RESTAURANT_EVENING: '/assets/background/nhà-hàng-tối.png',
 
     // Kí túc xá (Mới)
-    DORM_MORNING: '/src/assets/background/ktx_room_v2.png',
-    DORM_AFTERNOON: '/src/assets/background/kí-túc-xá-chiều.png',
-    DORM_EVENING: '/src/assets/background/kí-túc-xá-tối.png',
+    DORM_MORNING: '/assets/background/ktx_room_v2.png',
+    DORM_AFTERNOON: '/assets/background/kí-túc-xá-chiều.png',
+    DORM_EVENING: '/assets/background/kí-túc-xá-tối.png',
 
     // Phòng họp (Mới)
-    MEETING_MORNING: '/src/assets/background/phòng-họp-sáng.png',
-    MEETING_AFTERNOON: '/src/assets/background/phòng-họp-chiều.png',
-    MEETING_EVENING: '/src/assets/background/phòng-họp-tối.png',
+    MEETING_MORNING: '/assets/background/phòng-họp-sáng.png',
+    MEETING_AFTERNOON: '/assets/background/phòng-họp-chiều.png',
+    MEETING_EVENING: '/assets/background/phòng-họp-tối.png',
 
     // Rạp phim (Mới)
-    CINEMA_MORNING: '/src/assets/background/rạp-phim-sáng.png',
-    CINEMA_AFTERNOON: '/src/assets/background/raph-phim-chiều.png', // Note: typo in filename 'raph'
-    CINEMA_EVENING: '/src/assets/background/rạp-phim-tối.png',
+    CINEMA_MORNING: '/assets/background/rạp-phim-sáng.png',
+    CINEMA_AFTERNOON: '/assets/background/raph-phim-chiều.png', // Note: typo in filename 'raph'
+    CINEMA_EVENING: '/assets/background/rạp-phim-tối.png',
 
     // Đám cưới (Mới)
-    WEDDING_MORNING: '/src/assets/background/đám-cưới-sáng.png',
-    WEDDING_AFTERNOON: '/src/assets/background/đám-cưới-chiều.png',
-    WEDDING_EVENING: '/src/assets/background/đám-cưới-tói.png', // Note: typo in filename 'tói'
+    WEDDING_MORNING: '/assets/background/đám-cưới-sáng.png',
+    WEDDING_AFTERNOON: '/assets/background/đám-cưới-chiều.png',
+    WEDDING_EVENING: '/assets/background/đám-cưới-tói.png', // Note: typo in filename 'tói'
 
     // Giấc mơ (Mới)
-    DREAM: '/src/assets/background/khong-gian-huyen-ao.png', // Note: typo in filename 'huyèn'
+    DREAM: '/assets/background/khong-gian-huyen-ao.png', // Note: typo in filename 'huyèn'
 
     // Giảng đường (Mới)
-    LECTURE_HALL_MORNING: '/src/assets/background/giang-duong-sang.png',
+    LECTURE_HALL_MORNING: '/assets/background/giang-duong-sang.png',
 
     // === STUDY ABROAD BACKGROUNDS ===
     // Sân bay
-    AIRPORT: '/src/assets/background/sân-bay.png',
+    AIRPORT: '/assets/background/sân-bay.png',
     // Máy bay
-    AIRPLANE: '/src/assets/background/khoang-máy-bay.png',
+    AIRPLANE: '/assets/background/khoang-máy-bay.png',
     // Trường ĐH nước ngoài
-    FOREIGN_UNIVERSITY: '/src/assets/background/trường-nước-ngoài.png',
+    FOREIGN_UNIVERSITY: '/assets/background/trường-nước-ngoài.png',
     // KTX nước ngoài
-    FOREIGN_DORM: '/src/assets/background/kí-túc-xá-nước-ngoài.png',
+    FOREIGN_DORM: '/assets/background/kí-túc-xá-nước-ngoài.png',
 };
 
 // Helper function để lấy background theo location và time

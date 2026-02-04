@@ -51,7 +51,7 @@ export default function Chapter3Screen() {
 
     const getPlayerSprite = (emotion = 'nghiêm_túc') => {
         const gender = state.player.gender === 'male' ? 'con_trai' : 'con_gái';
-        return `/src/assets/characters/${gender}_${emotion}.png`;
+        return `/assets/characters/${gender}_${emotion}.png`;
     };
 
     const partner = state.flags.partner || 'hung';
@@ -132,7 +132,7 @@ Con có sẵn sàng không?`;
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_duyên_vui_vẻ.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_duyên_vui_vẻ.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên</h2>
@@ -157,7 +157,7 @@ Hãy suy nghĩ kỹ trước khi quyết định nhé!
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_duyên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_duyên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên</h2>
@@ -226,7 +226,7 @@ Em/Anh... em/anh có thai rồi! 😄`;
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${partner}_vui_vẻ.png`} alt={partnerName} className="character-sprite left" />
+                        <img src={`/assets/characters/${partner}_vui_vẻ.png`} alt={partnerName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{partnerName}</h2>
@@ -291,7 +291,7 @@ Bé nặng 3.2kg, cao 50cm!`;
                 <SceneBackground sceneKey="chapter3_child_birth">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bác_sĩ_vui_vẻ.png" alt="Bác sĩ" className="character-sprite left" />
+                        <img src="/assets/characters/bác_sĩ_vui_vẻ.png" alt="Bác sĩ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bác sĩ</h2>
@@ -409,7 +409,7 @@ Con có thể mua thêm căn hộ cho bố mẹ ở gần không?`;
                     <SceneBackground sceneKey="chapter3_parents_request">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                            <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố (qua điện thoại)</h2>
@@ -433,7 +433,7 @@ Con có thể cho bố mẹ lên ở cùng không? 😢`;
                     <SceneBackground sceneKey="chapter3_parents_request">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bố_lo_lắng.png" alt="Bố" className="character-sprite left" />
+                            <img src="/assets/characters/bố_lo_lắng.png" alt="Bố" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bố (qua điện thoại)</h2>
@@ -457,7 +457,7 @@ Con có thể cho bố mẹ lên ở cùng không? Mẹ sẽ giúp con chăm ch�
                     <SceneBackground sceneKey="chapter3_parents_request">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/mẹ_buồn.png" alt="Mẹ" className="character-sprite left" />
+                            <img src="/assets/characters/mẹ_buồn.png" alt="Mẹ" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Mẹ (qua điện thoại)</h2>
@@ -555,7 +555,7 @@ Bố mẹ ở đâu? 😰`;
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
+                        <img src={`/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{partnerName}</h2>
@@ -583,7 +583,7 @@ Hãy chọn khôn ngoan...`;
                     <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
                 )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -662,7 +662,7 @@ Bạn: "Mình cố gắng thôi... miễn bố mẹ lên ở cùng, yên tâm tu
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
+                        <img src={`/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
                         <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
@@ -699,7 +699,7 @@ Mẹ: "Cháu đâu rồi? Bà nhớ cháu!"`;
                 <SceneBackground sceneKey="chapter3_parents_request">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
@@ -728,8 +728,8 @@ ${partnerName} (mệt): "Sớm quá..." 😵`;
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_nghiêm_túc.png" alt="Mẹ" className="character-sprite left" />
-                        <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite right" />
+                        <img src="/assets/characters/mẹ_nghiêm_túc.png" alt="Mẹ" className="character-sprite left" />
+                        <img src={`/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
@@ -758,7 +758,7 @@ Bố: "Tai bố kém, phải to mới nghe!" 😠`;
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_tức_giận.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_tức_giận.png" alt="Bố" className="character-sprite left" />
                         <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
@@ -821,8 +821,8 @@ Cả nhà gật đầu. Không hoàn hảo, nhưng là một khởi đầu.`;
                 <SceneBackground sceneKey="chapter3_family_discussion">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
-                        <img src={`/src/assets/characters/${partner}_vui_vẻ.png`} alt={partnerName} className="character-sprite right" />
+                        <img src="/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
+                        <img src={`/assets/characters/${partner}_vui_vẻ.png`} alt={partnerName} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
@@ -1150,7 +1150,7 @@ Giờ đây, bạn bước vào Chapter 4...`;
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

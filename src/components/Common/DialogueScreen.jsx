@@ -54,7 +54,7 @@ export default function DialogueScreen({
     };
 
     const backgroundStyle = {
-        backgroundImage: `linear-gradient(rgba(20, 20, 40, 0.7), rgba(20, 20, 40, 0.7)), url('/src/assets/${background}.png')`
+        backgroundImage: `linear-gradient(rgba(20, 20, 40, 0.7), rgba(20, 20, 40, 0.7)), url('/assets/${background}.png')`
     };
 
     return (

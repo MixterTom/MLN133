@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { installContentProtection } from './utils/contentProtection'
 
 installContentProtection({
-  disableContextMenu: true,
+  disableContextMenu: false, // Tắt chặn chuột phải để test
   disableSelection: true,
 })
 

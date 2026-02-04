@@ -5,7 +5,7 @@ export default function StudyGroupGame({ onComplete }) {
     const [cards, setCards] = useState([]);
     const [flippedIndices, setFlippedIndices] = useState([]);
     const [matchedPairs, setMatchedPairs] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(45);
+    const [timeLeft, setTimeLeft] = useState(30);
     const [score, setScore] = useState(0);
     const [canFlip, setCanFlip] = useState(true);
 

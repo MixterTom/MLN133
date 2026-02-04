@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '../../contexts/GameContext';
 import StatsPanel from '../UI/StatsPanel';
+<<<<<<< HEAD
 import StatChangeNotification from '../UI/StatChangeNotification';
 import GameModal from '../UI/GameModal';
+=======
+>>>>>>> 141836d0e55434f959a14f472daf9b59c16303ee
 import CafeQTE from '../MiniGames/CafeQTE';
+import LatteArtGame from '../MiniGames/LatteArtGame';
 import ExamGame from '../MiniGames/ExamGame';
 import InterviewGame from '../MiniGames/InterviewGame';
 import DateGame from '../MiniGames/DateGame';
@@ -21,8 +25,6 @@ import './PrologueScreen.css';
 
 export default function Chapter1Screen() {
     const { state, updateStats, setScreen, addChoice, setFlag } = useGame();
-    const [showStatChange, setShowStatChange] = useState(false);
-    const [statChanges, setStatChanges] = useState({});
 
     // Load scenario and step from saved state, or use defaults
     const [scenario, setScenarioState] = useState(state.flags.chapter1_scenario || 'graduation');
@@ -125,19 +127,7 @@ export default function Chapter1Screen() {
         setFlag('chapter1_step', newStep);
     };
 
-    const handleChoice = (changes, choiceData) => {
-        setStatChanges(changes);
-        setShowStatChange(true);
-        if (choiceData) {
-            addChoice(choiceData);
-        }
-    };
 
-    const handleContinueAfterStats = () => {
-        updateStats(statChanges);
-        setShowStatChange(false);
-        setStep(step + 1);
-    };
 
     const handleMiniGameComplete = (score) => {
         const currentGameType = miniGameType; // Lưu lại trước khi reset
@@ -164,6 +154,11 @@ export default function Chapter1Screen() {
                 updateStats({ knowledge: -10, happiness: -10 });
                 setFlag('study_performance', 'poor');
             }
+        } else if (currentGameType === 'latte_art') {
+            // Latte Art results - determines cafe type
+            // Result already contains bonusStats, just apply them
+            // Cafe type is stored in flags by the game
+            // Don't apply stats here, will be applied after CafeQTE
         } else if (currentGameType === 'cafe') {
             // Cafe QTE results with feedback
             if (score >= 80) {
@@ -273,56 +268,49 @@ export default function Chapter1Screen() {
         setShowMiniGame(false);
         setMiniGameType(null);
 
-        const { score, result: quality, pathType } = result;
+        const { score, result: quality, pathType, bonusStats } = result;
 
         // Set quality flag based on result
         setFlag(`${pathType}_quality`, quality);
 
-        // Apply stats based on path and quality
+        // Apply bonus stats from mini-game
+        if (bonusStats) {
+            updateStats(bonusStats);
+        }
+
+        // Add choice based on path and quality
         if (pathType === 'university') {
             if (quality === 'excellent') {
-                updateStats({ knowledge: 60, happiness: 20 });
                 addChoice({ type: 'education', value: 'university_top' });
             } else if (quality === 'good') {
-                updateStats({ knowledge: 45, happiness: 10 });
                 addChoice({ type: 'education', value: 'university_good' });
             } else if (quality === 'average') {
-                updateStats({ knowledge: 30 });
                 addChoice({ type: 'education', value: 'university_normal' });
             } else {
-                updateStats({ knowledge: 20, happiness: -10 });
                 addChoice({ type: 'education', value: 'university_private' });
             }
             setFlag('education_path', 'university');
             setScenario('university');
         } else if (pathType === 'work') {
             if (quality === 'excellent') {
-                updateStats({ economy: 50, social: 20 });
                 addChoice({ type: 'education', value: 'work_big_company' });
             } else if (quality === 'good') {
-                updateStats({ economy: 35, social: 10 });
-                addChoice({ type: 'education', value: 'work_stable' });
+                addChoice({ type: 'education', value: 'work_good_company' });
             } else if (quality === 'average') {
-                updateStats({ economy: 20 });
                 addChoice({ type: 'education', value: 'work_normal' });
             } else {
-                updateStats({ economy: 10, happiness: -15 });
                 addChoice({ type: 'education', value: 'work_labor' });
             }
             setFlag('education_path', 'work');
             setScenario('work_early');
         } else if (pathType === 'study_abroad') {
             if (quality === 'excellent') {
-                updateStats({ knowledge: 80, social: 30, economy: -50 });
                 addChoice({ type: 'education', value: 'study_abroad_scholarship' });
             } else if (quality === 'good') {
-                updateStats({ knowledge: 60, social: 20, economy: -80 });
                 addChoice({ type: 'education', value: 'study_abroad_success' });
             } else if (quality === 'average') {
-                updateStats({ knowledge: 40, social: 10, economy: -100, happiness: -10 });
                 addChoice({ type: 'education', value: 'study_abroad_struggle' });
             } else {
-                updateStats({ happiness: -30, economy: -20 });
                 addChoice({ type: 'education', value: 'study_abroad_failed' });
                 // If failed study abroad, stay in Vietnam
                 setFlag('education_path', 'university');
@@ -339,10 +327,30 @@ export default function Chapter1Screen() {
         setSelectedPath(null);
     };
 
+    // Handler for Latte Art mini-game
+    const handleLatteArtComplete = (result) => {
+        setShowMiniGame(false);
+        setMiniGameType(null);
+
+        const { score, accuracy, result: quality, cafeType, bonusStats } = result;
+
+        // Store cafe type in flags
+        setFlag('cafe_type', cafeType);
+        setFlag('latte_art_score', score);
+
+        // Apply bonus stats from latte art
+        if (bonusStats) {
+            updateStats(bonusStats);
+        }
+
+        // Continue to next step (meeting cafe owner)
+        setStep(step + 1);
+    };
+
     // Helper function to get player sprite based on gender and emotion
     const getPlayerSprite = (emotion = 'nghiêm_túc') => {
         const gender = state.player.gender === 'male' ? 'con_trai' : 'con_gái';
-        return `/src/assets/characters/${gender}_${emotion}.png`;
+        return `/assets/characters/${gender}_${emotion}.png`;
     };
 
     // SCENARIO 1.1: Tốt nghiệp phổ thông (IMPROVED)
@@ -421,7 +429,7 @@ Và ngày mai, tất cả sẽ thay đổi.`} onComplete={() => setStep(2)} enab
                 <SceneBackground sceneKey="chapter1_wakeup">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -464,7 +472,7 @@ Vừa vui, vừa lo... Tương lai đang chờ phía trước.`} onComplete={() 
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -508,7 +516,7 @@ Tao đang phân vân lắm, Minh ạ...`} onComplete={() => setStep(6)} />
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_nghiêm_túc.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -551,7 +559,7 @@ Ai cũng biết, sau bữa ăn này sẽ là một cuộc nói chuyện nghiêm 
                 <SceneBackground sceneKey="chapter1_dinner">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -573,7 +581,7 @@ Con tốt nghiệp rồi, bố mẹ rất tự hào! Nhưng giờ con phải ngh
                 <SceneBackground sceneKey="chapter1_dinner">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Mẹ</h2>
@@ -659,7 +667,7 @@ ${state.player.name} ngồi bật dậy, tim đập thình thịch...
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -681,7 +689,7 @@ Và ta... ta có thể giúp ngươi nhìn thấy những con đường phía tr
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -703,7 +711,7 @@ Nhưng trước khi chọn con đường... ngươi phải chứng minh quyết 
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -739,11 +747,8 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
         return renderWithModal(
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
-                {showStatChange && (
-                    <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
-                )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -819,7 +824,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Bạn cùng phòng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Bạn cùng phòng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bạn cùng phòng</h2>
@@ -861,7 +866,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -879,7 +884,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -897,7 +902,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_university">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1002,7 +1007,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
@@ -1027,7 +1032,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                             {!showChoices ? (
                                 <Typewriter text={"Mình cũng thấy khó... Học nhóm là ý hay đấy!\n\nChúng mình cùng học nhé!"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
                             ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
+                                <button className="continue-btn action-btn fade-in" onClick={() => {
                                     setMiniGameType('study_group');
                                     setShowMiniGame(true);
                                 }}>Bắt đầu học nhóm! 📚</button>
@@ -1050,7 +1055,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1068,7 +1073,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1086,7 +1091,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1104,7 +1109,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_lecture">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bạn_thân_buồn.png" alt="Hùng" className="character-sprite left" />
+                            <img src="/assets/characters/bạn_thân_buồn.png" alt="Hùng" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Hùng</h2>
@@ -1152,6 +1157,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
+<<<<<<< HEAD
                             {!showChoices ? (
                                 <Typewriter text={"📅 3 tháng sau...\n\nCuộc sống đại học đang dần quen thuộc, nhưng tiền bạc lại là vấn đề...\n\nBạn cần học cách quản lý ngân sách!"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
                             ) : (
@@ -1160,6 +1166,12 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                                     setShowMiniGame(true);
                                 }}>Học quản lý ngân sách 💰</button>
                             )}
+=======
+                            <Typewriter text={"📅 3 tháng sau...\n\nCuộc sống đại học đang dần quen thuộc, nhưng tiền bạc lại là vấn đề..."} onComplete={() => {
+                                setScenario('part_time');
+                                setStep(0);
+                            }} enableVoice={audioEnabled} />
+>>>>>>> 141836d0e55434f959a14f472daf9b59c16303ee
                         </div>
                     </div>
                     {showMiniGame && miniGameType === 'budget' && (
@@ -1173,20 +1185,6 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
     // SCENARIO 1.3: Học tập và làm thêm
     if (scenario === 'part_time') {
         if (step === 0) {
-            return (
-                <SceneBackground sceneKey="chapter1_university">
-                    <StatsPanel />
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"📅 3 tháng sau...\n\nCuộc sống đại học đang dần quen thuộc, nhưng tiền bạc lại là vấn đề..."} onComplete={() => setStep(1)} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 1) {
             const origin = state.player.origin;
 
             // RICH ORIGIN - Không cần làm thêm
@@ -1222,7 +1220,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                         <div className="dialogue-box">
                             <h2 className="speaker-name">{state.player.name}</h2>
                             <div className="dialogue-content">
-                                <Typewriter text={"Trời... Mình chỉ còn 500k...\n\nTiền bố mẹ cho không đủ sống..."} onComplete={() => setStep(2)} />
+                                <Typewriter text={"Trời... Mình chỉ còn 500k...\n\nTiền bố mẹ cho không đủ sống..."} onComplete={() => setStep(1)} />
                             </div>
                         </div>
                     </SceneBackground>
@@ -1242,7 +1240,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                             <div className="dialogue-content">
                                 <Typewriter text={"Mình... Mình hết tiền rồi...\n\nBố mẹ không có tiền cho mình... Học bổng chỉ miễn học phí...\n\nMình phải làm thêm! Không có cách nào khác!"} onComplete={() => {
                                     updateStats({ happiness: -20 });
-                                    setStep(2);
+                                    setStep(1);
                                 }} enableVoice={audioEnabled} />
                             </div>
                         </div>
@@ -1251,24 +1249,24 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
             }
         }
 
-        if (step === 2) {
+        if (step === 1) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Bạn hết tiền à? Mình cũng vậy!\n\nTiền bố mẹ cho không đủ sống...\n\nMình biết một quán cà phê đang tuyển! Chúng mình đi xin việc nhé!"} onComplete={() => setStep(3)} />
+                            <Typewriter text={"Bạn hết tiền à? Mình cũng vậy!\n\nTiền bố mẹ cho không đủ sống...\n\nMình biết một quán cà phê đang tuyển! Chúng mình đi xin việc nhé!"} onComplete={() => setStep(2)} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 3) {
+        if (step === 2) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
@@ -1278,7 +1276,29 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Ừ! Đi thôi!\n\nMình cũng cần kiếm thêm tiền..."} onComplete={() => setStep(4)} />
+                            <Typewriter text={"Ừ! Đi thôi!\n\nMình cũng cần kiếm thêm tiền..."} onComplete={() => setStep(3)} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        // Show Latte Art mini-game to determine cafe type
+        if (step === 3 && showMiniGame && miniGameType === 'latte_art') {
+            return <LatteArtGame onComplete={handleLatteArtComplete} />;
+        }
+
+        if (step === 3) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"☕ Tại quán cà phê...\n\nChủ quán muốn test kỹ năng của bạn trước khi nhận vào làm!"} onComplete={() => {
+                                setMiniGameType('latte_art');
+                                setShowMiniGame(true);
+                            }} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1286,16 +1306,37 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
         }
 
         if (step === 4) {
+            const cafeType = state.flags.cafe_type || 'street';
+            const cafeInfo = {
+                highlands: {
+                    name: 'Highlands Coffee',
+                    salary: '50.000đ/giờ',
+                    desc: 'Quán cà phê cao cấp, khách hàng văn minh, môi trường chuyên nghiệp!'
+                },
+                normal: {
+                    name: 'The Coffee House',
+                    salary: '35.000đ/giờ',
+                    desc: 'Quán cà phê bình thường, khách hàng ổn, công việc vừa phải.'
+                },
+                street: {
+                    name: 'Quán Cafe Vỉa Hè',
+                    salary: '20.000đ/giờ',
+                    desc: 'Quán nhỏ, khách hàng khó tính, công việc vất vả...'
+                }
+            };
+
+            const cafe = cafeInfo[cafeType];
+
             return (
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Chủ quán</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Các em có kinh nghiệm không?"} onComplete={() => setStep(5)} />
+                            <Typewriter text={`${cafeType === 'highlands' ? 'Xuất sắc! Kỹ năng của em rất tốt!' : cafeType === 'normal' ? 'Ổn đấy! Em có thể làm được!' : 'Hmm... Kỹ năng còn hạn chế nhưng em có thể học!'}\n\n${cafe.desc}\n\nLương: ${cafe.salary}. Ca 4 tiếng, tuần làm 5 ca.\n\nGiờ cao điểm sẽ rất bận, em phải nhanh tay nhé!`} onComplete={() => setStep(5)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1306,52 +1347,21 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
             return (
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
-                    <div className="character-container">
-                        <img src={getPlayerSprite('ngại')} alt={state.player.name} className="character-sprite right" />
-                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Dạ... em chưa có kinh nghiệm ạ...\n\nNhưng em sẽ học hỏi và cố gắng!"} onComplete={() => setStep(6)} />
+                            <Typewriter text={"📅 Ngày hôm sau - Giờ cao điểm 5pm...\n\nQuán đông nghẹt khách!"} onComplete={() => {
+                                setMiniGameType('cafe');
+                                setShowMiniGame(true);
+                            }} />
                         </div>
                     </div>
+                    {showMiniGame && miniGameType === 'cafe' && <CafeQTE onComplete={handleMiniGameComplete} />}
                 </SceneBackground>
             );
         }
 
         if (step === 6) {
-            return (
-                <SceneBackground sceneKey="chapter1_cafe">
-                    <StatsPanel />
-                    <div className="character-container">
-                        <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
-                    </div>
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Chủ quán</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"Được! Em bắt đầu từ mai. Ca 4 tiếng, 25k/giờ = 100k/ca.\n\nTuần làm 5 ca = 500k/tuần.\n\nGiờ cao điểm sẽ rất bận, em phải nhanh tay nhé!"} onComplete={() => setStep(7)} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 7) {
-            return (
-                <SceneBackground sceneKey="chapter1_cafe">
-                    <StatsPanel />
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"📅 Ngày hôm sau - Giờ cao điểm 5pm...\n\nQuán đông nghẹt khách!"} onComplete={() => setShowMiniGame(true)} />
-                        </div>
-                    </div>
-                    {showMiniGame && <CafeQTE onComplete={handleMiniGameComplete} />}
-                </SceneBackground>
-            );
-        }
-
-        if (step === 8) {
             const performance = state.flags.cafe_performance || 'poor';
 
             // Excellent or Good performance - Được khen
@@ -1360,7 +1370,7 @@ Giờ thì... hãy chọn đi!`} onComplete={() => setScenario('choice')} />
                     <SceneBackground sceneKey="chapter1_cafe">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
+                            <img src="/assets/characters/sếp_hài_lòng.png" alt="Chủ quán" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Chủ quán</h2>
@@ -1371,7 +1381,7 @@ Khách hàng đều hài lòng! ${performance === 'excellent' ? 'Đây là tiề
 
 ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : 'Cứ giữ phong độ này!'}`} onComplete={() => {
                                         updateStats({ social: 10, knowledge: -10 });
-                                        setStep(9);
+                                        setStep(7);
                                     }} />
                             </div>
                         </div>
@@ -1384,14 +1394,14 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nóng_giận.png" alt="Chủ quán" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nóng_giận.png" alt="Chủ quán" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Chủ quán</h2>
                         <div className="dialogue-content">
                             <Typewriter text={"Em làm việc chậm quá! Khách phàn nàn nhiều lắm!\n\nNếu ngày mai vẫn thế này thì chị không thể giữ em được!\n\nEm phải cố gắng hơn nữa!"} onComplete={() => {
                                 updateStats({ social: 10, knowledge: -10 });
-                                setStep(9);
+                                setStep(7);
                             }} enableVoice={audioEnabled} />
                         </div>
                     </div>
@@ -1399,26 +1409,26 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             );
         }
 
-        if (step === 9) {
+        if (step === 7) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 3 tháng sau...\n\nBạn đã quen với công việc, nhưng học hành bị ảnh hưởng..."} onComplete={() => setStep(10)} />
+                            <Typewriter text={"📅 3 tháng sau...\n\nBạn đã quen với công việc, nhưng học hành bị ảnh hưởng..."} onComplete={() => setStep(8)} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 10) {
+        if (step === 8) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_lo_lắng.png" alt="Hùng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Hùng</h2>
@@ -1437,11 +1447,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         return (
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
-                {showStatChange && (
-                    <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
-                )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -1449,6 +1456,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                         {!showChoices ? (
                             <Typewriter text={"Ngươi phải cân bằng giữa học và làm...\n\nHãy học cách quản lý thời gian trước khi quyết định!"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
                         ) : (
+<<<<<<< HEAD
                             <>
                                 <div className="choices-container fade-in">
                                     <button className="choice-btn" onClick={() => {
@@ -1494,6 +1502,37 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                                     }} />
                                 )}
                             </>
+=======
+                            <div className="choices-container fade-in">
+                                <button className="choice-btn" onClick={() => {
+                                    updateStats({ economy: 20, knowledge: -15, happiness: -10 });
+                                    addChoice({ type: 'work_balance', value: 'work_more' });
+                                    setScenario('romance');
+                                    setStep(0);
+                                }}>
+                                    <span className="choice-title">💼 Tiếp tục làm 5 ca/tuần</span>
+                                    <span className="choice-desc">Mình cần tiền! Mình sẽ cố gắng học!</span>
+                                </button>
+                                <button className="choice-btn" onClick={() => {
+                                    updateStats({ economy: 12, knowledge: -5, happiness: 5 });
+                                    addChoice({ type: 'work_balance', value: 'balanced' });
+                                    setScenario('romance');
+                                    setStep(0);
+                                }}>
+                                    <span className="choice-title">⚖️ Giảm xuống 3 ca/tuần</span>
+                                    <span className="choice-desc">Mình sẽ cân bằng học và làm!</span>
+                                </button>
+                                <button className="choice-btn" onClick={() => {
+                                    updateStats({ economy: -20, knowledge: 20, happiness: 10 });
+                                    addChoice({ type: 'work_balance', value: 'study_focus' });
+                                    setScenario('romance');
+                                    setStep(0);
+                                }}>
+                                    <span className="choice-title">📚 Nghỉ làm, tập trung học</span>
+                                    <span className="choice-desc">Mình sẽ xin bố mẹ hỗ trợ thêm!</span>
+                                </button>
+                            </div>
+>>>>>>> 141836d0e55434f959a14f472daf9b59c16303ee
                         )}
                         <div className="dialogue-controls">
                             <button className="control-btn">⚙️ AUTO</button>
@@ -1507,6 +1546,14 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
 
     // SCENARIO 1.4: Gặp người đặc biệt
     if (scenario === 'romance') {
+        // Determine love interest based on player gender - OPPOSITE gender
+        // Male player meets Bích (female), Female player meets Khánh (male)
+        const loveInterestGender = state.player.gender === 'male' ? 'female' : 'male';
+        const loveInterestName = state.player.gender === 'male' ? 'Bích' : 'Khánh';
+        const loveInterestSprite = state.player.gender === 'male' ? 'bích' : 'khánh';
+        const pronoun = loveInterestGender === 'female' ? 'cô ấy' : 'anh ấy';
+        const possessive = loveInterestGender === 'female' ? 'của cô ấy' : 'của anh ấy';
+
         if (step === 0) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
@@ -1514,7 +1561,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Năm 3 đại học - Tháng 3/2027...\n\nCuộc sống đã ổn định hơn. Học hành, làm thêm đều đã quen thuộc...\n\nBạn bắt đầu chú ý đến những điều khác trong cuộc sống..."} onComplete={() => setStep(1)} />
+                            <Typewriter text={"📅 Năm 2 đại học - Tháng 10...\n\nCuộc sống đã ổn định hơn. Học hành, làm thêm đều đã quen thuộc...\n\nBạn bắt đầu chú ý đến những điều khác trong cuộc sống..."} onComplete={() => setStep(1)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1528,7 +1575,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"🏫 Giảng đường - Buổi chiều...\n\nBạn đang ngồi học nhóm với bạn bè.\n\nTrong lớp có một người bạn tên Khánh, người mà bạn thường để ý đến...\n\nKhánh vừa thông minh, vừa vui tính, khiến bạn cảm thấy thoải mái mỗi khi trò chuyện..."} onComplete={() => setStep(2)} />
+                            <Typewriter text={"🏫 Giảng đường - Buổi chiều...\n\nBạn đang ngồi học nhóm với bạn bè.\n\nTrong lớp có một người bạn tên " + loveInterestName + ", người mà bạn thường để ý đến..."} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1540,12 +1587,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={getPlayerSprite('thích_thú')} alt={state.player.name} className="character-sprite right" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <h2 className="speaker-name">{loveInterestName}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"(Suy nghĩ)\n\nKhánh hôm nay trông vui vẻ quá...\n\nMình... mình có thích Khánh không nhỉ?"} onComplete={() => setStep(3)} />
+                            <Typewriter text={"Này, bài tập môn Toán khó quá!\n\nBạn làm được bài 5 chưa? Mình không hiểu lắm..."} onComplete={() => setStep(3)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1557,12 +1604,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Minh (Bạn thân)</h2>
+                        <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Bạn có thích ai không?\n\nMình thấy bạn hay nhìn Khánh đấy!\n\nThử mời đi uống cà phê xem!"} onComplete={() => setStep(4)} />
+                            <Typewriter text={"À, bài đó à? Để mình giải thích cho...\n\nBạn phải dùng công thức này, rồi thay số vào..."} onComplete={() => setStep(4)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1574,12 +1621,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={getPlayerSprite('bối_rối')} alt={state.player.name} className="character-sprite right" />
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <h2 className="speaker-name">{loveInterestName}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Ừu... có một người...\n\nNhưng mình không biết nên làm gì..."} onComplete={() => setStep(5)} />
+                            <Typewriter text={"Ồ! Mình hiểu rồi! Cảm ơn bạn nhiều!\n\nBạn giỏi quá! Lần sau mình gặp khó khăn lại nhờ bạn nhé!"} onComplete={() => setStep(5)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1588,12 +1635,15 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
 
         if (step === 5) {
             return (
-                <SceneBackground sceneKey="chapter1_cinema">
+                <SceneBackground sceneKey="chapter1_lecture">
                     <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('thích_thú')} alt={state.player.name} className="character-sprite right" />
+                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
+                        <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Cuối tuần - Rạp phim...\n\nBạn đã mạnh dạn rủ Khánh đi xem phim..."} onComplete={() => setStep(6)} />
+                            <Typewriter text={"(Suy nghĩ)\n\n" + loveInterestName + " hôm nay trông vui vẻ quá...\n\nNụ cười " + possessive + " thật đẹp..."} onComplete={() => setStep(6)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1602,15 +1652,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
 
         if (step === 6) {
             return (
-                <SceneBackground sceneKey="chapter1_cinema">
+                <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
-                    <div className="character-container">
-                        <img src="/src/assets/characters/khánh_vui_vẻ.png" alt="Crush" className="character-sprite left" />
-                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Khánh</h2>
+                        <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Chào! Lâu rồi không gặp!\n\nBạn rủ mình đi xem phim à? Được!"} onComplete={() => setStep(7)} />
+                            <Typewriter text={"📅 2 tuần sau...\n\nBạn và " + loveInterestName + " đã gặp nhau nhiều lần hơn.\n\nMỗi lần gặp, bạn đều cảm thấy vui vẻ và thoải mái..."} onComplete={() => setStep(7)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1618,6 +1665,136 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
 
         if (step === 7) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Hùng (Bạn thân)</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Này này! Mình thấy bạn hay nhìn " + loveInterestName + " đấy!\n\nBạn có thích " + pronoun + " không?\n\nThử mời đi uống cà phê xem!"} onComplete={() => setStep(8)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 8) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('bối_rối')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Ừm... có một người...\n\nNhưng mình không biết " + pronoun + " có thích mình không...\n\nMình... mình sợ bị từ chối..."} onComplete={() => setStep(9)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 9) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Hùng (Bạn thân)</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Đừng sợ! Mạnh dạn lên!\n\nNếu không thử thì làm sao biết được?\n\nThôi, mình sẽ giúp bạn!"} onComplete={() => setStep(10)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 10) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Cuối tuần - Rạp phim...\n\nVới sự động viên của Hùng, bạn đã mạnh dạn rủ " + loveInterestName + " đi xem phim..."} onComplete={() => setStep(11)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 11) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Chào! Lâu rồi không gặp!\n\nBạn rủ mình đi xem phim à? Được chứ!\n\nMình cũng đang muốn xem phim này lắm!"} onComplete={() => setStep(12)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 12) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"(Suy nghĩ) Tuyệt! " + loveInterestName + " đồng ý rồi!\n\nTim mình đập thình thịch quá..."} onComplete={() => setStep(13)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 13) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"🎬 Trong rạp phim...\n\nPhim rất hay, nhưng bạn không thể tập trung.\n\nBạn cứ liếc nhìn " + loveInterestName + " ngồi bên cạnh..."} onComplete={() => setStep(14)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 14) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Phim hay quá! Bạn thấy sao?\n\nHôm nay vui lắm! Cảm ơn bạn đã rủ mình!"} onComplete={() => setStep(15)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 15) {
             return (
                 <SceneBackground sceneKey="chapter1_cinema">
                     <StatsPanel />
@@ -1627,26 +1804,9 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Tuyệt! Mình thích xem phim tình cảm!\n\nCòn bạn thích xem phim gì?"} onComplete={() => setStep(8)} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 8) {
-            return (
-                <SceneBackground sceneKey="chapter1_cinema">
-                    <StatsPanel />
-                    <div className="character-container">
-                        <img src="/src/assets/characters/khánh_vui_vẻ.png" alt="Khánh" className="character-sprite left" />
-                    </div>
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Khánh</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"Mình cũng thích phim tình cảm!\n\nHôm nay vui lắm! Cảm ơn bạn!"} onComplete={() => {
-                                updateStats({ happiness: 20, social: 10 });
-                                setStep(9);
+                            <Typewriter text={"Mình cũng vui lắm!\n\nLần sau... lần sau mình đi chơi nữa nhé?"} onComplete={() => {
+                                updateStats({ happiness: 15, social: 10 });
+                                setStep(16);
                             }} enableVoice={audioEnabled} />
                         </div>
                     </div>
@@ -1654,38 +1814,55 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             );
         }
 
-        if (step === 9) {
+        if (step === 16) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Được chứ! Mình rất thích đi chơi với bạn!\n\nBạn vui tính và dễ thương lắm!"} onComplete={() => setStep(17)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 17) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 3 tháng sau...\n\nHai bạn đã gặp nhau nhiều lần. Tình cảm ngày càng sâu đậm..."} onComplete={() => setStep(10)} />
+                            <Typewriter text={"📅 3 tháng sau...\n\nHai bạn đã gặp nhau nhiều lần. Đi cà phê, đi chơi, học chung...\n\nTình cảm ngày càng sâu đậm..."} onComplete={() => setStep(18)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 10) {
+        if (step === 18) {
             return (
                 <SceneBackground sceneKey="chapter1_dating">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/khánh_vui_vẻ.png" alt="Khánh" className="character-sprite left" />
+                        <img src={`/assets/characters/${loveInterestSprite}_nghiêm_túc.png`} alt={loveInterestName} className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Khánh</h2>
+                        <h2 className="speaker-name">{loveInterestName}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Mình... mình có điều muốn nói...\n\nMình... mình thích bạn...\n\nBạn có thích mình không?"} onComplete={() => setStep(11)} />
+                            <Typewriter text={"Mình... mình có điều muốn nói...\n\nMình nghĩ... mình đã thích bạn từ lâu rồi...\n\nBạn có thích mình không?"} onComplete={() => setStep(19)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 11) {
+        if (step === 19) {
             return (
                 <SceneBackground sceneKey="chapter1_dating">
                     <StatsPanel />
@@ -1695,10 +1872,11 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Mình cũng thích bạn! ❤️\n\nMình đã thích bạn từ lâu rồi..."} onComplete={() => {
+                            <Typewriter text={"Mình cũng thích bạn! ❤️\n\nMình đã thích bạn từ lần đầu tiên gặp...\n\nMình rất vui khi được ở bên bạn!"} onComplete={() => {
                                 updateStats({ happiness: 30 });
                                 setFlag('has_lover', true);
-                                setStep(12);
+                                setFlag('lover_name', loveInterestName);
+                                setStep(20);
                             }} enableVoice={audioEnabled} />
                         </div>
                     </div>
@@ -1706,21 +1884,34 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             );
         }
 
-        if (step === 12) {
+        if (step === 20) {
+            return (
+                <SceneBackground sceneKey="chapter1_dating">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Vậy... chúng mình là người yêu của nhau rồi nhé! 💕\n\nMình hứa sẽ luôn ở bên bạn!"} onComplete={() => setStep(21)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 21) {
             return (
                 <SceneBackground sceneKey="chapter1_university">
                     <StatsPanel />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            {!showChoices ? (
-                                <Typewriter text={"💕 Hai bạn đã bắt đầu yêu nhau...\n\nNhưng tình yêu và học hành có thể cân bằng được không?"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
-                            ) : (
-                                <button className="continue-btn fade-in" onClick={() => {
-                                    setScenario('love_choice');
-                                    setStep(0);
-                                }}>Tiếp tục →</button>
-                            )}
+                            <Typewriter text={"💕 Hai bạn đã bắt đầu yêu nhau...\n\nNhưng tình yêu và học hành có thể cân bằng được không?"} onComplete={() => {
+                                setScenario('love_choice');
+                                setStep(0);
+                            }} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1733,11 +1924,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         return (
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
-                {showStatChange && (
-                    <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
-                )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_bí_ẩn.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -1747,7 +1935,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                         ) : (
                             <div className="choices-container fade-in">
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ happiness: 30, economy: -10, knowledge: -10 }, { type: 'love_career', value: 'love' });
+                                    updateStats({ happiness: 30, economy: -10, knowledge: -10 });
+                                    addChoice({ type: 'love_career', value: 'love' });
                                     setScenario('family_pressure');
                                     setStep(0);
                                 }}>
@@ -1755,15 +1944,19 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                                     <span className="choice-desc">Tình yêu là quan trọng nhất!</span>
                                 </button>
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ knowledge: 20, economy: 10, happiness: -20 }, { type: 'love_career', value: 'career' });
-                                    setScenario('family_pressure');
+                                    // Choose career = breakup with lover
+                                    updateStats({ knowledge: 20, economy: 10, happiness: -20 });
+                                    addChoice({ type: 'love_career', value: 'career' });
+                                    setFlag('has_lover', false); // Break up
+                                    setScenario('breakup');
                                     setStep(0);
                                 }}>
                                     <span className="choice-title">💼 Tập trung sự nghiệp</span>
                                     <span className="choice-desc">Mình cần tập trung sự nghiệp trước...</span>
                                 </button>
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ happiness: 10, economy: -5, knowledge: -5 }, { type: 'love_career', value: 'balance' });
+                                    updateStats({ happiness: 10, economy: -5, knowledge: -5 });
+                                    addChoice({ type: 'love_career', value: 'balance' });
                                     setScenario('family_pressure');
                                     setStep(0);
                                 }}>
@@ -1782,19 +1975,111 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         );
     }
 
-    // SCENARIO 1.5: Áp lực gia đình
+    // SCENARIO: Breakup (when choosing career over love)
+    if (scenario === 'breakup') {
+        const loveInterestName = state.flags.lover_name || 'người yêu';
+        const loveInterestGender = state.player.gender === 'male' ? 'female' : 'male';
+        const loveInterestSprite = state.player.gender === 'male' ? 'bích' : 'khánh';
+
+        if (step === 0) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Vài ngày sau...\n\nBạn đã quyết định nói chuyện với " + loveInterestName + "..."} onComplete={() => setStep(1)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 1) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('buồn')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình... mình cần nói chuyện với bạn...\n\nMình nghĩ... mình cần tập trung cho sự nghiệp...\n\nMình xin lỗi..."} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 2) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${loveInterestSprite}_buồn.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình... mình hiểu...\n\nMình biết sự nghiệp quan trọng với bạn...\n\nMình hy vọng bạn sẽ thành công..."} onComplete={() => setStep(3)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 3) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('buồn')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình xin lỗi... Mình thật sự xin lỗi...\n\n(Suy nghĩ) Đây có phải quyết định đúng không?"} onComplete={() => {
+                                updateStats({ happiness: -30 });
+                                setStep(4);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 4) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"💔 Hai người đã chia tay...\n\nBạn cảm thấy buồn, nhưng quyết tâm tập trung cho tương lai..."} onComplete={() => {
+                                setScenario('family_pressure');
+                                setStep(0);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }
+
+    // SCENARIO 1.5: Áp lực gia đình (IMPROVED - check if has lover)
     if (scenario === 'family_pressure') {
+        const hasLover = state.flags.has_lover;
+        const loveInterestName = state.flags.lover_name || 'người yêu';
+
         if (step === 0) {
             return (
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
-                    <div className="character-container">
-                        <img src="/src/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
-                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Mẹ</h2>
+                        <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Con ơi! Lâu rồi không về!\n\nCon học thế nào? Sắp tốt nghiệp rồi nhỉ?\n\nCon có người yêu chưa?"} onComplete={() => setStep(1)} />
+                            <Typewriter text={"📅 Năm 4 đại học - Sắp tốt nghiệp...\n\nBạn về nhà thăm bố mẹ..."} onComplete={() => setStep(1)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1806,12 +2091,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        <img src="/assets/characters/mẹ_yêu_thương.png" alt="Mẹ" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <h2 className="speaker-name">Mẹ</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Dạ, con có người yêu rồi ạ...\n\nCon đang học tốt mà!"} onComplete={() => setStep(2)} />
+                            <Typewriter text={"Con ơi! Lâu rồi không về!\n\nCon học thế nào? Sắp tốt nghiệp rồi nhỉ?\n\nCon có người yêu chưa?"} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1819,33 +2104,201 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
 
         if (step === 2) {
+            // Different response based on relationship status
+            if (hasLover) {
+                return (
+                    <SceneBackground sceneKey="prologue_childhood_normal">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Dạ, con có người yêu rồi ạ!\n\nTên " + loveInterestName + ", rất tốt với con!"} onComplete={() => setStep(3)} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                return (
+                    <SceneBackground sceneKey="prologue_childhood_normal">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Dạ... con chưa có người yêu ạ...\n\nCon đang tập trung học..."} onComplete={() => setStep(5)} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
+        }
+
+        // Branch 1: Has lover - parents want to introduce someone else
+        if (step === 3 && hasLover) {
             return (
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_nghiêm_túc.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Bố muốn con về làm việc ở quê...\n\nỞ đó bố có quen biết, dễ xin việc...\n\nCon ở xa, bố mẹ lo lắng lắm..."} onComplete={() => setStep(3)} />
+                            <Typewriter text={"Người yêu à... Gia đình người ta thế nào?\n\nBố có quen con nhà hàng xóm, gia đình tử tế lắm...\n\nCon gặp nói chuyện xem sao?"} onComplete={() => setStep(4)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 3) {
+        if (step === 4 && hasLover) {
             return (
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
+                        <img src={getPlayerSprite('bối_rối')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Nhưng con muốn ở thành phố...\n\nCon có ước mơ của con..."} onComplete={() => setScenario('family_choice')} />
+                            <Typewriter text={"Nhưng con đã có người yêu rồi mà...\n\n(Suy nghĩ) Bố mẹ muốn con gặp người khác?"} onComplete={() => setStep(10)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        // Branch 2: No lover - parents introduce someone
+        if (step === 5 && !hasLover) {
+            return (
+                <SceneBackground sceneKey="prologue_childhood_normal">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/assets/characters/mẹ_vui_vẻ.png" alt="Mẹ" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Mẹ</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Con đã lớn rồi, mẹ lo lắm!\n\nMẹ có quen con nhà hàng xóm, rất tốt!\n\nCon gặp nói chuyện xem sao?"} onComplete={() => setStep(6)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 6 && !hasLover) {
+            return (
+                <SceneBackground sceneKey="prologue_childhood_normal">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('bối_rối')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Dạ... con sẽ gặp...\n\n(Suy nghĩ) Mình chưa sẵn sàng lắm..."} onComplete={() => setStep(10)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        // Common: Meet the person parents introduce
+        if (step === 10) {
+            const introducedPersonGender = state.player.gender === 'male' ? 'female' : 'male';
+            const introducedPersonName = introducedPersonGender === 'female' ? 'Trang' : 'Hùng';
+            const introducedPersonSprite = introducedPersonGender === 'female' ? 'trang' : 'hùng';
+
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Vài ngày sau - Quán cà phê...\n\nBạn gặp " + introducedPersonName + " - người mà bố mẹ giới thiệu..."} onComplete={() => {
+                                setFlag('introduced_person_name', introducedPersonName);
+                                setFlag('introduced_person_sprite', introducedPersonSprite);
+                                setStep(11);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 11) {
+            const introducedPersonName = state.flags.introduced_person_name;
+            const introducedPersonSprite = state.flags.introduced_person_sprite;
+
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{introducedPersonName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Chào! Mình là " + introducedPersonName + "!\n\nBố mẹ mình và bố mẹ bạn quen nhau lâu rồi!\n\nRất vui được gặp bạn!"} onComplete={() => setStep(12)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 12) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Chào... Mình cũng vui được gặp bạn...\n\n(Suy nghĩ) " + (hasLover ? loveInterestName + " sẽ nghĩ sao?" : "Người này có vẻ tốt...")} onComplete={() => setStep(13)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 13) {
+            const introducedPersonName = state.flags.introduced_person_name;
+            const introducedPersonSprite = state.flags.introduced_person_sprite;
+
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/assets/characters/${introducedPersonSprite}_vui_vẻ.png`} alt={introducedPersonName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{introducedPersonName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình nghe nói bạn sắp tốt nghiệp đại học!\n\nBạn định làm gì sau khi tốt nghiệp?\n\nMình đang làm việc ở công ty gia đình..."} onComplete={() => setStep(14)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 14) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Hai người nói chuyện thêm một lúc...\n\n" + (hasLover ? "Nhưng bạn cứ nghĩ về " + loveInterestName + "..." : "Bạn cảm thấy thoải mái khi nói chuyện...")} onComplete={() => {
+                                setScenario('marriage_choice');
+                                setStep(0);
+                            }} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -1853,16 +2306,79 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
     }
 
+    // CHOICE: Marriage decision
+    if (scenario === 'marriage_choice') {
+        const hasLover = state.flags.has_lover;
+        const loveInterestName = state.flags.lover_name || 'người yêu';
+        const introducedPersonName = state.flags.introduced_person_name;
+
+        return (
+            <SceneBackground sceneKey="dream">
+                <StatsPanel />
+                <div className="character-container">
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                </div>
+                <div className="dialogue-box">
+                    <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
+                    <div className="dialogue-content">
+                        {!showChoices ? (
+                            <Typewriter text={hasLover ?
+                                "Ngươi đang có người yêu, nhưng bố mẹ muốn ngươi cưới người khác...\n\nNgươi sẽ chọn ai?" :
+                                "Bố mẹ muốn ngươi cưới người họ chọn...\n\nNgươi có chấp nhận không?"
+                            } onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
+                        ) : (
+                            <div className="choices-container fade-in">
+                                {hasLover && (
+                                    <button className="choice-btn" onClick={() => {
+                                        updateStats({ happiness: 30, social: -20 });
+                                        addChoice({ type: 'marriage', value: 'lover' });
+                                        setFlag('married_to', loveInterestName);
+                                        setScenario('family_choice');
+                                        setStep(0);
+                                    }}>
+                                        <span className="choice-title">💕 Cưới {loveInterestName}</span>
+                                        <span className="choice-desc">Mình yêu {loveInterestName}!</span>
+                                    </button>
+                                )}
+                                <button className="choice-btn" onClick={() => {
+                                    updateStats({ happiness: hasLover ? -20 : 10, social: 30, economy: 20 });
+                                    addChoice({ type: 'marriage', value: 'arranged' });
+                                    setFlag('married_to', introducedPersonName);
+                                    setFlag('has_lover', false);
+                                    setScenario('family_choice');
+                                    setStep(0);
+                                }}>
+                                    <span className="choice-title">💍 Cưới {introducedPersonName}</span>
+                                    <span className="choice-desc">{hasLover ? 'Nghe lời bố mẹ...' : 'Người này có vẻ tốt!'}</span>
+                                </button>
+                                <button className="choice-btn" onClick={() => {
+                                    updateStats({ happiness: -10, social: -10 });
+                                    addChoice({ type: 'marriage', value: 'refuse' });
+                                    setScenario('family_choice');
+                                    setStep(0);
+                                }}>
+                                    <span className="choice-title">🚫 Từ chối cưới</span>
+                                    <span className="choice-desc">Mình chưa sẵn sàng!</span>
+                                </button>
+                            </div>
+                        )}
+                        <div className="dialogue-controls">
+                            <button className="control-btn">⚙️ AUTO</button>
+                            <button className="control-btn">⏭️ SKIP</button>
+                        </div>
+                    </div>
+                </div>
+            </SceneBackground>
+        );
+    }
+
     // Family choice
     if (scenario === 'family_choice') {
         return (
             <SceneBackground sceneKey="dream">
                 <StatsPanel />
-                {showStatChange && (
-                    <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
-                )}
                 <div className="character-container">
-                    <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                    <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                 </div>
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -1872,7 +2388,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                         ) : (
                             <div className="choices-container fade-in">
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ happiness: -15, social: 20 }, { type: 'family_decision', value: 'obey' });
+                                    updateStats({ happiness: -15, social: 20 });
+                                    addChoice({ type: 'family_decision', value: 'obey' });
                                     setScenario('graduation_uni');
                                     setStep(0);
                                 }}>
@@ -1880,7 +2397,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                                     <span className="choice-desc">Con sẽ về quê làm việc!</span>
                                 </button>
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ happiness: 20, social: -15 }, { type: 'family_decision', value: 'follow_dream' });
+                                    updateStats({ happiness: 20, social: -15 });
+                                    addChoice({ type: 'family_decision', value: 'follow_dream' });
                                     setScenario('graduation_uni');
                                     setStep(0);
                                 }}>
@@ -1888,7 +2406,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                                     <span className="choice-desc">Con muốn theo đuổi đam mê của con!</span>
                                 </button>
                                 <button className="choice-btn" onClick={() => {
-                                    handleChoice({ happiness: 5, social: 5 }, { type: 'family_decision', value: 'compromise' });
+                                    updateStats({ happiness: 5, social: 5 });
+                                    addChoice({ type: 'family_decision', value: 'compromise' });
                                     setScenario('graduation_uni');
                                     setStep(0);
                                 }}>
@@ -1914,7 +2433,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_graduation">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -1948,7 +2467,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="prologue_childhood_normal">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -1982,7 +2501,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -2040,7 +2559,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_interview">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp công ty</h2>
@@ -2091,7 +2610,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/đồng_nghiệp_nghiêm_túc.png" alt="Đồng nghiệp" className="character-sprite left" />
+                        <img src="/assets/characters/đồng_nghiệp_nghiêm_túc.png" alt="Đồng nghiệp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Đồng nghiệp (có bằng đại học)</h2>
@@ -2142,7 +2661,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_hài_lòng.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_hài_lòng.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp</h2>
@@ -2176,7 +2695,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân - tốt nghiệp đại học)</h2>
@@ -2227,7 +2746,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_cafe">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_vui_vẻ.png" alt="Minh" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Minh (Bạn thân)</h2>
@@ -2261,7 +2780,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_office">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Sếp" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Sếp</h2>
@@ -2300,7 +2819,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_airport">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bố_buồn.png" alt="Bố" className="character-sprite left" />
+                        <img src="/assets/characters/bố_buồn.png" alt="Bố" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
@@ -2385,7 +2904,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Bạn quốc tế" className="character-sprite left" />
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Bạn quốc tế" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bạn quốc tế</h2>
@@ -2521,7 +3040,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="chapter1_interview">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Nhà tuyển dụng</h2>
@@ -2548,7 +3067,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                 <SceneBackground sceneKey="dream">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_vui_vẻ.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

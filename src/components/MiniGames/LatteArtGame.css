@@ -1,0 +1,297 @@
+.latte-art-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #D4A574 0%, #8B6F47 100%);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    color: white;
+    text-align: center;
+}
+
+.latte-art-container h2 {
+    font-size: 2.5em;
+    margin: 0 0 15px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.intro-text {
+    font-size: 1.3em;
+    margin-bottom: 25px;
+    opacity: 0.95;
+}
+
+.pattern-preview {
+    margin: 30px 0;
+}
+
+.art-canvas {
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    cursor: crosshair;
+    background: #F5E6D3;
+    display: block;
+    margin: 0 auto;
+}
+
+.art-canvas.preview {
+    cursor: default;
+}
+
+.pattern-info {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.pattern-emoji {
+    font-size: 3em;
+}
+
+.pattern-name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.instructions {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 25px 0;
+    backdrop-filter: blur(10px);
+}
+
+.instructions p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.start-btn {
+    padding: 18px 50px;
+    font-size: 1.5em;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Playing state */
+.latte-art-container.playing {
+    max-width: 700px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.pattern-target {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.pattern-target .pattern-emoji {
+    font-size: 2em;
+}
+
+.timer {
+    font-size: 1.5em;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.game-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.clear-btn,
+.done-btn {
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.clear-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.clear-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.done-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+}
+
+.done-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hint {
+    margin-top: 15px;
+    font-size: 1.1em;
+    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+/* Result state */
+.latte-art-container.result {
+    max-width: 600px;
+}
+
+.result-canvas {
+    margin: 30px 0;
+}
+
+.result-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    min-width: 150px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 1em;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.result-message {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 25px;
+    border-radius: 15px;
+    margin: 25px 0;
+    backdrop-filter: blur(10px);
+}
+
+.result-message p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.cafe-info {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.cafe-info h3 {
+    font-size: 1.8em;
+    margin: 0 0 10px 0;
+}
+
+.salary {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #FFD700;
+    margin: 0;
+}
+
+.continue-btn {
+    padding: 18px 50px;
+    font-size: 1.4em;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.continue-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .latte-art-container {
+        padding: 20px;
+    }
+
+    .art-canvas {
+        width: 280px !important;
+        height: 280px !important;
+    }
+
+    .latte-art-container h2 {
+        font-size: 2em;
+    }
+
+    .pattern-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .result-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .stat-box {
+        min-width: auto;
+    }
+}

@@ -44,7 +44,7 @@ export default function Chapter4Screen() {
 
     const getPlayerSprite = (emotion = 'nghiêm_túc') => {
         const gender = state.player.gender === 'male' ? 'con_trai' : 'con_gái';
-        return `/src/assets/characters/${gender}_${emotion}.png`;
+        return `/assets/characters/${gender}_${emotion}.png`;
     };
 
     const partner = state.flags.partner || 'hung';
@@ -132,7 +132,7 @@ Hãy cẩn thận với những quyết định ở tuổi trung niên nhé...
                     <SceneBackground sceneKey="dream">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bà_tiên_duyên_lo_lắng.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                            <img src="/assets/characters/bà_tiên_duyên_lo_lắng.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bà Tiên Duyên</h2>
@@ -157,7 +157,7 @@ Hãy cân bằng nhé con!`;
                     <SceneBackground sceneKey="dream">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bà_tiên_duyên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
+                            <img src="/assets/characters/bà_tiên_duyên_nghiêm_túc.png" alt="Bà Tiên Duyên" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box">
                             <h2 className="speaker-name">Bà Tiên Duyên</h2>
@@ -222,7 +222,7 @@ Bạn đã làm việc 20 năm...
                     <SceneBackground sceneKey="chapter4_career_peak">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/sếp_vui_vẻ.png" alt="Sếp" className="character-sprite left" />
+                            <img src="/assets/characters/sếp_vui_vẻ.png" alt="Sếp" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box fade-in">
                             <h2 className="speaker-name">Sếp</h2>
@@ -297,7 +297,7 @@ Bạn thường xuyên về nhà muộn...`}
                         <SceneBackground sceneKey="chapter4_home_conflict">
                             <StatsPanel />
                             <div className="character-container">
-                                <img src="/src/assets/characters/con_nóng_giận.png" alt="Con" className="character-sprite left" />
+                                <img src="/assets/characters/con_nóng_giận.png" alt="Con" className="character-sprite left" />
                             </div>
                             <div className="dialogue-box fade-in">
                                 <h2 className="speaker-name">Con (12 tuổi)</h2>
@@ -323,7 +323,7 @@ Bố/Mẹ giàu mà không dành thời gian cho con! Con ghét bố/mẹ! 😠`
                         <SceneBackground sceneKey="chapter4_home_conflict">
                             <StatsPanel />
                             <div className="character-container">
-                                <img src="/src/assets/characters/con_buồn.png" alt="Con" className="character-sprite left" />
+                                <img src="/assets/characters/con_buồn.png" alt="Con" className="character-sprite left" />
                             </div>
                             <div className="dialogue-box fade-in">
                                 <h2 className="speaker-name">Con (12 tuổi)</h2>
@@ -349,7 +349,7 @@ Bố/Mẹ không có thời gian chơi với con nữa...`}
                         <SceneBackground sceneKey="chapter4_home_conflict">
                             <StatsPanel />
                             <div className="character-container">
-                                <img src="/src/assets/characters/con_nghiêm_túc.png" alt="Con" className="character-sprite left" />
+                                <img src="/assets/characters/con_nghiêm_túc.png" alt="Con" className="character-sprite left" />
                             </div>
                             <div className="dialogue-box fade-in">
                                 <h2 className="speaker-name">Con (12 tuổi)</h2>
@@ -457,7 +457,7 @@ Bố/Mẹ bận làm việc để kiếm tiền cho con...
                     <SceneBackground sceneKey="chapter4_home_conflict">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src={`/src/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
+                            <img src={`/assets/characters/${partner}_lo_lắng.png`} alt={partnerName} className="character-sprite left" />
                         </div>
                         <div className="dialogue-box fade-in">
                             <h2 className="speaker-name">{partnerName}</h2>
@@ -504,7 +504,7 @@ Con cũng buồn lắm...`}
                         <StatChangeNotification changes={statChanges} onContinue={handleContinueAfterStats} />
                     )}
                     <div className="character-container">
-                        <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                        <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                     </div>
                     <div className="dialogue-box fade-in">
                         <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
@@ -553,7 +553,7 @@ Stress công việc đã ảnh hưởng đến sức khỏe...`}
                     <SceneBackground sceneKey="chapter3_hospital">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bác_sĩ_nghiêm_túc.png" alt="Bác sĩ" className="character-sprite left" />
+                            <img src="/assets/characters/bác_sĩ_nghiêm_túc.png" alt="Bác sĩ" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box fade-in">
                             <h2 className="speaker-name">Bác sĩ</h2>
@@ -589,7 +589,7 @@ Anh/Chị cần nghỉ ngơi, ăn uống lành mạnh, tập thể dục!`}
                     <SceneBackground sceneKey="dream">
                         <StatsPanel />
                         <div className="character-container">
-                            <img src="/src/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
+                            <img src="/assets/characters/bà_tiên_nghiêm_túc.png" alt="Bà Tiên" className="character-sprite left" />
                         </div>
                         <div className="dialogue-box fade-in">
                             <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>

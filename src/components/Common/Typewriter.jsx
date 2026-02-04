@@ -252,6 +252,14 @@ const Typewriter = ({
     // Click anywhere on screen to skip dialogue animation hoặc tiếp tục
     useEffect(() => {
         const handleClick = (e) => {
+            console.log('[Typewriter] Click detected', {
+                isTyping,
+                displayedLength: displayedText.length,
+                textLength: text.length,
+                hasCompleted: hasCompletedRef.current,
+                target: e.target.tagName
+            });
+
             // Không xử lý nếu click vào button, input, hoặc các element tương tác
             const target = e.target;
             const isInteractive = target.tagName === 'BUTTON' ||
@@ -264,17 +272,22 @@ const Typewriter = ({
                 target.closest('.continue-btn');
 
             if (isInteractive) {
+                console.log('[Typewriter] Click on interactive element, ignored');
                 return;
             }
 
             // Nếu đang typing: skip animation và hiển thị text đầy đủ
             if (isTyping) {
+                console.log('[Typewriter] Skipping animation');
                 skipAnimation();
             }
             // Nếu text đã đầy đủ và chưa gọi onComplete: gọi onComplete để tiếp tục
             else if (displayedText.length >= text.length && !hasCompletedRef.current && onCompleteRef.current) {
+                console.log('[Typewriter] Calling onComplete');
                 hasCompletedRef.current = true;
                 onCompleteRef.current();
+            } else {
+                console.log('[Typewriter] No action taken');
             }
         };
 
