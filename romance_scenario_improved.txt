@@ -1,0 +1,342 @@
+// IMPROVED ROMANCE SCENARIO - Replace from step 2 onwards in Chapter1Screen.jsx
+
+        if (step === 2) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Này, bài tập môn Toán khó quá!\n\nBạn làm được bài 5 chưa? Mình không hiểu lắm..."} onComplete={() => setStep(3)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 3) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"À, bài đó à? Để mình giải thích cho...\n\nBạn phải dùng công thức này, rồi thay số vào..."} onComplete={() => setStep(4)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 4) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Ồ! Mình hiểu rồi! Cảm ơn bạn nhiều!\n\nBạn giỏi quá! Lần sau mình gặp khó khăn lại nhờ bạn nhé!"} onComplete={() => setStep(5)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 5) {
+            return (
+                <SceneBackground sceneKey="chapter1_lecture">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('thích_thú')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"(Suy nghĩ)\n\n" + loveInterestName + " hôm nay trông vui vẻ quá...\n\nNụ cười " + possessive + " thật đẹp..."} onComplete={() => setStep(6)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 6) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 2 tuần sau...\n\nBạn và " + loveInterestName + " đã gặp nhau nhiều lần hơn.\n\nMỗi lần gặp, bạn đều cảm thấy vui vẻ và thoải mái..."} onComplete={() => setStep(7)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 7) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/bạn_thân_thích_thú.png" alt="Hùng" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Hùng (Bạn thân)</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Này này! Mình thấy bạn hay nhìn " + loveInterestName + " đấy!\n\nBạn có thích " + pronoun + " không?\n\nThử mời đi uống cà phê xem!"} onComplete={() => setStep(8)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 8) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('bối_rối')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Ừm... có một người...\n\nNhưng mình không biết " + pronoun + " có thích mình không...\n\nMình... mình sợ bị từ chối..."} onComplete={() => setStep(9)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 9) {
+            return (
+                <SceneBackground sceneKey="chapter1_cafe">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src="/src/assets/characters/bạn_thân_vui_vẻ.png" alt="Hùng" className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Hùng (Bạn thân)</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Đừng sợ! Mạnh dạn lên!\n\nNếu không thử thì làm sao biết được?\n\nThôi, mình sẽ giúp bạn!"} onComplete={() => setStep(10)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 10) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Cuối tuần - Rạp phim...\n\nVới sự động viên của Hùng, bạn đã mạnh dạn rủ " + loveInterestName + " đi xem phim..."} onComplete={() => setStep(11)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 11) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Chào! Lâu rồi không gặp!\n\nBạn rủ mình đi xem phim à? Được chứ!\n\nMình cũng đang muốn xem phim này lắm!"} onComplete={() => setStep(12)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 12) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"(Suy nghĩ) Tuyệt! " + loveInterestName + " đồng ý rồi!\n\nTim mình đập thình thịch quá..."} onComplete={() => setStep(13)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 13) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"🎬 Trong rạp phim...\n\nPhim rất hay, nhưng bạn không thể tập trung.\n\nBạn cứ liếc nhìn " + loveInterestName + " ngồi bên cạnh..."} onComplete={() => setStep(14)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 14) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Phim hay quá! Bạn thấy sao?\n\nHôm nay vui lắm! Cảm ơn bạn đã rủ mình!"} onComplete={() => setStep(15)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 15) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('thích_thú')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình cũng vui lắm!\n\nLần sau... lần sau mình đi chơi nữa nhé?"} onComplete={() => {
+                                updateStats({ happiness: 15, social: 10 });
+                                setStep(16);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 16) {
+            return (
+                <SceneBackground sceneKey="chapter1_cinema">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Được chứ! Mình rất thích đi chơi với bạn!\n\nBạn vui tính và dễ thương lắm!"} onComplete={() => setStep(17)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 17) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 3 tháng sau...\n\nHai bạn đã gặp nhau nhiều lần. Đi cà phê, đi chơi, học chung...\n\nTình cảm ngày càng sâu đậm..."} onComplete={() => setStep(18)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 18) {
+            return (
+                <SceneBackground sceneKey="chapter1_dating">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_nghiêm_túc.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình... mình có điều muốn nói...\n\nMình nghĩ... mình đã thích bạn từ lâu rồi...\n\nBạn có thích mình không?"} onComplete={() => setStep(19)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 19) {
+            return (
+                <SceneBackground sceneKey="chapter1_dating">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình cũng thích bạn! ❤️\n\nMình đã thích bạn từ lần đầu tiên gặp...\n\nMình rất vui khi được ở bên bạn!"} onComplete={() => {
+                                updateStats({ happiness: 30 });
+                                setFlag('has_lover', true);
+                                setFlag('lover_name', loveInterestName);
+                                setStep(20);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 20) {
+            return (
+                <SceneBackground sceneKey="chapter1_dating">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={`/src/assets/characters/${loveInterestSprite}_vui_vẻ.png`} alt={loveInterestName} className="character-sprite left" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{loveInterestName}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Vậy... chúng mình là người yêu của nhau rồi nhé! 💕\n\nMình hứa sẽ luôn ở bên bạn!"} onComplete={() => setStep(21)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 21) {
+            return (
+                <SceneBackground sceneKey="chapter1_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            {!showChoices ? (
+                                <Typewriter text={"💕 Hai bạn đã bắt đầu yêu nhau...\n\nNhưng tình yêu và học hành có thể cân bằng được không?"} onComplete={() => setShowChoices(true)} enableVoice={audioEnabled} />
+                            ) : (
+                                <button className="continue-btn fade-in" onClick={() => {
+                                    setScenario('love_choice');
+                                    setStep(0);
+                                }}>Tiếp tục →</button>
+                            )}
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+    }

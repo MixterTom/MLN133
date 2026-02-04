@@ -257,11 +257,48 @@ const PathCollectorGame = ({ pathType = 'university', onComplete }) => {
 
     const handleComplete = () => {
         const result = getResult();
+
+        // Calculate bonus stats based on score and result
+        let bonusStats = {};
+
+        if (pathType === 'university') {
+            if (result === 'excellent') {
+                bonusStats = { knowledge: 30, happiness: 20, social: 15, economy: 10 };
+            } else if (result === 'good') {
+                bonusStats = { knowledge: 20, happiness: 15, social: 10, economy: 5 };
+            } else if (result === 'average') {
+                bonusStats = { knowledge: 10, happiness: 5, social: 5 };
+            } else {
+                bonusStats = { knowledge: 5, happiness: -5, economy: -5 };
+            }
+        } else if (pathType === 'work') {
+            if (result === 'excellent') {
+                bonusStats = { economy: 30, social: 20, happiness: 15, knowledge: 10 };
+            } else if (result === 'good') {
+                bonusStats = { economy: 20, social: 15, happiness: 10, knowledge: 5 };
+            } else if (result === 'average') {
+                bonusStats = { economy: 10, social: 5, happiness: 5 };
+            } else {
+                bonusStats = { economy: 5, happiness: -10, health: -5 };
+            }
+        } else if (pathType === 'study_abroad') {
+            if (result === 'excellent') {
+                bonusStats = { knowledge: 35, social: 25, happiness: 20, economy: 15 };
+            } else if (result === 'good') {
+                bonusStats = { knowledge: 25, social: 15, happiness: 10, economy: 10 };
+            } else if (result === 'average') {
+                bonusStats = { knowledge: 15, social: 10, happiness: 5, economy: -5 };
+            } else {
+                bonusStats = { knowledge: 5, happiness: -15, economy: -20, health: -10 };
+            }
+        }
+
         onComplete({
             score,
             result,
             pathType,
-            collectedItems: collectedItems.length
+            collectedItems: collectedItems.length,
+            bonusStats // Thêm stats để Chapter1 có thể cập nhật
         });
     };
 

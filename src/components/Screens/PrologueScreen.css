@@ -503,9 +503,9 @@
 }
 
 /* Continue button - HIDDEN in dialogue (click anywhere to continue) */
-/* But VISIBLE in mini-games */
-.dialogue-box .continue-btn,
-.dialogue-content .continue-btn {
+/* But VISIBLE in mini-games and action buttons */
+.dialogue-box .continue-btn:not(.action-btn),
+.dialogue-content .continue-btn:not(.action-btn) {
     display: none !important;
     /* Ẩn nút tiếp tục trong dialogue - click chuột để tiếp tục */
 }
