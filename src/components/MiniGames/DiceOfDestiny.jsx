@@ -92,10 +92,10 @@ export default function DiceOfDestiny({ origin, onComplete }) {
             if (origin === 'rich') {
                 if (finalScore >= 80) {
                     detailedOrigin = 'rich_happy';
-                    bonusStats = { economy: 50, happiness: 30, social: 20, health: 40, knowledge: 35 };
+                    bonusStats = { economy: 100, happiness: 30, social: 20, health: 40, knowledge: 35 };
                 } else if (finalScore >= 50) {
                     detailedOrigin = 'rich_lonely';
-                    bonusStats = { economy: 50, happiness: 10, social: 10, health: 40, knowledge: 35 };
+                    bonusStats = { economy: 100, happiness: 10, social: 10, health: 40, knowledge: 35 };
                 } else {
                     detailedOrigin = 'rich_controlled';
                     bonusStats = { economy: 50, happiness: 5, social: 5, health: 35, knowledge: 30 };
@@ -220,12 +220,13 @@ export default function DiceOfDestiny({ origin, onComplete }) {
 
             <div className="dice-instructions">
                 {rollCount === 0 && <p>Nhấn "Gieo xúc xắc" để bắt đầu!</p>}
-                {rollCount > 0 && rollCount < 5 && <p>Click vào xúc xắc để giữ lại, sau đó gieo lại!</p>}
+                {rollCount > 0 && rollCount < 5 && !lockedDice.every(Boolean) && <p>Click vào xúc xắc để giữ lại, sau đó gieo lại!</p>}
+                {rollCount > 0 && lockedDice.every(Boolean) && <p>Bạn đã chốt cả 3 xúc xắc. Hãy xác nhận kết quả!</p>}
                 {rollCount === 5 && <p>Bạn đã hết lượt gieo. Nhấn "Xem kết quả"!</p>}
             </div>
 
             <div className="dice-controls">
-                {rollCount < 5 ? (
+                {rollCount < 5 && !lockedDice.every(Boolean) ? (
                     <button
                         className="roll-button"
                         onClick={rollDice}
@@ -235,7 +236,7 @@ export default function DiceOfDestiny({ origin, onComplete }) {
                     </button>
                 ) : (
                     <button className="finish-button" onClick={finishGame}>
-                        ✨ Xem kết quả
+                        ✨ {rollCount < 5 ? 'Chốt kết quả ngay' : 'Xem kết quả'}
                     </button>
                 )}
             </div>

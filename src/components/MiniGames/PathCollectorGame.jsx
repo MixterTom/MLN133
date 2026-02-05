@@ -7,11 +7,11 @@ const PATH_CONFIGS = {
         title: '🎓 Đường đến Đại Học',
         description: 'Hứng sách vở để vào đại học chất lượng!',
         goodItems: [
-            { emoji: '📚', name: 'Sách', points: 15 },
-            { emoji: '📖', name: 'Giáo trình', points: 10 },
-            { emoji: '🎓', name: 'Bằng cấp', points: 25 },
-            { emoji: '📝', name: 'Bài tập', points: 10 },
-            { emoji: '💡', name: 'Kiến thức', points: 20 },
+            { emoji: '📚', name: 'Sách', points: 5 },
+            { emoji: '📖', name: 'Giáo trình', points: 4 },
+            { emoji: '🎓', name: 'Bằng cấp', points: 8 },
+            { emoji: '📝', name: 'Bài tập', points: 3 },
+            { emoji: '💡', name: 'Kiến thức', points: 6 },
         ],
         badItems: [
             { emoji: '🎮', name: 'Game', points: -15 },
@@ -20,23 +20,23 @@ const PATH_CONFIGS = {
             { emoji: '🎉', name: 'Party', points: -15 },
         ],
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        thresholds: { excellent: 150, good: 100, average: 50 },
+        thresholds: { excellent: 81, good: 50, average: 20 },
         resultMessages: {
             excellent: { title: '🎉 Xuất sắc!', desc: 'Bạn đỗ vào Đại học TOP đầu!' },
-            good: { title: '👍 Tốt lắm!', desc: 'Bạn vào được Đại học tốt!' },
-            average: { title: '😐 Tạm được', desc: 'Bạn vào Đại học bình thường' },
-            poor: { title: '😢 Tiếc quá', desc: 'Bạn chỉ vào được Đại học tư thục' },
+            good: { title: '👍 Tốt lắm!', desc: 'Bạn vào được Đại học công lập!' },
+            average: { title: '😐 Tạm được', desc: 'Bạn vào Đại học tư thục' },
+            poor: { title: '😢 Tiếc quá', desc: 'Bạn trượt nguyện vọng 1...' },
         }
     },
     work: {
         title: '💼 Đường đến Công việc',
         description: 'Thu thập kỹ năng để có công việc tốt!',
         goodItems: [
-            { emoji: '💼', name: 'Kinh nghiệm', points: 15 },
-            { emoji: '🔧', name: 'Kỹ năng', points: 10 },
-            { emoji: '💰', name: 'Lương', points: 20 },
-            { emoji: '🤝', name: 'Quan hệ', points: 15 },
-            { emoji: '📈', name: 'Thăng tiến', points: 25 },
+            { emoji: '💼', name: 'Kinh nghiệm', points: 5 },
+            { emoji: '🔧', name: 'Kỹ năng', points: 4 },
+            { emoji: '💰', name: 'Lương', points: 6 },
+            { emoji: '🤝', name: 'Quan hệ', points: 5 },
+            { emoji: '📈', name: 'Thăng tiến', points: 8 },
         ],
         badItems: [
             { emoji: '😴', name: 'Lười biếng', points: -15 },
@@ -45,23 +45,23 @@ const PATH_CONFIGS = {
             { emoji: '💸', name: 'Tiêu xài', points: -15 },
         ],
         background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        thresholds: { excellent: 150, good: 100, average: 50 },
+        thresholds: { excellent: 81, good: 50, average: 20 },
         resultMessages: {
             excellent: { title: '🎉 Xuất sắc!', desc: 'Bạn được nhận vào công ty lớn!' },
             good: { title: '👍 Tốt lắm!', desc: 'Bạn có công việc ổn định!' },
-            average: { title: '😐 Tạm được', desc: 'Bạn làm việc bình thường' },
-            poor: { title: '😢 Khó khăn', desc: 'Bạn phải làm công việc tay chân' },
+            average: { title: '😐 Tạm được', desc: 'Công việc lương thấp, vất vả' },
+            poor: { title: '😢 Khó khăn', desc: 'Bạn thất nghiệp tạm thời...' },
         }
     },
     study_abroad: {
         title: '✈️ Đường đến Du Học',
         description: 'Chuẩn bị hành trang cho chuyến du học!',
         goodItems: [
-            { emoji: '✈️', name: 'Visa', points: 20 },
-            { emoji: '📚', name: 'IELTS', points: 15 },
-            { emoji: '🎓', name: 'Học bổng', points: 25 },
-            { emoji: '🌍', name: 'Văn hóa', points: 15 },
-            { emoji: '💪', name: 'Quyết tâm', points: 10 },
+            { emoji: '✈️', name: 'Visa', points: 6 },
+            { emoji: '📚', name: 'IELTS', points: 5 },
+            { emoji: '🎓', name: 'Học bổng', points: 8 },
+            { emoji: '🌍', name: 'Văn hóa', points: 4 },
+            { emoji: '💪', name: 'Quyết tâm', points: 3 },
         ],
         badItems: [
             { emoji: '🏠', name: 'Nhớ nhà', points: -15 },
@@ -70,11 +70,11 @@ const PATH_CONFIGS = {
             { emoji: '😢', name: 'Cô đơn', points: -15 },
         ],
         background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        thresholds: { excellent: 160, good: 110, average: 60 },
+        thresholds: { excellent: 81, good: 50, average: 20 },
         resultMessages: {
             excellent: { title: '🎉 Xuất sắc!', desc: 'Bạn nhận học bổng toàn phần!' },
-            good: { title: '👍 Tốt lắm!', desc: 'Bạn du học thành công!' },
-            average: { title: '😐 Tạm được', desc: 'Bạn du học nhưng khó khăn' },
+            good: { title: '👍 Tốt lắm!', desc: 'Bạn đi du học tự túc thành công!' },
+            average: { title: '😐 Tạm được', desc: 'Trường du học chất lượng thấp' },
             poor: { title: '😢 Thất bại', desc: 'Visa bị từ chối...' },
         }
     }
