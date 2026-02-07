@@ -1,0 +1,7 @@
+/* Job Interview Game Styles - Reuse ReturneeInterviewGame styles */
+@import './ReturneeInterviewGame.css';
+
+/* Additional specific styles if needed */
+.interview-game {
+    /* Inherits from ReturneeInterviewGame.css */
+}

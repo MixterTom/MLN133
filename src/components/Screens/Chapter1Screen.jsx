@@ -338,30 +338,6 @@ export default function Chapter1Screen() {
 
     // SCENARIO 1.1: Tốt nghiệp phổ thông (IMPROVED)
     if (scenario === 'graduation') {
-        // Show audio enable overlay if not enabled yet
-        if (!audioEnabled && step === 0) {
-            return (
-                <SceneBackground sceneKey="chapter1_memory">
-                    <StatsPanel />
-                    <div className="audio-enable-overlay">
-                        <div className="audio-enable-box">
-                            <h2>🎙️ Bật Lồng Tiếng</h2>
-                            <p>Game có hỗ trợ lồng tiếng AI cho các nhân vật.</p>
-                            <p>Bạn có muốn bật lồng tiếng không?</p>
-                            <div className="audio-buttons">
-                                <button className="choice-btn" onClick={enableAudio}>
-                                    <span className="choice-title">🔊 Có, bật lồng tiếng</span>
-                                </button>
-                                <button className="choice-btn secondary" onClick={() => setAudioEnabled(true)}>
-                                    <span className="choice-title">🔇 Không, chơi không tiếng</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
         // Step 0: Flashback - Ước mơ tuổi thơ
         if (step === 0) {
             const text = `✨ Hồi ức - 10 năm trước...
@@ -3436,9 +3412,31 @@ Giờ đây, ngươi bước vào giai đoạn tiếp theo: Lập gia đình...`
         <SceneBackground sceneKey="dream">
             <StatsPanel />
             <div className="dialogue-box">
-                <h2 className="speaker-name">System</h2>
+                <h2 className="speaker-name">System Debug</h2>
                 <div className="dialogue-content">
-                    <Typewriter text={"Chapter 1 đang được phát triển..."} onComplete={() => setScreen('start')} />
+                    <p style={{ whiteSpace: 'pre-line', marginBottom: '20px' }}>
+                        {`Chapter 1 Debug Info:
+                        
+Scenario: ${scenario}
+Step: ${step}
+ShowChoices: ${showChoices}
+Education Path: ${state.flags.education_path || 'none'}`}
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="continue-btn" onClick={() => {
+                            console.log('Force Chapter 2');
+                            setFlag('chapter1_scenario', 'chapter_end');
+                            setFlag('chapter1_step', 0);
+                            setFlag('chapter2_scenario', 'graduation');
+                            setFlag('chapter2_step', 0);
+                            setScreen('chapter2');
+                        }}>🚀 Force Chapter 2</button>
+                        <button className="continue-btn" onClick={() => {
+                            setScenario('graduation_uni');
+                            setStep(0);
+                        }}>Reset to Graduation</button>
+                        <button className="continue-btn" onClick={() => setScreen('start')}>Về màn hình chính</button>
+                    </div>
                 </div>
             </div>
         </SceneBackground>
