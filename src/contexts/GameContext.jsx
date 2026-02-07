@@ -5,6 +5,7 @@ const GameContext = createContext();
 
 const initialState = {
     screen: 'start',
+    voiceEnabled: false, // Voice narration setting
     player: {
         name: '',
         gender: '',
@@ -98,6 +99,13 @@ function gameReducer(state, action) {
             };
             break;
 
+        case 'SET_VOICE_ENABLED':
+            newState = {
+                ...state,
+                voiceEnabled: action.payload
+            };
+            break;
+
         case 'LOAD_GAME':
             newState = action.payload;
             break;
@@ -131,6 +139,7 @@ export function GameProvider({ children }) {
         updateStats: (stats) => dispatch({ type: 'UPDATE_STATS', payload: stats }),
         addChoice: (choice) => dispatch({ type: 'ADD_CHOICE', payload: choice }),
         setFlag: (key, value) => dispatch({ type: 'SET_FLAG', payload: { key, value } }),
+        setVoiceEnabled: (enabled) => dispatch({ type: 'SET_VOICE_ENABLED', payload: enabled }),
         loadGame: () => {
             const savedGame = loadSavedGame();
             if (savedGame) {

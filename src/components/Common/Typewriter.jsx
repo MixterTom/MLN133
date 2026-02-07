@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { textToSpeech, CHARACTER_VOICES, VOICES } from '../../utils/fptTTS';
+import { useGame } from '../../contexts/GameContext';
 
 // Global audio reference để dừng audio khi chuyển dialogue
 let globalAudio = null;
@@ -23,8 +24,10 @@ const Typewriter = ({
     text,
     onComplete,
     speed = 70,
-    enableVoice = true,
 }) => {
+    const { state } = useGame();
+    const enableVoice = state.voiceEnabled; // Get from GameContext
+
     const [displayedText, setDisplayedText] = useState('');
     const indexRef = useRef(0);
     const lastTextRef = useRef('');

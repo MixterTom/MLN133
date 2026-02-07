@@ -8,7 +8,7 @@
  */
 
 // API Key FPT AI
-const FPT_API_KEY = 'yumz6d2GbPxDxE5l4ydKK1YpFVfeFFEf';
+const FPT_API_KEY = 'rQj7NzWYrpJKjgRYPnrwsmM3tPfSYOUB';
 
 // Các giọng đọc tiếng Việt có sẵn
 export const VOICES = {
@@ -58,7 +58,7 @@ const audioCache = new Map();
 /**
  * Tạo audio từ text sử dụng FPT AI
  * @param {string} text - Text cần chuyển thành giọng nói
- * @param {string} voice - Tên giọng đọc (default: banmai)
+ * @param {string} voice - Tên giọng đọc (default: linhsan)
  * @param {string} speed - Tốc độ đọc: -3 đến 3 (default: 0)
  * @returns {Promise<string>} - URL của audio file
  */
@@ -76,7 +76,6 @@ export async function textToSpeech(text, voice = 'linhsan', speed = '0') {
                 'api-key': FPT_API_KEY,
                 'speed': speed,
                 'voice': voice,
-                'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: text,
         });
@@ -88,8 +87,12 @@ export async function textToSpeech(text, voice = 'linhsan', speed = '0') {
         const data = await response.json();
 
         if (data.error === 0 && data.async) {
-            // FPT AI trả về URL async, cần đợi file được tạo
+            // FPT AI trả về URL async
             const audioUrl = data.async;
+
+            // Đợi 1 giây để FPT tạo file (tránh CORS issue)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             audioCache.set(cacheKey, audioUrl);
             return audioUrl;
         } else {
@@ -117,13 +120,22 @@ export function playAudio(audioUrl, volume = 1) {
         const audio = new Audio(audioUrl);
         audio.volume = volume;
 
-        audio.onended = () => resolve(audio);
-        audio.onerror = (e) => reject(e);
+        // Thêm crossOrigin để tránh CORS issues
+        audio.crossOrigin = 'anonymous';
 
-        // Delay nhỏ để đảm bảo file đã được tạo xong
-        setTimeout(() => {
+        audio.onended = () => resolve(audio);
+        audio.onerror = (e) => {
+            console.error('Audio playback error:', e);
+            reject(new Error('Failed to play audio'));
+        };
+
+        // Đợi audio load xong trước khi play
+        audio.oncanplaythrough = () => {
             audio.play().catch(reject);
-        }, 500);
+        };
+
+        // Bắt đầu load audio
+        audio.load();
     });
 }
 

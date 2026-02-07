@@ -95,7 +95,7 @@ Giờ đây... Hãy chọn xuất thân của ngươi...`;
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
                         {!showChoices ? (
-                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
+                            <Typewriter text={text} enableVoice={true} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <div className="choices-container fade-in">
                                 <button
@@ -149,7 +149,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
                         {!showChoices ? (
-                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
+                            <Typewriter text={text} enableVoice={true} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <div className="choices-container fade-in">
                                 <button
@@ -193,7 +193,7 @@ Giờ đây, ngươi muốn là nam hay nữ?`;
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
                         {!showChoices ? (
-                            <Typewriter text={text} onComplete={() => setShowChoices(true)} />
+                            <Typewriter text={text} enableVoice={true} onComplete={() => setShowChoices(true)} />
                         ) : (
                             <div className="input-container fade-in">
                                 <input
@@ -256,7 +256,7 @@ Tiếng khóc em bé vang lên...
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Narrator</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={() => setStep(3.1)} />
+                        <Typewriter text={text} enableVoice={true} onComplete={() => setStep(3.1)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -307,7 +307,7 @@ Nhưng mẹ sẽ cố gắng hết sức! Con phải học hành chăm chỉ đ�
                 <div className="dialogue-box">
                     <h2 className="speaker-name">{speakerName}</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={() => setStep(3.2)} />
+                        <Typewriter text={text} enableVoice={true} onComplete={() => setStep(3.2)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -366,7 +366,7 @@ Bạn quyết tâm phải thoát nghèo! Ý chí của bạn rất mạnh mẽ!`
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Narrator</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={() => setStep(4)} />
+                        <Typewriter text={text} enableVoice={true} onComplete={() => setStep(4)} />
                     </div>
                 </div>
             </SceneBackground>
@@ -401,10 +401,12 @@ Mỗi giai đoạn đều có thử thách riêng... Hãy chọn khôn ngoan!`;
                 <div className="dialogue-box">
                     <h2 className="speaker-name">Bà Tiên Duyên ✨</h2>
                     <div className="dialogue-content">
-                        <Typewriter text={text} onComplete={handleComplete} />
+                        <Typewriter text={text} enableVoice={true} onComplete={handleComplete} />
                     </div>
                 </div>
             </SceneBackground>
         );
     }
 }
+
+

@@ -8,6 +8,9 @@ import InterviewGame from '../MiniGames/InterviewGame';
 import DateGame from '../MiniGames/DateGame';
 import StudyGroupGame from '../MiniGames/StudyGroupGame';
 import PathCollectorGame from '../MiniGames/PathCollectorGame';
+import ReturneeInterviewGame from '../MiniGames/ReturneeInterviewGame';
+import CulturalAdaptationGame from '../MiniGames/CulturalAdaptationGame';
+import LanguageLearningGame from '../MiniGames/LanguageLearningGame';
 import SceneBackground from '../Common/SceneBackground';
 import Typewriter from '../Common/Typewriter';
 import { preloadDialogues, getPreloadProgress } from '../../utils/voicePreloader';
@@ -258,6 +261,73 @@ export default function Chapter1Screen() {
 
         // Continue to next step (meeting cafe owner)
         setStep(step + 1);
+    };
+
+    // Handler for Returnee Interview mini-game
+    const handleReturneeInterviewComplete = (result) => {
+        setShowMiniGame(false);
+        setMiniGameType(null);
+
+        const { score, result: quality, salary, studyAbroadQuality } = result;
+
+        // Store interview results
+        setFlag('interview_result', quality);
+        setFlag('interview_score', score);
+        setFlag('starting_salary', salary);
+
+        // Apply stats based on result
+        if (quality === 'excellent') {
+            updateStats({ economy: 30, happiness: 25, social: 10 });
+        } else if (quality === 'good') {
+            updateStats({ economy: 15, happiness: 15, social: 5 });
+        } else if (quality === 'average') {
+            updateStats({ economy: 5, happiness: 5, social: 0 });
+        } else {
+            updateStats({ economy: -10, happiness: -20, social: -10 });
+        }
+
+        // Continue to result step
+        setStep(21);
+    };
+
+    // Handler for Language Learning mini-game
+    const handleLanguageLearningComplete = (result) => {
+        setShowMiniGame(false);
+        setMiniGameType(null);
+
+        const { score, result: quality, bonusStats } = result;
+
+        // Store language learning results
+        setFlag('language_learning_result', quality);
+        setFlag('language_learning_score', score);
+
+        // Apply bonus stats
+        if (bonusStats) {
+            updateStats(bonusStats);
+        }
+
+        // Continue to next step
+        setStep(10);
+    };
+
+    // Handler for Cultural Adaptation mini-game
+    const handleCulturalAdaptationComplete = (result) => {
+        setShowMiniGame(false);
+        setMiniGameType(null);
+
+        const { score, result: quality, bonusStats } = result;
+
+        // Store cultural adaptation results
+        setFlag('cultural_adaptation_result', quality);
+        setFlag('cultural_adaptation_score', score);
+
+        // Apply bonus stats
+        if (bonusStats) {
+            updateStats(bonusStats);
+        }
+
+        // Continue to next step
+        setStep(12);
     };
 
     // Helper function to get player sprite based on gender and emotion
@@ -2591,14 +2661,17 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
 
     // Study abroad path
     if (scenario === 'study_abroad') {
+        // Get study abroad quality from minigame result
+        const studyAbroadQuality = state.flags.study_abroad_quality || 'good';
+
         if (step === 0) {
             return (
-                <SceneBackground sceneKey="chapter1_airport">
+                <SceneBackground sceneKey="chapter1_bedroom_morning">
                     <StatsPanel />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 18 tuổi - Tháng 8/2024\n\nBạn quyết định du học nước ngoài...\n\nHôm nay là ngày lên máy bay..."} onComplete={() => setStep(1)} />
+                            <Typewriter text={"📅 18 tuổi - Tháng 7/2024 - Một tuần trước khi đi\n\nSau khi hoàn tất thủ tục visa và chuẩn bị hành lý...\n\nBạn bắt đầu cảm nhận được sự lo lắng về chuyến đi sắp tới.\n\nĐây là lần đầu tiên bạn xa nhà lâu như vậy..."} onComplete={() => setStep(1)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -2606,6 +2679,93 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
 
         if (step === 1) {
+            // Different intro based on scholarship status
+            if (studyAbroadQuality === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_living_room_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/bố_vui_vẻ.png" alt="Bố" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Bố</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Con giỏi quá! Học bổng toàn phần đấy!\n\nBố mẹ tự hào về con lắm! Con không phải lo về tiền bạc nữa!\n\nCon cứ tập trung học hành thôi!"} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (studyAbroadQuality === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_living_room_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Mẹ</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Con ơi... Trường này không phải là trường tốt lắm...\n\nNhưng mẹ tin con sẽ cố gắng!\n\nCon phải học chăm chỉ gấp đôi người khác nhé!"} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                return (
+                    <SceneBackground sceneKey="chapter1_living_room_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/mẹ_lo_lắng.png" alt="Mẹ" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Mẹ</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Con ơi, mẹ đã chuẩn bị đủ thuốc men cho con rồi nhé.\n\nNước ngoài thời tiết khác, con phải giữ gìn sức khỏe!\n\nNhớ ăn uống đầy đủ, đừng tiết kiệm quá mà ốm đấy!"} onComplete={() => setStep(2)} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
+        }
+
+        if (step === 2) {
+            return (
+                <SceneBackground sceneKey="chapter1_living_room_evening">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite(studyAbroadQuality === 'excellent' ? 'vui_vẻ' : studyAbroadQuality === 'average' ? 'lo_lắng' : 'buồn')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={
+                                studyAbroadQuality === 'excellent'
+                                    ? "Dạ! Con sẽ cố gắng không phụ lòng bố mẹ!\n\n(Suy nghĩ) Mình may mắn quá! Học bổng toàn phần!\n\nMình sẽ tận dụng cơ hội này thật tốt!"
+                                    : studyAbroadQuality === 'average'
+                                        ? "Dạ, con sẽ cố gắng hết sức!\n\n(Suy nghĩ) Trường không tốt lắm... Nhưng ít nhất mình cũng được đi du học...\n\nMình phải chứng minh mình có thể làm được!"
+                                        : "Dạ, con biết rồi mẹ...\n\n(Suy nghĩ) Mình sắp phải xa gia đình 4 năm...\n\nLiệu mình có thích nghi được với cuộc sống nước ngoài không nhỉ?"
+                            } onComplete={() => setStep(3)} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 3) {
+            return (
+                <SceneBackground sceneKey="chapter1_airport">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Tháng 8/2024 - Ngày khởi hành\n\nSân bay Tân Sơn Nhất đông nghịt người.\n\nBạn đứng trước cổng check-in, vali nặng trĩu bên cạnh.\n\nBố mẹ đứng đối diện, cố gắng giữ nụ cười..."} onComplete={() => setStep(4)} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 4) {
             return (
                 <SceneBackground sceneKey="chapter1_airport">
                     <StatsPanel />
@@ -2615,14 +2775,14 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Bố</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Con đi cẩn thận! Nhớ gọi điện về!\n\nBố mẹ sẽ nhớ con lắm... 😢\n\nCon phải cố gắng học hành nhé!"} onComplete={() => setStep(2)} />
+                            <Typewriter text={"Con đi cẩn thận nhé! Nhớ gọi điện về thường xuyên!\n\nBố mẹ sẽ nhớ con lắm... 😢\n\nCon phải cố gắng học hành, đừng để bố mẹ thất vọng!"} onComplete={() => setStep(5)} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 2) {
+        if (step === 5) {
             return (
                 <SceneBackground sceneKey="chapter1_airport">
                     <StatsPanel />
@@ -2632,56 +2792,8 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Dạ! Con sẽ cố gắng! Con yêu bố mẹ! 😢\n\n(Suy nghĩ) Mình sẽ xa nhà 4 năm... Mình có làm được không?"} onComplete={() => {
+                            <Typewriter text={"Dạ! Con sẽ cố gắng hết sức! Con yêu bố mẹ! 😢\n\n(Ôm chặt bố mẹ lần cuối trước khi vào cổng)\n\n(Suy nghĩ) Đây là quyết định đúng đắn... phải không?"} onComplete={() => {
                                 updateStats({ happiness: -20, social: -10 });
-                                setStep(3);
-                            }} enableVoice={audioEnabled} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 3) {
-            return (
-                <SceneBackground sceneKey="chapter1_airplane">
-                    <StatsPanel />
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"✈️ Trên máy bay...\n\n12 giờ bay... Bạn cảm thấy lo lắng về tương lai..."} onComplete={() => setStep(4)} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 4) {
-            return (
-                <SceneBackground sceneKey="chapter1_foreign_university">
-                    <StatsPanel />
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"📅 Năm 1 - Nước ngoài\n\nMọi thứ đều xa lạ... Ngôn ngữ, văn hóa, con người..."} onComplete={() => setStep(5)} />
-                        </div>
-                    </div>
-                </SceneBackground>
-            );
-        }
-
-        if (step === 5) {
-            return (
-                <SceneBackground sceneKey="chapter1_foreign_dorm">
-                    <StatsPanel />
-                    <div className="character-container">
-                        <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
-                    </div>
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"(Suy nghĩ)\n\nMình... Mình nhớ nhà quá...\n\nTiếng Anh mình còn kém... Bài giảng khó hiểu quá... 😢"} onComplete={() => {
-                                updateStats({ happiness: -20, knowledge: -10 });
                                 setStep(6);
                             }} enableVoice={audioEnabled} />
                         </div>
@@ -2692,18 +2804,12 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
 
         if (step === 6) {
             return (
-                <SceneBackground sceneKey="chapter1_foreign_university">
+                <SceneBackground sceneKey="chapter1_airplane">
                     <StatsPanel />
-                    <div className="character-container">
-                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="Bạn quốc tế" className="character-sprite left" />
-                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Bạn quốc tế</h2>
+                        <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Hey! You're from Vietnam?\n\nThat's cool! I'm John! Let's be friends!\n\nDon't worry, you'll get used to it!"} onComplete={() => {
-                                updateStats({ social: 20, happiness: 10 });
-                                setStep(7);
-                            }} enableVoice={audioEnabled} />
+                            <Typewriter text={"✈️ Trên máy bay - 12 giờ bay\n\nBạn ngồi bên cửa sổ, nhìn xuống những đám mây trắng.\n\nSài Gòn đã xa dần phía sau...\n\nTrước mặt là một tương lai đầy bất định..."} onComplete={() => setStep(7)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -2717,7 +2823,7 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Năm 2 - 20 tuổi\n\nBạn đã quen với cuộc sống nước ngoài...\n\nTiếng Anh đã tốt hơn nhiều!"} onComplete={() => setStep(8)} />
+                            <Typewriter text={"📅 Năm 1 - Tháng 9/2024 - Tuần đầu tiên\n\nSân trường đại học nước ngoài.\n\nMọi thứ đều xa lạ... Ngôn ngữ, văn hóa, con người...\n\nBạn cảm thấy lạc lõng giữa đám đông sinh viên quốc tế."} onComplete={() => setStep(8)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -2725,23 +2831,62 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
 
         if (step === 8) {
-            return (
-                <SceneBackground sceneKey="chapter1_foreign_dorm">
-                    <StatsPanel />
-                    <div className="character-container">
-                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
-                    </div>
-                    <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
-                        <div className="dialogue-content">
-                            <Typewriter text={"Mình đã quen rồi!\n\nTiếng Anh mình tốt hơn! Bài giảng dễ hiểu hơn!\n\nMình có nhiều bạn quốc tế!"} onComplete={() => {
-                                updateStats({ knowledge: 30, social: 20, happiness: 20 });
-                                setStep(9);
-                            }} enableVoice={audioEnabled} />
+            // Different experiences based on quality
+            if (studyAbroadQuality === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
                         </div>
-                    </div>
-                </SceneBackground>
-            );
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ trong phòng kí túc xá cao cấp)\n\nPhòng ở đây tốt quá! Có học bổng nên mình không phải lo về tiền!\n\nTiếng Anh mình cũng ổn... Mình sẽ cố gắng thích nghi!\n\nNhưng... mình vẫn nhớ nhà..."} onComplete={() => {
+                                    updateStats({ happiness: -10, knowledge: 5 });
+                                    setStep(9);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (studyAbroadQuality === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ trong phòng kí túc xá cũ kỹ)\n\nPhòng ở đây... không được tốt lắm...\n\nTiếng Anh mình kém, giáo sư dạy cũng không rõ ràng...\n\nMình có làm được không? 😢"} onComplete={() => {
+                                    updateStats({ happiness: -20, knowledge: -10, health: -5 });
+                                    setStep(9);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ trong phòng kí túc xá)\n\nMình... Mình nhớ nhà quá...\n\nTiếng Anh mình còn kém, bài giảng nói quá nhanh, mình không hiểu gì cả...\n\nMình có thể vượt qua được không? 😢"} onComplete={() => {
+                                    updateStats({ happiness: -15, knowledge: -5 });
+                                    setStep(9);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
         }
 
         if (step === 9) {
@@ -2751,27 +2896,38 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Năm 3 - 21 tuổi\n\nNhưng có một vấn đề..."} onComplete={() => setStep(10)} />
+                            <Typewriter text={"📅 Tháng 10/2024 - Tháng thứ 2\n\nTrong lớp học...\n\nGiáo sư đang giảng bài, bạn cố gắng ghi chép nhưng vẫn bỏ lỡ nhiều chi tiết.\n\nBạn nhận ra mình cần cải thiện tiếng Anh gấp!\n\nHãy học từ vựng để hiểu bài tốt hơn!"} onComplete={() => {
+                                setMiniGameType('language_learning');
+                                setShowMiniGame(true);
+                            }} />
                         </div>
                     </div>
+                    {showMiniGame && miniGameType === 'language_learning' && (
+                        <LanguageLearningGame onComplete={handleLanguageLearningComplete} />
+                    )}
                 </SceneBackground>
             );
         }
 
         if (step === 10) {
+            // Get language learning result
+            const languageResult = state.flags.language_learning_result || 'average';
+
             return (
-                <SceneBackground sceneKey="chapter1_foreign_dorm">
+                <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
-                    <div className="character-container">
-                        <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
-                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"(Suy nghĩ)\n\nMình đã xa nhà 3 năm...\n\nMình không còn mối quan hệ ở Việt Nam...\n\nBạn bè cũ đã xa cách... 😢"} onComplete={() => {
-                                updateStats({ social: -20, happiness: -10 });
-                                setStep(11);
-                            }} enableVoice={audioEnabled} />
+                            <Typewriter text={
+                                languageResult === 'excellent'
+                                    ? "📚 Sau vài tuần học tập chăm chỉ...\n\nTiếng Anh của bạn đã tiến bộ vượt bậc!\n\nBạn bắt đầu hiểu được hầu hết bài giảng.\n\nNhưng vẫn còn một vấn đề... Văn hóa!"
+                                    : languageResult === 'good'
+                                        ? "📚 Sau vài tuần học tập...\n\nTiếng Anh của bạn đã tốt hơn đáng kể.\n\nBạn hiểu được phần lớn bài giảng.\n\nNhưng vẫn còn khó khăn với văn hóa giao tiếp..."
+                                        : languageResult === 'average'
+                                            ? "📚 Sau vài tuần học tập...\n\nTiếng Anh của bạn có tiến bộ nhưng chưa nhiều.\n\nBạn vẫn còn gặp khó khăn với bài giảng.\n\nVà cả văn hóa giao tiếp nữa..."
+                                            : "📚 Sau vài tuần...\n\nTiếng Anh của bạn vẫn còn yếu.\n\nBạn gặp rất nhiều khó khăn trong học tập.\n\nVà không biết cách giao tiếp với người nước ngoài..."
+                            } onComplete={() => setStep(11)} />
                         </div>
                     </div>
                 </SceneBackground>
@@ -2782,28 +2938,65 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
             return (
                 <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
+                    <div className="character-container">
+                        <img src="/assets/characters/bạn_thân_thích_thú.png" alt="John" className="character-sprite left" />
+                    </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Narrator</h2>
+                        <h2 className="speaker-name">John (Bạn quốc tế)</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Năm 4 - 22 tuổi - Tốt nghiệp\n\nBạn đã tốt nghiệp với bằng giỏi!\n\nGiờ đây, bạn phải quyết định: Ở lại hay về Việt Nam?"} onComplete={() => setStep(12)} />
+                            <Typewriter text={"Hey! You're from Vietnam, right?\n\nI'm John! I noticed you seem a bit lost.\n\nDon't worry, it's tough for everyone at first!\n\nLet me teach you about our culture here!"} onComplete={() => {
+                                updateStats({ social: 15, happiness: 10 });
+                                setStep(11.5);
+                            }} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 12) {
+        if (step === 11.5) {
             return (
-                <SceneBackground sceneKey="chapter1_airport">
+                <SceneBackground sceneKey="chapter1_foreign_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"🌍 John bắt đầu dạy bạn về văn hóa phương Tây...\n\nCách chào hỏi, cách ăn uống, cách giao tiếp...\n\nMọi thứ đều khác với Việt Nam!\n\nHãy học cách thích nghi với văn hóa mới!"} onComplete={() => {
+                                setMiniGameType('cultural_adaptation');
+                                setShowMiniGame(true);
+                            }} />
+                        </div>
+                    </div>
+                    {showMiniGame && miniGameType === 'cultural_adaptation' && (
+                        <CulturalAdaptationGame onComplete={handleCulturalAdaptationComplete} />
+                    )}
+                </SceneBackground>
+            );
+        }
+
+        if (step === 12) {
+            // Get cultural adaptation result
+            const culturalResult = state.flags.cultural_adaptation_result || 'average';
+
+            return (
+                <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
+                        <img src={getPlayerSprite(culturalResult === 'excellent' ? 'vui_vẻ' : culturalResult === 'good' ? 'thích_thú' : 'ngại')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
                         <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Mình sẽ về Việt Nam!\n\nMình nhớ gia đình, nhớ quê hương!\n\nMình sẽ áp dụng kiến thức học được để phát triển đất nước!"} onComplete={() => {
-                                updateStats({ knowledge: 60, happiness: 20 });
+                            <Typewriter text={
+                                culturalResult === 'excellent'
+                                    ? "Oh... Thank you so much, John!\n\nMình hiểu rồi! Văn hóa ở đây thú vị quá!\n\nMình sẽ cố gắng thích nghi!\n\n(Suy nghĩ) Mình bắt đầu thích cuộc sống ở đây rồi!"
+                                    : culturalResult === 'good'
+                                        ? "Thank you, John! I learned a lot!\n\nMình vẫn còn lúng túng một chút...\n\nNhưng mình sẽ cố gắng!\n\n(Suy nghĩ) Từ từ mình sẽ quen thôi..."
+                                        : culturalResult === 'average'
+                                            ? "Thank you... but it's still confusing...\n\nMình vẫn chưa hiểu lắm...\n\nVăn hóa khác quá!\n\n(Suy nghĩ) Mình có thể thích nghi được không nhỉ?"
+                                            : "I... I don't know if I can do this...\n\nMình vẫn rất lúng túng...\n\nMọi thứ quá khác biệt!\n\n(Suy nghĩ) Mình có nên về Việt Nam không?"
+                            } onComplete={() => {
+                                updateStats({ social: 10, happiness: culturalResult === 'excellent' ? 15 : culturalResult === 'good' ? 10 : 5 });
                                 setStep(13);
                             }} enableVoice={audioEnabled} />
                         </div>
@@ -2813,39 +3006,395 @@ ${performance === 'excellent' ? 'Em có tài năng làm việc này đấy!' : '
         }
 
         if (step === 13) {
+            // Different year 2 experiences
+            if (studyAbroadQuality === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình đã quen rồi! Tiếng Anh mình tốt hơn nhiều!\n\nTrường top đầu nên cơ hội thực tập rất nhiều!\n\nMình có nhiều bạn quốc tế giỏi, học được nhiều thứ!"} onComplete={() => {
+                                    updateStats({ knowledge: 30, social: 20, happiness: 25 });
+                                    setStep(14);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (studyAbroadQuality === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('mệt_mỏi')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình đã quen hơn... nhưng vẫn vất vả...\n\nTrường không tốt nên phải tự học nhiều hơn...\n\nMình phải làm thêm để có tiền sinh hoạt... Mệt quá! 😓"} onComplete={() => {
+                                    updateStats({ knowledge: 15, social: 10, happiness: 5, health: -10, economy: 10 });
+                                    setStep(14);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_dorm">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình đã quen rồi! Tiếng Anh mình tốt hơn nhiều!\n\nBài giảng giờ dễ hiểu hơn, mình có nhiều bạn quốc tế!\n\nCuộc sống ở đây... không tệ như mình nghĩ!"} onComplete={() => {
+                                    updateStats({ knowledge: 25, social: 15, happiness: 20 });
+                                    setStep(14);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
+        }
+
+        if (step === 14) {
             return (
-                <SceneBackground sceneKey="chapter1_office">
+                <SceneBackground sceneKey="chapter1_foreign_university">
                     <StatsPanel />
                     <div className="dialogue-box">
                         <h2 className="speaker-name">Narrator</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"📅 Về Việt Nam - Xin việc\n\nNhưng..."} onComplete={() => setStep(14)} />
+                            <Typewriter text={"📅 Năm 3 - Tháng 12/2026 - 21 tuổi\n\nNhưng có một vấn đề bắt đầu nảy sinh...\n\nBạn nhận ra mình đã xa Việt Nam gần 3 năm.\n\nMối quan hệ với bạn bè cũ dần phai nhạt..."} onComplete={() => setStep(15)} />
                         </div>
                     </div>
                 </SceneBackground>
             );
         }
 
-        if (step === 14) {
+        if (step === 15) {
             return (
-                <SceneBackground sceneKey="chapter1_interview">
+                <SceneBackground sceneKey="chapter1_foreign_dorm">
                     <StatsPanel />
                     <div className="character-container">
-                        <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        <img src={getPlayerSprite('lo_lắng')} alt={state.player.name} className="character-sprite right" />
                     </div>
                     <div className="dialogue-box">
-                        <h2 className="speaker-name">Nhà tuyển dụng</h2>
+                        <h2 className="speaker-name">{state.player.name}</h2>
                         <div className="dialogue-content">
-                            <Typewriter text={"Anh/Chị học nước ngoài à? Tốt!\n\nNhưng anh/chị không có kinh nghiệm làm việc ở Việt Nam...\n\nVà không có mối quan hệ... Khó xin việc lắm!"} onComplete={() => {
-                                updateStats({ economy: -20, happiness: -20 });
-                                setFlag('study_abroad_difficulty', true);
-                                setScenario('chapter_end');
-                                setStep(0);
+                            <Typewriter text={"(Nhìn điện thoại, tin nhắn từ bạn cũ ngày càng ít)\n\nMình đã xa nhà 3 năm rồi...\n\nBạn bè ở Việt Nam đã có cuộc sống riêng, mối quan hệ của mình dần xa cách...\n\nLiệu khi về, mình còn hòa nhập được không? 😢"} onComplete={() => {
+                                updateStats({ social: -15, happiness: -10 });
+                                setStep(16);
                             }} enableVoice={audioEnabled} />
                         </div>
                     </div>
                 </SceneBackground>
             );
+        }
+
+        if (step === 16) {
+            return (
+                <SceneBackground sceneKey="chapter1_foreign_university">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Năm 4 - Tháng 6/2027 - 22 tuổi - Lễ tốt nghiệp\n\nBạn đã hoàn thành chương trình học với thành tích xuất sắc!\n\nBằng đại học quốc tế, kiến thức chuyên môn vững vàng, tiếng Anh thành thạo...\n\nNhưng giờ đây, bạn phải đối mặt với quyết định quan trọng..."} onComplete={() => setStep(17)} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 17) {
+            // Different graduation outcomes
+            if (studyAbroadQuality === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_university">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình đã tốt nghiệp loại xuất sắc từ trường top!\n\nCó nhiều công ty ở đây muốn tuyển mình...\n\nNhưng... mình nhớ nhà, nhớ gia đình... Mình muốn về!"} onComplete={() => {
+                                    updateStats({ knowledge: 35, happiness: 15 });
+                                    setStep(18);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (studyAbroadQuality === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_university">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('buồn')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình đã tốt nghiệp... nhưng điểm không cao...\n\nTrường không nổi tiếng, khó xin việc ở đây...\n\nMình nên về Việt Nam... Ít nhất ở đó mình còn có gia đình..."} onComplete={() => {
+                                    updateStats({ knowledge: 20, happiness: 5 });
+                                    setStep(18);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                return (
+                    <SceneBackground sceneKey="chapter1_foreign_university">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('nghiêm_túc')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nỞ lại đây? Hay về Việt Nam?\n\nỞ lại thì có cơ hội việc làm tốt, lương cao...\n\nNhưng mình nhớ gia đình, nhớ quê hương... Mình muốn về!"} onComplete={() => {
+                                    updateStats({ knowledge: 30, happiness: 10 });
+                                    setStep(18);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
+        }
+
+        if (step === 18) {
+            return (
+                <SceneBackground sceneKey="chapter1_airport">
+                    <StatsPanel />
+                    <div className="character-container">
+                        <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                    </div>
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">{state.player.name}</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"Mình đã quyết định! Mình sẽ về Việt Nam!\n\nMình nhớ gia đình, nhớ quê hương!\n\nMình sẽ áp dụng kiến thức học được để phát triển sự nghiệp ở Việt Nam!"} onComplete={() => {
+                                updateStats({ happiness: 20 });
+                                setStep(19);
+                            }} enableVoice={audioEnabled} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 19) {
+            return (
+                <SceneBackground sceneKey="chapter1_living_room_morning">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Tháng 8/2027 - Về đến Việt Nam\n\nSau 4 năm xa nhà, bạn đã trở về.\n\nGia đình đón bạn với niềm vui vỡ òa.\n\nNhưng thị trường việc làm ở Việt Nam... không như bạn tưởng tượng..."} onComplete={() => setStep(20)} />
+                        </div>
+                    </div>
+                </SceneBackground>
+            );
+        }
+
+        if (step === 20) {
+            return (
+                <SceneBackground sceneKey="chapter1_office">
+                    <StatsPanel />
+                    <div className="dialogue-box">
+                        <h2 className="speaker-name">Narrator</h2>
+                        <div className="dialogue-content">
+                            <Typewriter text={"📅 Tháng 9/2027 - Buổi phỏng vấn\n\nHôm nay là ngày phỏng vấn quan trọng.\n\nBạn đã chuẩn bị kỹ lưỡng, mặc vest chỉnh tề.\n\nLiệu bạn có thể thuyết phục nhà tuyển dụng?"} onComplete={() => {
+                                setMiniGameType('returnee_interview');
+                                setShowMiniGame(true);
+                            }} />
+                        </div>
+                    </div>
+                    {showMiniGame && miniGameType === 'returnee_interview' && (
+                        <ReturneeInterviewGame
+                            studyAbroadQuality={studyAbroadQuality}
+                            onComplete={handleReturneeInterviewComplete}
+                        />
+                    )}
+                </SceneBackground>
+            );
+        }
+
+        if (step === 21) {
+            // Get interview result from minigame
+            const interviewResult = state.flags.interview_result || 'poor';
+            const salary = state.flags.starting_salary || 0;
+
+            // Different job hunting experiences based on interview result
+            if (interviewResult === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_office">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/sếp_hài_lòng.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Nhà tuyển dụng</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`Xuất sắc! Anh/Chị đã trả lời rất tốt!\n\nChúng tôi rất ấn tượng với bằng cấp và thái độ của anh/chị!\n\nChào mừng anh/chị đến với công ty! Lương ${salary} triệu/tháng!`} onComplete={() => {
+                                    setFlag('study_abroad_success', true);
+                                    setStep(22);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (interviewResult === 'good') {
+                return (
+                    <SceneBackground sceneKey="chapter1_office">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Nhà tuyển dụng</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`Tốt lắm! Anh/Chị đã vượt qua vòng phỏng vấn!\n\nChúng tôi sẽ nhận anh/chị với mức lương ${salary} triệu/tháng.\n\nChào mừng đến với công ty!`} onComplete={() => {
+                                    setStep(22);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (interviewResult === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_office">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/sếp_nghiêm_túc.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Nhà tuyển dụng</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`Anh/Chị trả lời... tạm được.\n\nChúng tôi sẽ cho anh/chị thử việc với lương ${salary} triệu/tháng.\n\nHy vọng anh/chị sẽ cố gắng hơn trong công việc.`} onComplete={() => {
+                                    setFlag('study_abroad_struggle', true);
+                                    setStep(22);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                // Failed interview
+                return (
+                    <SceneBackground sceneKey="chapter1_office">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src="/assets/characters/sếp_nóng_giận.png" alt="Nhà tuyển dụng" className="character-sprite left" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">Nhà tuyển dụng</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"Rất tiếc, anh/chị chưa đáp ứng được yêu cầu của chúng tôi.\n\nCâu trả lời của anh/chị chưa thuyết phục...\n\nChúng tôi sẽ liên lạc lại nếu có cơ hội phù hợp hơn."} onComplete={() => {
+                                    setFlag('study_abroad_difficulty', true);
+                                    setStep(22);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
+        }
+
+        if (step === 22) {
+            // Get interview result
+            const interviewResult = state.flags.interview_result || 'poor';
+            const salary = state.flags.starting_salary || 0;
+
+            // Different endings based on interview result
+            if (interviewResult === 'excellent') {
+                return (
+                    <SceneBackground sceneKey="chapter1_office">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`(Suy nghĩ)\n\nMình đã thành công! Phỏng vấn xuất sắc, công việc tốt, lương ${salary} triệu!\n\nQuyết định du học của mình là đúng đắn!\n\nNhưng... mình đã mất 4 năm xa gia đình... Liệu có đáng không?`} onComplete={() => {
+                                    setFlag('study_abroad_difficulty', false);
+                                    setScenario('chapter_end');
+                                    setStep(0);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (interviewResult === 'good') {
+                return (
+                    <SceneBackground sceneKey="chapter1_bedroom_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('vui_vẻ')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`(Suy nghĩ)\n\nMình đã được nhận việc! Lương ${salary} triệu, không cao lắm nhưng cũng ổn.\n\n4 năm du học... có lẽ cũng đáng.\n\nMình sẽ cố gắng phát triển sự nghiệp từ đây!`} onComplete={() => {
+                                    setFlag('study_abroad_difficulty', false);
+                                    setScenario('chapter_end');
+                                    setStep(0);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else if (interviewResult === 'average') {
+                return (
+                    <SceneBackground sceneKey="chapter1_bedroom_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('buồn')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={`(Suy nghĩ)\n\nMình được nhận... nhưng chỉ thử việc với lương ${salary} triệu...\n\n4 năm du học, xa gia đình, vất vả... để rồi về nhận lương thấp thế này?\n\nLiệu quyết định của mình... có sai không? 😢`} onComplete={() => {
+                                    updateStats({ happiness: -10 });
+                                    setFlag('study_abroad_difficulty', true);
+                                    setScenario('chapter_end');
+                                    setStep(0);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            } else {
+                // Failed interview
+                return (
+                    <SceneBackground sceneKey="chapter1_bedroom_evening">
+                        <StatsPanel />
+                        <div className="character-container">
+                            <img src={getPlayerSprite('buồn')} alt={state.player.name} className="character-sprite right" />
+                        </div>
+                        <div className="dialogue-box">
+                            <h2 className="speaker-name">{state.player.name}</h2>
+                            <div className="dialogue-content">
+                                <Typewriter text={"(Suy nghĩ)\n\nMình... không được nhận...\n\nPhỏng vấn thất bại... Mình đã trả lời không tốt...\n\n4 năm du học, xa gia đình, vất vả... để rồi về không có việc làm?\n\nMình đã sai lầm... 😢😢😢"} onComplete={() => {
+                                    updateStats({ happiness: -20 });
+                                    setFlag('study_abroad_difficulty', true);
+                                    setScenario('chapter_end');
+                                    setStep(0);
+                                }} enableVoice={audioEnabled} />
+                            </div>
+                        </div>
+                    </SceneBackground>
+                );
+            }
         }
     }
 

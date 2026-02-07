@@ -7,39 +7,51 @@ import Chapter3Screen from './components/Screens/Chapter3Screen';
 import Chapter4Screen from './components/Screens/Chapter4Screen';
 import Chapter5Screen from './components/Screens/Chapter5Screen';
 import GameOverScreen from './components/Screens/GameOverScreen';
+import VoiceToggleButton from './components/UI/VoiceToggleButton';
 import './App.css';
 
 function GameRouter() {
   const { state } = useGame();
 
-  switch (state.screen) {
-    case 'start':
-      return <StartScreen />;
+  // Don't show voice toggle on start screen
+  const showVoiceToggle = state.screen !== 'start';
 
-    case 'prologue':
-      return <PrologueScreen />;
+  return (
+    <>
+      {showVoiceToggle && <VoiceToggleButton />}
 
-    case 'chapter1':
-      return <Chapter1Screen />;
+      {(() => {
+        switch (state.screen) {
+          case 'start':
+            return <StartScreen />;
 
-    case 'chapter2':
-      return <Chapter2Screen />;
+          case 'prologue':
+            return <PrologueScreen />;
 
-    case 'chapter3':
-      return <Chapter3Screen />;
+          case 'chapter1':
+            return <Chapter1Screen />;
 
-    case 'chapter4':
-      return <Chapter4Screen />;
+          case 'chapter2':
+            return <Chapter2Screen />;
 
-    case 'chapter5':
-      return <Chapter5Screen />;
+          case 'chapter3':
+            return <Chapter3Screen />;
 
-    case 'gameover':
-      return <GameOverScreen />;
+          case 'chapter4':
+            return <Chapter4Screen />;
 
-    default:
-      return <StartScreen />;
-  }
+          case 'chapter5':
+            return <Chapter5Screen />;
+
+          case 'gameover':
+            return <GameOverScreen />;
+
+          default:
+            return <StartScreen />;
+        }
+      })()}
+    </>
+  );
 }
 
 function App() {

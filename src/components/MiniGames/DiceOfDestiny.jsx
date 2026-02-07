@@ -92,35 +92,35 @@ export default function DiceOfDestiny({ origin, onComplete }) {
             if (origin === 'rich') {
                 if (finalScore >= 80) {
                     detailedOrigin = 'rich_happy';
-                    bonusStats = { economy: 100, happiness: 30, social: 20, health: 40, knowledge: 35 };
+                    bonusStats = { economy: 150, happiness: 60, social: 50, health: 70, knowledge: 60 };
                 } else if (finalScore >= 50) {
                     detailedOrigin = 'rich_lonely';
-                    bonusStats = { economy: 100, happiness: 10, social: 10, health: 40, knowledge: 35 };
+                    bonusStats = { economy: 150, happiness: 40, social: 30, health: 70, knowledge: 60 };
                 } else {
                     detailedOrigin = 'rich_controlled';
-                    bonusStats = { economy: 50, happiness: 5, social: 5, health: 35, knowledge: 30 };
+                    bonusStats = { economy: 100, happiness: 30, social: 25, health: 60, knowledge: 55 };
                 }
             } else if (origin === 'normal') {
                 if (finalScore >= 80) {
                     detailedOrigin = 'normal_happy';
-                    bonusStats = { economy: 20, happiness: 40, social: 30, health: 50, knowledge: 30 };
+                    bonusStats = { economy: 50, happiness: 70, social: 60, health: 80, knowledge: 55 };
                 } else if (finalScore >= 50) {
                     detailedOrigin = 'normal_stressed';
-                    bonusStats = { economy: 20, happiness: 20, social: 20, health: 45, knowledge: 25 };
+                    bonusStats = { economy: 50, happiness: 50, social: 45, health: 70, knowledge: 50 };
                 } else {
                     detailedOrigin = 'normal_broken';
-                    bonusStats = { economy: 10, happiness: 10, social: 10, health: 40, knowledge: 20 };
+                    bonusStats = { economy: 30, happiness: 35, social: 30, health: 65, knowledge: 45 };
                 }
             } else if (origin === 'poor') {
                 if (finalScore >= 80) {
                     detailedOrigin = 'poor_loving';
-                    bonusStats = { economy: 5, happiness: 30, social: 20, health: 40, knowledge: 25 };
+                    bonusStats = { economy: 20, happiness: 60, social: 50, health: 70, knowledge: 50 };
                 } else if (finalScore >= 50) {
                     detailedOrigin = 'poor_struggling';
-                    bonusStats = { economy: 5, happiness: 15, social: 15, health: 35, knowledge: 20 };
+                    bonusStats = { economy: 20, happiness: 45, social: 40, health: 65, knowledge: 45 };
                 } else {
                     detailedOrigin = 'poor_broken';
-                    bonusStats = { economy: 5, happiness: 10, social: 10, health: 30, knowledge: 15 };
+                    bonusStats = { economy: 15, happiness: 30, social: 30, health: 60, knowledge: 40 };
                 }
             }
 
